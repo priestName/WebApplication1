@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="Test233" Class="DataClasses1DataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="AppSettings" ConnectionString="Data Source=.;Initial Catalog=Test233;Integrated Security=True" SettingsObjectName="WindowsFormsApplication2.Properties.Settings" SettingsPropertyName="Test233ConnectionString" Provider="System.Data.SqlClient" />
+  <Table Name="dbo.UserIP" Member="UserIP">
+    <Type Name="UserIP">
+      <Column Name="UserId" Type="System.String" DbType="NVarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="PassWord" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="UIP" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
+    </Type>
+  </Table>
+</Database>

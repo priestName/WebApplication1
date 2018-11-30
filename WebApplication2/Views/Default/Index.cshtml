@@ -1,0 +1,55 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+    <style>
+        *{
+            margin:0px;
+            padding:0px;
+        }
+        html,body{height:100%; width:100%; overflow:hidden; margin:0;padding:0;}
+        body > div{width:100%; height:100%; overflow:hidden; margin:0;padding:0;}
+        #msgbox {
+        height: 100%;
+        width: 100%;
+        }
+        #msgss{
+            height:70%;
+            width:100%;
+            display:block;
+            
+        }
+        #msgshw{
+            height:30%;
+            width:79%;
+            display:inline;
+        }
+        #msgok {
+        width:20%;
+        height:30%;
+        display:inline;
+        float:right;
+        }
+    </style>
+</head>
+<body>
+    <div> 
+        <div id="msgbox">
+            <textarea id="msgss" readonly="readonly"></textarea>
+            <textarea id="msgshw"></textarea><input id="msgok" type="button" value="ok" />
+        </div>
+    </div>
+    <script>
+        $(function () {
+
+        })
+    </script>
+</body>
+</html>
