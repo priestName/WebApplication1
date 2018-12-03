@@ -70,7 +70,7 @@
     <Compile Include="Class2_json.cs" />
     <Compile Include="Class3_Execl.cs" />
     <Compile Include="Class4_Timer.cs" />
-    <Compile Include="Class5.cs" />
+    <Compile Include="Class5_ASCII.cs" />
     <Compile Include="Class6.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
