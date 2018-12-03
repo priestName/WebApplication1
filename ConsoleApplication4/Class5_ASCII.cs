@@ -12,8 +12,19 @@ namespace ConsoleApplication4
     {
         public void saa()
         {
-            Console.WriteLine(jie(jia(Console.ReadLine())));
+            Console.WriteLine(jiami(Console.ReadLine()));
+            //Console.WriteLine(jie(jia(Console.ReadLine())));
         }
+        public string jiami(string aa)
+        {
+            byte[] a= ASCIIEncoding.ASCII.GetBytes(aa);
+            byte[] d = Encoding.Default.GetBytes(aa);
+            string b = ASCIIEncoding.ASCII.GetString(a);
+            string c = Encoding.Default.GetString(a);
+            return a[0].ToString();
+        }
+
+
         public static readonly string sKey = "_lantel_";
         public static string jia(string pToEncrypt)
         {
