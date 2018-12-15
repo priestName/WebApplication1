@@ -5,16 +5,24 @@ using System.Net;
 using System.Text;
 using System.Net.Http;
 using Newtonsoft.Json.Linq;
+using System.Web;
+using System.Linq;
 
 namespace ConsoleApplication4
 {
     class Class1
     {
+        private static System.Web.Caching.Cache cache = HttpRuntime.Cache;
+        public void saa()
+        {
+            if (cache["accesstoken"] == null)
+                getAccessToken();
+            Console.WriteLine(unit_utterance());
+        }
         // unit对话接口
         public string unit_utterance()
         {
-            JObject job = JObject.Parse(getAccessToken());
-            string token = job["access_token"].ToString();
+            string token = cache["accesstoken"].ToString();
             string host = "https://aip.baidubce.com/rpc/2.0/unit/service/chat?access_token=" + token;
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(host);
             request.Method = "post";
@@ -27,9 +35,16 @@ namespace ConsoleApplication4
             HttpWebResponse response = (HttpWebResponse)request.GetResponse();
             StreamReader reader = new StreamReader(response.GetResponseStream(), Encoding.UTF8);
             string result = reader.ReadToEnd();
-            Console.WriteLine("对话接口返回:");
-            Console.WriteLine(result);
-            return result;
+            JObject JobResult = JObject.Parse(result);
+            try
+            {
+                var Result_list = JobResult["result"]["response_list"]["action_list"].Select(s => s["say"].ToString()).ToList();
+                return Result_list[1];
+            }
+            catch
+            {
+                return result.ToString();
+            }
         }
 
         public String getAccessToken()
@@ -48,6 +63,10 @@ namespace ConsoleApplication4
 
             HttpResponseMessage response = client.PostAsync(authHost, new FormUrlEncodedContent(paraList)).Result;
             String result = response.Content.ReadAsStringAsync().Result;
+            JObject job = JObject.Parse(result);
+            if (cache["accesstoken"] != null)
+                cache.Remove("accesstoken");
+            cache.Insert("accesstoken", job["access_token"].ToString());
             return result;
         }
     }

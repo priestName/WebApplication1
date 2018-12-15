@@ -58,6 +58,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -68,11 +69,12 @@
   <ItemGroup>
     <Compile Include="Class1.cs" />
     <Compile Include="Class1_sql.cs" />
+    <Compile Include="Class2.cs" />
     <Compile Include="Class2_json.cs" />
     <Compile Include="Class3_Execl.cs" />
     <Compile Include="Class4_Timer.cs" />
     <Compile Include="Class5_ASCII.cs" />
-    <Compile Include="Class6.cs" />
+    <Compile Include="Class6_技能对话.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
