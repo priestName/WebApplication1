@@ -27,12 +27,12 @@ namespace ConsoleApplication3
                 socket.BeginReceive(buffer, 0, buffer.Length, SocketFlags.None, new AsyncCallback(ReceiveMessage), socket);
 
                 //④接受用户输入，将消息发送给服务器端
-                while (true)
-                {
+                //while (true)
+                //{
                     var message = Console.ReadLine();
                     var outputBuffer = Encoding.UTF8.GetBytes(message);
                     socket.BeginSend(outputBuffer, 0, outputBuffer.Length, SocketFlags.None, null, null);
-                }
+                //}
             }
             catch (Exception ex)
             {

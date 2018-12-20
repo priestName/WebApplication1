@@ -22,28 +22,41 @@ namespace ConsoleApplication4
         // unit对话接口
         public string unit_utterance()
         {
-            string token = cache["accesstoken"].ToString();
-            string host = "https://aip.baidubce.com/rpc/2.0/unit/service/chat?access_token=" + token;
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(host);
-            request.Method = "post";
-            request.ContentType = "application/json";
-            request.KeepAlive = true;
-            string str = "{\"log_id\":\"UNITTEST_10000\",\"version\":\"2.0\",\"service_id\":\"S10550\",\"session_id\":\"\",\"request\":{\"query\":\"北京天气\",\"bernard_level\":0,\"user_id\":\"88888\",\"client_session\":\"{\\\"client_results\\\":\\\"\\\", \\\"candidate_options\\\":[]}\"},\"query_info\":{\"asr_candidates\":[],\"source\":\"KEYBOARD\",\"type\":\"TEXT\"},\"updates\":\"\",\"dialog_state\":{\"contexts\":{\"SYS_REMEMBERED_SKILLS\":[\"21441\"]}}}"; // json格式
-            byte[] buffer = Encoding.UTF8.GetBytes(str);
-            request.ContentLength = buffer.Length;
-            request.GetRequestStream().Write(buffer, 0, buffer.Length);
-            HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-            StreamReader reader = new StreamReader(response.GetResponseStream(), Encoding.UTF8);
-            string result = reader.ReadToEnd();
-            JObject JobResult = JObject.Parse(result);
+            //传入参数
+            //string query = "北京天气";//内容
+            //string service_id = "S10550";//机器人ID
+            //string user_id = "8888888";
+            //string log_id = "7758521";
+            //string Skills = "\"SYS_REMEMBERED_SKILLS\":[21441,21448]";//技能组
+
+            //string token = cache["accesstoken"].ToString();
+            //string host = "https://aip.baidubce.com/rpc/2.0/unit/service/chat?access_token=" + token;
+            //HttpWebRequest request = (HttpWebRequest)WebRequest.Create(host);
+            //request.Method = "post";
+            //request.ContentType = "application/json";
+            //request.KeepAlive = true;
+            //string str = "{\"log_id\":\""+log_id+"\",\"version\":\"2.0\",\"service_id\":\""+ service_id + "\",\"session_id\":\"\",\"request\":{\"query\":\""+query+"\",\"bernard_level\":0,\"user_id\":\""+user_id+ "\",\"client_session\":\"{\\\"client_results\\\":\\\"\\\", \\\"candidate_options\\\":[]}\"},\"query_info\":{\"asr_candidates\":[],\"source\":\"KEYBOARD\",\"type\":\"TEXT\"},\"updates\":\"\",\"dialog_state\":{\"contexts\":{}}}"; // json格式
+            //byte[] buffer = Encoding.UTF8.GetBytes(str);
+            //request.ContentLength = buffer.Length;
+            //request.GetRequestStream().Write(buffer, 0, buffer.Length);
+            //HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+            //StreamReader reader = new StreamReader(response.GetResponseStream(), Encoding.UTF8);
+            //string result = reader.ReadToEnd();
+
+            StreamReader strs1 = new StreamReader(@"C:\Users\admin\Desktop\123.txt", Encoding.Default);
+            string a = strs1.ReadLine();
+
+            JObject JobResult = JObject.Parse(a);
             try
             {
-                var Result_list = JobResult["result"]["response_list"]["action_list"].Select(s => s["say"].ToString()).ToList();
-                return Result_list[1];
+                var Result_list1 = JobResult["result"]["response_list"];
+                var Result_list = JObject.Parse(Result_list1.Select(s => s["action_list"]).ToString());//Select(s => s["say"].ToString())
+
+                return Result_list.ToString();
             }
-            catch
+            catch(Exception e)
             {
-                return result.ToString();
+                return a;//result.ToString();
             }
         }
 

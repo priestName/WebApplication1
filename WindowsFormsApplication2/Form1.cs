@@ -18,9 +18,9 @@ namespace WindowsFormsApplication2
         //①创建一个Socket
         public Socket sockets= new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
         public static string userids = string.Empty;
-        public Form1(string userid)
+        public Form1(/*string userid*/)
         {
-            userids = userid;
+            userids = "123"; //userid;
             InitializeComponent();
         }
         #region 接收信息

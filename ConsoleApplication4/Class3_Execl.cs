@@ -180,7 +180,7 @@ namespace ConsoleApplication4
             //FileStream fileS = new FileStream(@"C:\Users\admin\Desktop\News.xls", FileMode.Open, FileAccess.Read);
             //wk = new HSSFWorkbook(fileS);
             //ISheet sheet = wk.GetSheetAt(0);
-            //string a=sheet.GetRow(1).GetCell(0).ToString();
+            //string a = sheet.GetRow(1).GetCell(0).ToString();
         }
     }
 }

@@ -10,7 +10,7 @@
 <body>
     <form id="form1" runat="server">
     <div>
-    
+        <iframe scrolling="no" src="https://tianqiapi.com/api.php?style=ts&skin=pitaya" frameborder="0" width="325" height="220" allowtransparency="true"></iframe>
     </div>
     </form>
 </body>

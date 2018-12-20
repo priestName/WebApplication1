@@ -22,6 +22,11 @@ namespace ConsoleApplication4
         }
         public static string unit_utterance()
         {
+            //传入参数
+            string query = "你好";//内容
+            string bot_id = "21441";//技能
+            string user_id = "8888888";
+            string log_id = "7758521";
             //24.14dee8b928c79aaa22c7dab96637b9f4.2592000.1547275788.282335-15147577
             string token = cache["accesstoken"].ToString();
             string host = "https://unit.gz.baidubce.com/rpc/2.0/unit/bot/chat?access_token=" + token;//技能对话
@@ -29,7 +34,8 @@ namespace ConsoleApplication4
             request.Method = "post";
             request.ContentType = "application/json";
             request.KeepAlive = true;
-            string str = "{\"bot_session\":\"\",\"log_id\":\"7758521\",\"request\":{\"bernard_level\":0,\"client_session\":\"{\\\"client_results\\\":\\\"\\\", \\\"candidate_options\\\":[]}\",\"query\":\"你好\",\"query_info\":{\"asr_candidates\":[],\"source\":\"KEYBOARD\",\"type\":\"TEXT\"},\"updates\":\"\",\"user_id\":\"88888\"},\"bot_id\":\"21441\",\"version\":\"2.0\"}"; // json格式 
+            string str =string.Format("{\"bot_session\":\"\",\"log_id\":\"{3}\",\"request\":{\"bernard_level\":0,\"client_session\":\"{\\\"client_results\\\":\\\"\\\", \\\"candidate_options\\\":[]}\",\"query\":\"{0}\",\"query_info\":{\"asr_candidates\":[],\"source\":\"KEYBOARD\",\"type\":\"TEXT\"},\"updates\":\"\",\"user_id\":\"{2}\"},\"bot_id\":\"{1}\",\"version\":\"2.0\"}", 
+                                        query, bot_id, user_id, log_id); // json格式 
             byte[] buffer = Encoding.UTF8.GetBytes(str);
             request.ContentLength = buffer.Length;
             request.GetRequestStream().Write(buffer, 0, buffer.Length);

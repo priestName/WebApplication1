@@ -31,8 +31,8 @@ namespace WindowsFormsApplication2
             if (users != null)
             {
                 this.Visible=false;
-                Form1 f1=new Form1(user);
-                f1.ShowDialog();
+                //Form1 f1=new Form1(user);
+                //f1.ShowDialog();
                 this.Visible = true;
             }
         }
