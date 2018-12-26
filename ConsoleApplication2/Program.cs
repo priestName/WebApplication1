@@ -14,9 +14,12 @@ namespace ConsoleApplication2
     {
         static void Main(string[] args)
         {
-            Class1 c1 = new Class1();
+            //Class1 c1 = new Class1();
+            //c1.Main();
+
+            TCP_Server c1 = new TCP_Server();
             c1.Main();
-            
+
         }
     }
 }

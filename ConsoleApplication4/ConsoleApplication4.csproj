@@ -71,6 +71,7 @@
     <Compile Include="Class1_sql.cs" />
     <Compile Include="Class2.cs" />
     <Compile Include="Class2_json.cs" />
+    <Compile Include="Class3.cs" />
     <Compile Include="Class3_Execl.cs" />
     <Compile Include="Class4_Timer.cs" />
     <Compile Include="Class5_ASCII.cs" />

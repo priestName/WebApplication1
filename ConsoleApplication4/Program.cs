@@ -10,7 +10,7 @@ namespace ConsoleApplication4
     {
         static void Main(string[] args)
         {
-            Class1 classs = new Class1();
+            Class2 classs = new Class2();
             classs.saa();
             Console.ReadLine();
         }
