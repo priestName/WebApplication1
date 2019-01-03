@@ -57,7 +57,7 @@
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(251, 48);
             this.button1.TabIndex = 0;
-            this.button1.Text = "开始(Enter)";
+            this.button1.Text = "开始(Enter/F12)";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
@@ -254,12 +254,14 @@
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.button1);
+            this.KeyPreview = true;
             this.MaximizeBox = false;
             this.Name = "Form4";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Form4";
             this.TopMost = true;
             this.Load += new System.EventHandler(this.Form4_Load);
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Form4_KeyDown);
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();

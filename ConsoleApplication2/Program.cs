@@ -17,9 +17,13 @@ namespace ConsoleApplication2
             //Class1 c1 = new Class1();
             //c1.Main();
 
-            TCP_Server c1 = new TCP_Server();
-            c1.Main();
+            //TCP_Server c1 = new TCP_Server();
+            //c1.Main();
 
+            SocketService socket = new SocketService();
+            socket.Start();
+
+            Console.ReadLine();
         }
     }
 }
