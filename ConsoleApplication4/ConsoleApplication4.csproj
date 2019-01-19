@@ -67,15 +67,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
+    <Compile Include="Class_baiduAI.cs" />
     <Compile Include="Class1_sql.cs" />
-    <Compile Include="Class2.cs" />
+    <Compile Include="Class_Socket.cs" />
     <Compile Include="Class2_json.cs" />
-    <Compile Include="Class3.cs" />
+    <Compile Include="Class_Thread.cs" />
     <Compile Include="Class3_Execl.cs" />
     <Compile Include="Class4_Timer.cs" />
     <Compile Include="Class5_ASCII.cs" />
     <Compile Include="Class6_技能对话.cs" />
+    <Compile Include="Class_Text.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

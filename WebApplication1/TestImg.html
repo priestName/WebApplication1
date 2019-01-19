@@ -1,0 +1,91 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title></title>
+	<meta charset="utf-8" />
+    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+</head>
+<body>
+    <div id="ImgTest" style="width:500px;height:500px;border:1px #000 solid">
+        <span style="float:right"><img src="#" width="100" height="100" alt="Alternate Text" /></span>
+    </div>
+    <input type="button" value="123" id="Img"/><input type="file" id="FileImg" accept="image/*" style="display:none"/>
+    <script>
+        $(function () {
+            $("#Img").click(function () {
+                $("#FileImg").click()
+            })
+            $("#FileImg").change(function () {
+                if (!/image\/\w+/.test(document.getElementById('FileImg').files[0].type)) {
+
+                    alert("请确保文件为图像类型");
+                    return false;
+
+                 }
+
+                //var windowURL = window.URL || window.webkitURL;
+                //var ImgUrl= windowURL.createObjectURL($("#FileImg")[0].files[0]);
+                //console.log(ImgUrl);
+                //$("#ImgTest img").attr("src", ImgUrl)
+
+                var file = this.files[0];
+                var reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = function () {
+                    var result = this.result;
+                    var img = new Image();
+                    img.src = result;
+                    $("#ImgTest img").attr("src", result)
+                }
+            })
+            var segment = 50 * 1024;
+            function packagedata(data) {
+
+                var buffer = new Array();
+                var length = data.length;
+
+                if (length > segment) {
+
+                    var packagecount = 0;
+                    var packagefloor = 0;
+                    packagecount = Math.ceil(length / (segment));
+                    packagefloor = Math.floor(length / (segment));
+                    for (var i = 0; i < packagefloor; i++) {
+
+                        buffer[i] = '0001';
+                        buffer[i] += '0000';
+                        buffer[i] += hexToString(packagecount);
+                        buffer[i] += hexToString(i + 1);
+                        buffer[i] += data.substr(segment * i, segment);
+
+                    }
+
+                    if (packagecount > packagefloor) {
+
+                        buffer[packagecount - 1] = '0001';
+                        buffer[packagecount - 1] += '0000';
+                        buffer[packagecount - 1] += hexToString(packagecount);
+                        buffer[packagecount - 1] += hexToString(packagecount);
+                        buffer[packagecount - 1] += data.substr(segment * (packagecount - 1), length % (segment));
+
+                    }
+
+                }
+                else {
+
+                    buffer[0] = '0001';
+                    buffer[0] += '0000';
+                    buffer[0] += '0001';
+                    buffer[0] += '0001';
+                    buffer[0] += data;
+
+                }
+
+                return buffer;
+
+            }
+        })
+    </script>
+</body>
+</html>

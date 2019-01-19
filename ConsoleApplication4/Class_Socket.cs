@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace ConsoleApplication4
 {
-    class Class2
+    class Class_Socket
     {
         static byte[] buffer = new byte[1024];
         private static int count = 0;

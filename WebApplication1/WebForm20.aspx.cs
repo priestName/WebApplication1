@@ -9,9 +9,10 @@ namespace WebApplication1
 {
     public partial class WebForm20 : System.Web.UI.Page
     {
+        public string userName = string.Empty;
         protected void Page_Load(object sender, EventArgs e)
         {
-
+            userName = "1213232132132";
         }
     }
 }

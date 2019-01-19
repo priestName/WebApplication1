@@ -1,66 +1,168 @@
 ﻿<!DOCTYPE html>
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title></title>
     <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+    <script src="scripts/jquery.qqFace.js"></script>
     <style>
+        * {
+            margin:0;
+            padding:0;
+            font-family:'Microsoft YaHei'
+        }
+        html {
+            overflow:hidden;
+            width:100%;
+            height:100%;
+        }
+        body,form {
+            overflow:hidden;
+            width:100%;
+            height:100%;
+        }
         #TextBox1 {
             overflow: auto;
+            height:80%;
+            width:100%;
+            resize:none;
+            border:solid 1px #808080
         }
 
-            #TextBox1 div {
-                width: 100%;
-            }
+        #TextBox2 {
+            height:100%;
+            width:100%;
+            resize:none;
+            overflow:auto;
+            display:block;
+        }
+        .TextSp{
+            height:14%;
+            width:80%;
+            float:left;
+        }
+        #TextBox1 div {
+            width: 100%;
+            text-align:right;
+        }
 
+        #Button1 {
+            width:100%;
+            height:100%;
+        }
+        .Btn1Sp{
+            width:10%;
+            height:14%;
+            float:left;
+            vertical-align:top;
+        }
+        .ButSp{
+            width:10%;
+            height:14%;
+            vertical-align:top;
+            float:left;
+        }
+        #Button2 {
+            width:100%;
+            height:50%;
+        }
+        #Button3 {
+            width:100%;
+            height:50%;
+        }
         .MsgGo {
             background-color: darkturquoise;
-            float: right;
+            line-height:24px;
+            text-align:right;
+            margin:1px 0px;
+            display:inline-block;
         }
 
         .SiMsg {
             background-color: #00ffff;
         }
 
-        .Msg {
-        }
-
         .SysSuccess {
             background-color: green;
-            text-align: center;
+            text-align: center !important;
         }
 
         .SysFailure {
             background-color: red;
-            text-align: center;
+            text-align: center !important;
         }
 
         .SysWarning {
             background-color: yellow;
-            text-align: center;
+            text-align: center !important;
         }
+        input::-webkit-input-placeholder {
+            color:#000;
+            font-size:16px;
+        }
+        #UserName {
+            border:none;
+            margin-left:10px;
+            width:auto;
+        }
+        .MsgImg{
+            width:150px;
+            height:150px;
+            vertical-align: text-top;
+        }
+        .qqFace {
+            position:absolute;
+            display:none;
+            z-index:1000;
+            right:10%;
+            bottom:14%;
+            width:80%;
+            background-color:#ffffff;
+            height:77px;
+            overflow:auto ;
+            border:1px solid #d4d4d4;
+            border-radius:5px;
+            padding:8px;
+            box-shadow: 0px 0px 15px #a8a8a8;
+        }
+        .qqFace tr td{
+            float:left;
+        }
+        .qqFace tr td:hover{
+            background-color:#d4d4d4;
+            box-sizing:border-box;
+        }
+        .qqFace::-webkit-scrollbar {
+        display: none;
+    }
     </style>
 </head>
 <body>
-    <form id="form1" runat="server">
-        <div>
-            <label>用户昵称：</label><input type="text" id="UserName" readonly="readonly" style="border:none" /><input type="button" value="确认" style="display:none" id="EditName" />
+    <form id="form1">
+        <div style="height:35px;line-height:35px">
+            <input type="text" id="UserName" readonly="readonly" placeholder="用户昵称"/><input type="button" value="确认" style="display:none" id="EditName" />
             <select id="UserList">
                 <option value="-1">在线用户</option>
             </select>
-            <label id="UserNum">当前在线人数：0人</label>
+            <label id="UserNum">0人在线</label>
         </div>
-        <div>
-            <div id="TextBox1" style="height:206px;width:700px;resize:none;border:solid 1px #808080">
+        <div style="width:100%;height:100%;">
+            <div id="TextBox1">
             </div>
             <hr />
-            <textarea id="TextBox2" style="height:197px;width:550px;resize:none"></textarea>
-            <input id="Button1" type="button" style="width:140px;height:203px" />
+            <span class="ButSp">
+                <input id="Button3" class="Button3" type="button" value="表情" />
+                <input id="Button2" type="button" value="图片" /><br />
+            </span>
+            <span class="TextSp"><span contenteditable="true" id="TextBox2"></span></span>
+            <span class="Btn1Sp"><input id="Button1" type="button" value="发送" /></span>
+            <input type="file" id="FileImg" accept="image/*" style="display:none"/>
         </div>
         <script>
             $(function () {
                 // 打开一个 web socket
-                var ws = new WebSocket("ws://192.168.3.251:7788");
+                var ws = new WebSocket("ws://192.168.3.251:7788");//47.106.232.163   192.168.3.251
                 ws.onopen = function()//连接成功时触发
                 {
                     $("#TextBox1").html($("#TextBox1").html() + "<div class='SysSuccess'>连接成功</div>");
@@ -69,39 +171,14 @@
 
                 ws.onmessage = function (evt)//接收消息时触发
                 {
-                    var Msg = evt.data.split(':');
-                    switch (Msg[0]) {
-                        case "Echo":
-                            var Htmls = "<div><span class='Msg'>" + Msg[1] + "</span></div><br />";
-                            $("#TextBox1").html($("#TextBox1").html() + Htmls);
-                            return;
-                        case "username":
-                            $("#UserName").val(Msg[1]);
-                            return
-                        case "serverlist":
-                            var UserList = Msg[1].split('|');
-                            var Htmls = "<option value='-1'>在线用户</option>";
-                            $("#UserNum").html("当前在线人数：" + UserList.length + "人");
-                            for (var i = 0; i < UserList.length; i++) {
-                                if (UserList[i] != $("#UserName").val())
-                                {
-                                    Htmls += "<option value='" + i + "'>" + UserList[i] + "</option>";
-                                }
-                            }
-                            $("#UserList").html(Htmls);
-                            return
-                        case "EchoGo":
-                            var Htmls = "<span class='SiMsg'>" + Msg[1] + "</span>";
-                            $("#TextBox1").html($("#TextBox1").html() + Htmls + "<br />");
-                            return;
-                        default:
-                    }
+                    var Htmls = messages(evt.data);
+                    $("#TextBox1").html($("#TextBox1").html() + Htmls);
                     $("#TextBox1").scrollTop($("#TextBox1")[0].scrollHeight);
                 };
 
                 ws.onclose = function(evt)
                 {
-                    $("#TextBox1").html($("#TextBox1").html() + "<div class='SysFailure'>服务器已关闭</div>");//关闭时触发
+                    $("#TextBox1").html($("#TextBox1").html() + "<div class='SysFailure'>与服务器的连接已断开</div>");//关闭时触发
                     $("#TextBox1").scrollTop($("#TextBox1")[0].scrollHeight);
                 };
 
@@ -109,34 +186,108 @@
                 {
                     $("#TextBox1").html($("#TextBox1").html() + "<div class='SysWarning'>服务器未开启</div>");//连接出错时触发
                     $("#TextBox1").scrollTop($("#TextBox1")[0].scrollHeight);
+                    socketStatus = false;
+                    ws.send();
                 };
+                window.onbeforeunload = function () {
+                    ws.close();
+                }
+
+                function messages(message) {
+                    var MsgName = message.substring(0,message.indexOf(':')) //evt.data.split(':');
+                    var Msgs = message.substring(message.indexOf(':') + 1)
+                    var Htmls = "";
+                    switch (MsgName) {
+                        case "Echo":
+                            Htmls = "<div><span class='Msg'>" + Msgs + "</span></div>";
+                            return Htmls;
+                        case "username":
+                            $("#UserName").val(Msgs);
+                            return Htmls;
+                        case "serverlist":
+                            var UserList = Msgs.split('|');
+                            var HtmlList = "<option value='-1'>在线用户</option>";
+                            $("#UserNum").html(UserList.length + "人在线");
+                            for (var i = 0; i < UserList.length; i++) {
+                                if (UserList[i] != $("#UserName").val()) {
+                                    HtmlList += "<option value='" + i + "'>" + UserList[i] + "</option>";
+                                }
+                            }
+                            $("#UserList").html(HtmlList);
+                            return Htmls;
+                        case "EchoGo":
+                            Htmls = "<div class='SiMsg'>" + Msgs + "</div>";
+                            return Htmls;
+                        case "SysMsg":
+                            Htmls = "<div class='SysWarning'>" + Msgs + "</div>";
+                            return Htmls;
+                        case "EchoImg":
+                            Htmls = "<div>" + Msgs.substring(0,Msgs.indexOf("：")) + "<img class='MsgImg' src='" + Msgs.substring(Msgs.indexOf("：") + 1) + "'/></div>";
+                            return Htmls;
+                        default:
+                            return Htmls;
+                    }
+                }
+
                 $("#Button1").click(function () {
-                    var msg = $("#TextBox2").val();
+                    var msg = $("#TextBox2").html();
+                    if (msg.substring(msg.length - 15) == "<div><br></div>")
+                    {
+                        msg=msg.substring(0, msg.length - 15)
+                    }
                     if ($("#UserList").val() == -1) {
-                        var Htmls = "<span class='MsgGo'>" + msg + "</span>";
-                        $("#TextBox1").html($("#TextBox1").html() + Htmls + "<br />")
+                        var Htmls = "<div><span class='MsgGo'>" + msg + "</span></div>";
+                        $("#TextBox1").html($("#TextBox1").html() + Htmls)
                         ws.send("Msg:" + msg);
                     }
                     else {
-                        var Htmls = "<span class='MsgGo'>" +"==>>"+ $("#UserList").val()+"：" + msg + "</span>";
-                        $("#TextBox1").html($("#TextBox1").html() + Htmls + "<br />")
+                        var Htmls = "<div class='MsgGo'><span class='MsgGo'>" + "==>>" + $("#UserList").text().replace(/^\s+|\s+$/g, "") + "：" + msg + "</span></div>";
+                        $("#TextBox1").html($("#TextBox1").html() + Htmls)
                         ws.send($("#UserList").val() + ":" + msg);
                     }
                     $("#TextBox1").scrollTop($("#TextBox1")[0].scrollHeight);
-                    $("#TextBox2").val("");
+                    $("#TextBox2").html("");
                 })
-
+                $("#Button2").click(function () {
+                    $("#FileImg").click();
+                })
+                $("#FileImg").change(function () {
+                    if (!/image\/\w+/.test(document.getElementById('FileImg').files[0].type)) {
+                        alert("请选择图像文件");
+                        return false;
+                    }
+                    var file = this.files[0];
+                    var reader = new FileReader();
+                    reader.readAsDataURL(file);
+                    reader.onload = function () {
+                        var result = this.result;
+                        var img = new Image();
+                        img.src = result;
+                        var Imgs = "<div style='text-align:right;'><img class='MsgImg' src='" + result + "'/></div>"
+                        $("#TextBox1").html($("#TextBox1").html() + Imgs + "<br />")
+                        ws.send("MsgImg:" + result)
+                    }
+                })
                 $("#UserName").dblclick(function () {
                     $("#UserName").removeAttr("readonly");
                     $("#EditName").removeAttr("style");
-
                 })
                 $("#EditName").click(function () {
                     ws.send("EditName:" + $("#UserName").val());
                     $("#UserName").attr("readonly", "readonly");
                     $("#EditName").css("display", "none")
                 })
+
+                $('.Button3').qqFace({
+                    id: 'facebox', //表情盒子的ID
+                    assign: 'TextBox2', //给那个控件赋值
+                    path: 'face/'	//表情存放的路径
+                });
             })
+            function faceImg(ObjImg) {
+                var imgsrc = '<img src="' + ObjImg["src"] + '" />'
+                $("#TextBox2").html($("#TextBox2").html() + imgsrc);
+            }
         </script>
     </form>
 </body>

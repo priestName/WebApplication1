@@ -127,10 +127,92 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="face\1.gif" />
+    <Content Include="face\10.gif" />
+    <Content Include="face\11.gif" />
+    <Content Include="face\12.gif" />
+    <Content Include="face\13.gif" />
+    <Content Include="face\14.gif" />
+    <Content Include="face\15.gif" />
+    <Content Include="face\16.gif" />
+    <Content Include="face\17.gif" />
+    <Content Include="face\18.gif" />
+    <Content Include="face\19.gif" />
+    <Content Include="face\2.gif" />
+    <Content Include="face\20.gif" />
+    <Content Include="face\21.gif" />
+    <Content Include="face\22.gif" />
+    <Content Include="face\23.gif" />
+    <Content Include="face\24.gif" />
+    <Content Include="face\25.gif" />
+    <Content Include="face\26.gif" />
+    <Content Include="face\27.gif" />
+    <Content Include="face\28.gif" />
+    <Content Include="face\29.gif" />
+    <Content Include="face\3.gif" />
+    <Content Include="face\30.gif" />
+    <Content Include="face\31.gif" />
+    <Content Include="face\32.gif" />
+    <Content Include="face\33.gif" />
+    <Content Include="face\34.gif" />
+    <Content Include="face\35.gif" />
+    <Content Include="face\36.gif" />
+    <Content Include="face\37.gif" />
+    <Content Include="face\38.gif" />
+    <Content Include="face\39.gif" />
+    <Content Include="face\4.gif" />
+    <Content Include="face\40.gif" />
+    <Content Include="face\41.gif" />
+    <Content Include="face\42.gif" />
+    <Content Include="face\43.gif" />
+    <Content Include="face\44.gif" />
+    <Content Include="face\45.gif" />
+    <Content Include="face\46.gif" />
+    <Content Include="face\47.gif" />
+    <Content Include="face\48.gif" />
+    <Content Include="face\49.gif" />
+    <Content Include="face\5.gif" />
+    <Content Include="face\50.gif" />
+    <Content Include="face\51.gif" />
+    <Content Include="face\52.gif" />
+    <Content Include="face\53.gif" />
+    <Content Include="face\54.gif" />
+    <Content Include="face\55.gif" />
+    <Content Include="face\56.gif" />
+    <Content Include="face\57.gif" />
+    <Content Include="face\58.gif" />
+    <Content Include="face\59.gif" />
+    <Content Include="face\6.gif" />
+    <Content Include="face\60.gif" />
+    <Content Include="face\61.gif" />
+    <Content Include="face\62.gif" />
+    <Content Include="face\63.gif" />
+    <Content Include="face\64.gif" />
+    <Content Include="face\65.gif" />
+    <Content Include="face\66.gif" />
+    <Content Include="face\67.gif" />
+    <Content Include="face\68.gif" />
+    <Content Include="face\69.gif" />
+    <Content Include="face\7.gif" />
+    <Content Include="face\70.gif" />
+    <Content Include="face\71.gif" />
+    <Content Include="face\72.gif" />
+    <Content Include="face\73.gif" />
+    <Content Include="face\74.gif" />
+    <Content Include="face\75.gif" />
+    <Content Include="face\8.gif" />
+    <Content Include="face\9.gif" />
     <Content Include="ChatPage.html" />
     <Content Include="FleckHrml.html" />
     <Content Include="Global.asax" />
+    <Content Include="HtmlJqueryUi.html" />
     <Content Include="HtmlWuzi.html" />
+    <Content Include="style\images\ui-icons_444444_256x240.png" />
+    <Content Include="style\images\ui-icons_555555_256x240.png" />
+    <Content Include="style\images\ui-icons_777620_256x240.png" />
+    <Content Include="style\images\ui-icons_777777_256x240.png" />
+    <Content Include="style\images\ui-icons_cc0000_256x240.png" />
+    <Content Include="style\images\ui-icons_ffffff_256x240.png" />
     <Content Include="packages.config" />
     <Content Include="ApplicationInsights.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -138,9 +220,14 @@
     <None Include="scripts\jquery-1.6.4-vsdoc.js" />
     <Content Include="scripts\jquery-1.6.4.js" />
     <Content Include="scripts\jquery-1.6.4.min.js" />
+    <Content Include="scripts\jquery-ui.min.js" />
+    <Content Include="scripts\jquery.js" />
+    <Content Include="scripts\jquery.qqFace.js" />
     <Content Include="scripts\jquery.signalR-2.4.0.js" />
     <Content Include="scripts\jquery.signalR-2.4.0.min.js" />
     <Content Include="SettingConfig.xml" />
+    <Content Include="style\jquery-ui.min.css" />
+    <Content Include="TestImg.html" />
     <Content Include="WebForm10.aspx" />
     <Content Include="WebForm11.aspx" />
     <Content Include="WebForm12.aspx" />
@@ -153,6 +240,7 @@
     <Content Include="WebForm19.aspx" />
     <Content Include="WebForm2.aspx" />
     <Content Include="WebForm20.aspx" />
+    <Content Include="WebForm21.aspx" />
     <Content Include="WebForm3.aspx" />
     <Content Include="WebForm4.aspx" />
     <Content Include="WebForm5.aspx" />
@@ -279,6 +367,13 @@
     <Compile Include="WebForm20.aspx.designer.cs">
       <DependentUpon>WebForm20.aspx</DependentUpon>
     </Compile>
+    <Compile Include="WebForm21.aspx.cs">
+      <DependentUpon>WebForm21.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WebForm21.aspx.designer.cs">
+      <DependentUpon>WebForm21.aspx</DependentUpon>
+    </Compile>
     <Compile Include="WebForm3.aspx.cs">
       <DependentUpon>WebForm3.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -328,6 +423,9 @@
     <Compile Include="WebForm9.aspx.designer.cs">
       <DependentUpon>WebForm9.aspx</DependentUpon>
     </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Images\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

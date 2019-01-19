@@ -24,12 +24,15 @@ namespace ConsoleApplication4
                             }
                         }";
             JObject job = JObject.Parse(aa);
-            var a = job.SelectToken("$.a.b2[?(@.c1 == 'a>b2>c1')]").Select(s => (string)s).ToList() ;
-
-            JToken a1 = job.SelectToken("$.a.b2[?(@.c1 == 'a>b2>c1')]");
+            //var a = job.SelectToken("$.a.b2[?(@.c1 == 'a>b2>c1')]").Select(s => (string)s).ToList() ;
+            //JToken a1 = job.SelectToken("$.a.b1[?(@.c1 == 'a>b2>c1')]");
             //var va= jar.Select(s=>s["c1"].ToString()== "a>b2>c1");
-            Console.WriteLine(a);
+            //Console.WriteLine(a);
+            //Console.WriteLine(a1);
+            job["$.a.b1"] = "'a>b11s','a>b12s'";
+            JToken a1 = job.SelectToken("$.a.b1");
             Console.WriteLine(a1);
+            //a1.ToList
         }
     }
 }

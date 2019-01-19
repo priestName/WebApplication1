@@ -3,22 +3,32 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <title></title>
-    <script src="scripts/jquery-3.3.1.min.js"></script>
+    <link href="style/jquery-ui.min.css" rel="stylesheet" />
 	<meta charset="utf-8" />
 </head>
 <body>
-    <form id="form1" runat="server">
+    <form id="form1">
+        <div class="SysMsg"></div>
+        <div style="height:35px;line-height:35px;padding-left:40px">
+            <input type="text" id="UserName" readonly="readonly" placeholder="用户昵称" /><input type="button" value="确认" style="display:none" id="EditName" />
+            <select id="UserList">
+                <option value="-1">选择在线用户</option>
+            </select>
+            <input type="button" id="UserGo" value="发起对战" />
+            <label id="UserNum">0人在线</label>
+        </div>
         <div class="fom">
             <div class="left"><div class="left1"></div></div>
             <div class="right"><div class="right1"></div></div>
             <div class="box"></div>
         </div>
-        <div class="jieju"><div class="jus"></div></div>
+        <div class="jieju"><div class="jus"></div><input type="button" value="重新开始" id="Reset" /></div>
         <div>
             <span>棋盘规格(单行的格数)：</span><input type="text" id="sizes" />
             <span>&nbsp&nbsp&nbsp</span>
             <input type="button" value="开  始" id="ok" />
         </div>
+        <div id="Msgs" style="display:none"></div>
     </form>
     <style>
         body {
@@ -32,7 +42,6 @@
             width: 600px;
             height: 550px;
             margin: 0px auto;
-            margin-top: 5%;
         }
 
         .box {
@@ -40,6 +49,7 @@
             height: 500px;
             border: inset 5px #808080;
             margin: 20px 45px;
+            position:relative;
         }
 
             .box div {
@@ -61,11 +71,11 @@
 
         .left1 {
             background-color: #fff;
+            display: none;
         }
 
         .right1 {
             background-color: #000;
-            display: none;
         }
 
         .left1, .right1 {
@@ -110,43 +120,134 @@
                 padding-top:70%;
                 font-family:"华文行楷"
             }
+        #UserName{
+            border:none;
+            margin-left:10px;
+            width:auto;}
+        .SysMsg {
+            padding:2px 10px;
+            margin-left:55px;
+            width:490px;
+        }
     </style>
+    <script src="scripts/jquery-3.3.1.min.js"></script>
+    <script src="scripts/jquery.js"></script>
+    <script src="scripts/jquery-ui.min.js"></script>
     <script type="text/javascript">
+        var gg = 10;
+        var wh = 500 / gg;
+        var qzsz = wh / 2 + 5
+        var qzclo = "000";
+        var x, y;
+        var QzArray = new Array();
+        var VsUserGo="";
         $(function () {
             buju();
-        })
-        $("#ok").click(function () {
-            buju();
-        })
-        function buju () {
-            var gg = 10;
-            if ($("#sizes").val() !== "") {
-                gg = $("#sizes").val();
+            var ws = new WebSocket("ws://192.168.3.251:7788");//47.106.232.163   192.168.3.251
+            ws.onopen = function ()//连接成功时触发
+            {
+                $(".SysMsg").text("登录成功！");
+            };
+            ws.onmessage = function (evt)//接收消息时触发
+            {
+                var Htmls = messages(evt.data);
+                console.log(Htmls);
+            };
+            ws.onclose = function (evt) {
+                if ($(".SysMsg").text().indexOf("Error:") == -1)
+                {
+                    $(".SysMsg").text("Error:与服务器的连接已断开！");
+                    
+                }else{
+                    $(".SysMsg").text($(".SysMsg").text() + "与服务器的连接已断开！");
+                }
+            };
+            ws.onerror = function (evt) {
+                $(".SysMsg").text("Error:服务器未开启！");
+                socketStatus = false;
+                ws.close();
+            };
+            window.onbeforeunload = function () {
+                ws.close();
             }
-            var wh = 500 / gg;
-            var qzsz = wh / 2 + 5
-            var htm = "";
-            var qzclo = "";
-            var QzArray = new Array();
-            htm = "";
-            for (var i = 0; i < gg; i++) {
-                for (var r = 0; r < gg; r++) {
-                    htm += "<div class='dv' style='width:" + wh + "px;height:" + wh + "px'></div>"
+
+            $("#UserName").dblclick(function () {
+                $("#UserName").removeAttr("readonly");
+                $("#EditName").removeAttr("style");
+            })
+            $("#UserName").blur(function () {
+                $("#UserName").attr("readonly", "readonly");
+                $("#EditName").css("display", "none")
+            })
+            $("#EditName").click(function () {
+                ws.send("EditName:" + $("#UserName").val());
+                $("#UserName").attr("readonly", "readonly");
+                $("#EditName").css("display", "none")
+            })
+
+            1
+            function messages(message) {
+                var MsgName = message.substring(0, message.indexOf(':')) //evt.data.split(':');
+                var Msgs = message.substring(message.indexOf(':') + 1)
+                var Htmls = "";
+                switch (MsgName) {
+                    case "username":
+                        $("#UserName").val(Msgs);
+                        return Htmls;
+                    case "serverlist":
+                        var UserList = Msgs.split('|');
+                        var HtmlList = "<option value='-1'>在线用户</option>";
+                        $("#UserNum").html(UserList.length + "人在线");
+                        for (var i = 0; i < UserList.length; i++) {
+                            if (UserList[i] != $("#UserName").val()) {
+                                HtmlList += "<option value='" + i + "'>" + UserList[i] + "</option>";
+                            }
+                        }
+                        $("#UserList").html(HtmlList);
+                        return Htmls;
+                    case "SysMsg":
+                        $(".SysMsg").text("System prompt:" + Msgs + "！");
+                        return Htmls;
+                    case "qizixy":
+                        var Htmls = "<div class='qz' style='left:" + Msgs.split(';')[0] + "px;top:" + Msgs.split(';')[1] + "px;background-color:#" + qzclo + ";width:" + qzsz + "px;height:" + qzsz + "px;'></div>"
+                        $(".box").append(Htmls);
+                        return Htmls; 
+                    case "UserGo":
+                        var Htmls = "<div>" + Msgs.split(';')[0] + "对你发起挑战，是否接受<div>"
+                        $("#Msgs").html(Htmls);
+                        $("#Msgs").dialog({
+                            modal: true, resizable: false, title: '挑战',
+                            height: 200,
+                            width: 300,
+                            buttons: {
+                                "接受": function () {
+                                    wx.send("UserIsGo:Yes");
+                                    $(this).dialog("close");
+                                },
+                                "拒绝": function () {
+                                    wx.send("UserIsGo:No");
+                                    $(this).dialog("close");
+                                }
+                            }
+                        })
+                    case "UserIsGo":
+
+                        return Htmls;
+
+                    default:
+                        return Htmls;
                 }
             }
-            $(".box").html(htm)
-            var x, y;
+
             $(".dv").click(function (e) {
                 var positionX = e.pageX - $(this).offset().left;
                 var positionY = e.pageY - $(this).offset().top;
                 if (positionX > wh / 2) {
-                    if (positionY > wh / 2)
-                    {
+                    if (positionY > wh / 2) {
                         x = ($(this).offset().left + wh);
                         y = $(this).offset().top + wh;
                     }
-                    else
-                    {
+                    else {
                         x = $(this).offset().left + wh;
                         y = $(this).offset().top;
                     }
@@ -157,7 +258,7 @@
                     else
                     { x = $(this).offset().left; y = $(this).offset().top }
                 }
-                x -= qzsz / 2; y -= qzsz / 2;
+                x -= (qzsz / 2) + $(".box").offset().left + 5; y -= (qzsz / 2) + $(".box").offset().top + 5;
                 var is_not1 = $.inArray(qzclo + "|" + x + "|" + y, QzArray)
                 var is_not2 = $.inArray(qzclo + "|" + x + "|" + y, QzArray)
                 if (is_not1 == -1 && is_not2 == -1) {
@@ -178,6 +279,7 @@
                     }
                     var qz = "<div class='qz' style='left:" + x + "px;top:" + y + "px;background-color:#" + qzclo + ";width:" + qzsz + "px;height:" + qzsz + "px;'></div>"
                     $(".box").append(qz);
+                    ws.send("qizixy:" + x + ";" + y);
                     var h1 = h2 = s1 = s2 = zx1 = zx2 = yx1 = yx2 = 0;
                     for (var s = 0; s < 4; s++) {
                         h1 += h1 != s ? 0 : ($.inArray(qzclo + "|" + (x + parseInt(wh * (s + 1))) + "|" + y, QzArray) == -1 ? 0 : 1)//横排右
@@ -189,10 +291,8 @@
                         yx1 += yx1 != s ? 0 : ($.inArray(qzclo + "|" + (x - parseInt(wh * (s + 1))) + "|" + (y + parseInt(wh * (s + 1))), QzArray) == -1 ? 0 : 1)//右斜下
                         yx2 += yx2 != s ? 0 : ($.inArray(qzclo + "|" + (x + parseInt(wh * (s + 1))) + "|" + (y - parseInt(wh * (s + 1))), QzArray) == -1 ? 0 : 1)//右斜上
                     }
-                    if(h1+h2>=4 || s1+s2>=4 || zx1+zx2>=4 || yx1+yx2>=4)
-                    {
-                        if (QzArray.length % 2==0)
-                        {
+                    if (h1 + h2 >= 4 || s1 + s2 >= 4 || zx1 + zx2 >= 4 || yx1 + yx2 >= 4) {
+                        if (QzArray.length % 2 == 0) {
                             setTimeout(function () { $(".jieju").show(); $(".jus").html("白子胜"); $(".jus").animate({ paddingTop: "25%" }, 500); }, 100)
                             $("div").unbind();
                         } else {
@@ -202,7 +302,36 @@
                     }
                 }
             })
-        }
+
+            $("#UserGo").click(function () {
+                wx.send("UserGo:" + $("#UserList").val());
+                VsUserGo = $.trim($("#UserList").text());
+                $(".jieju").show(); $(".jus").html("黑子胜")
+            })
+
+            $("#ok").click(function () {
+                buju();
+            })
+            $("#Reset").click(function () {
+                buju();
+                $(".jieju").hide();
+                $("div").bind();
+            })
+            function buju() {
+                var htm = "";
+                if ($("#sizes").val() !== "") {
+                    gg = $("#sizes").val();
+                }
+                htm = "";
+                for (var i = 0; i < gg; i++) {
+                    for (var r = 0; r < gg; r++) {
+                        htm += "<div class='dv' style='width:" + wh + "px;height:" + wh + "px'></div>"
+                    }
+                }
+                $(".box").html(htm)
+            }
+        })
+        
     </script>
 </body>
 </html>

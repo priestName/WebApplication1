@@ -10,7 +10,7 @@ using System.Linq;
 
 namespace ConsoleApplication4
 {
-    class Class1
+    class Class_baiduAI
     {
         private static System.Web.Caching.Cache cache = HttpRuntime.Cache;
         public void saa()
