@@ -71,7 +71,7 @@ namespace ConsoleApplication4
                 for (var j = 0; j < sheet.GetRow(i).LastCellNum; j++)
                 {
                     aa[i, j] = sheet.GetRow(i).GetCell(j).ToString();
-                    Console.Write(aa[i, j]);
+                    Console.Write(aa[i, j]); //14.215.177.38
                 }
             }
             return aa;

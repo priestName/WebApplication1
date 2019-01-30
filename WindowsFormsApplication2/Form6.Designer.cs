@@ -33,7 +33,6 @@
             this.label1 = new System.Windows.Forms.Label();
             this.jsTimes = new System.Windows.Forms.Label();
             this.dateTimePicker1 = new System.Windows.Forms.DateTimePicker();
-            this.label2 = new System.Windows.Forms.Label();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.SuspendLayout();
             // 
@@ -62,7 +61,7 @@
             this.jsTimes.AutoSize = true;
             this.jsTimes.BackColor = System.Drawing.Color.Transparent;
             this.jsTimes.Font = new System.Drawing.Font("宋体", 12F);
-            this.jsTimes.Location = new System.Drawing.Point(32, 31);
+            this.jsTimes.Location = new System.Drawing.Point(7, 6);
             this.jsTimes.Name = "jsTimes";
             this.jsTimes.Size = new System.Drawing.Size(160, 16);
             this.jsTimes.TabIndex = 0;
@@ -72,21 +71,11 @@
             // 
             this.dateTimePicker1.CustomFormat = "yyyy年MM月dd日 HH:mm:ss";
             this.dateTimePicker1.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.dateTimePicker1.Location = new System.Drawing.Point(35, 7);
+            this.dateTimePicker1.Location = new System.Drawing.Point(35, 4);
             this.dateTimePicker1.Name = "dateTimePicker1";
             this.dateTimePicker1.Size = new System.Drawing.Size(183, 21);
             this.dateTimePicker1.TabIndex = 4;
             this.dateTimePicker1.Value = new System.DateTime(2019, 1, 18, 0, 0, 0, 0);
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.BackColor = System.Drawing.Color.Transparent;
-            this.label2.Location = new System.Drawing.Point(155, 19);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(17, 12);
-            this.label2.TabIndex = 5;
-            this.label2.Text = "-1";
             // 
             // timer1
             // 
@@ -99,7 +88,6 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(221, 53);
-            this.Controls.Add(this.label2);
             this.Controls.Add(this.dateTimePicker1);
             this.Controls.Add(this.jsTimes);
             this.Controls.Add(this.label1);
@@ -110,6 +98,7 @@
             this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Form6";
+            this.Load += new System.EventHandler(this.Form6_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -121,7 +110,6 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label jsTimes;
         private System.Windows.Forms.DateTimePicker dateTimePicker1;
-        private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Timer timer1;
     }
 }

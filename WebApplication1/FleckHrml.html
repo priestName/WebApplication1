@@ -3,6 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
     <title></title>
     <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
     <script src="scripts/jquery.qqFace.js"></script>
@@ -104,7 +105,8 @@
         #UserName {
             border:none;
             margin-left:10px;
-            width:auto;
+            width:110px;
+            font-size:16px;
         }
         .MsgImg{
             width:150px;
@@ -135,13 +137,16 @@
         }
         .qqFace::-webkit-scrollbar {
         display: none;
-    }
+        }
+        #EditName {
+        font-size:16px;
+        }
     </style>
 </head>
 <body>
     <form id="form1">
         <div style="height:35px;line-height:35px">
-            <input type="text" id="UserName" readonly="readonly" placeholder="用户昵称"/><input type="button" value="确认" style="display:none" id="EditName" />
+            <input type="text" id="UserName" readonly="readonly" placeholder="用户昵称" /><input type="button" value="确认" style="display:none" id="EditName" />
             <select id="UserList">
                 <option value="-1">在线用户</option>
             </select>
@@ -161,8 +166,13 @@
         </div>
         <script>
             $(function () {
+                var fontSize1 = document.body.clientWidth
+                var fontSize2 = document.body.clientHeight
+                $("html").css("width", fontSize1);
+                $("html").css("height", fontSize2);
+                
                 // 打开一个 web socket
-                var ws = new WebSocket("ws://192.168.3.251:7788");//47.106.232.163   192.168.3.251
+                var ws = new WebSocket("ws://47.106.232.163:7788");//47.106.232.163   192.168.3.251
                 ws.onopen = function()//连接成功时触发
                 {
                     $("#TextBox1").html($("#TextBox1").html() + "<div class='SysSuccess'>连接成功</div>");
@@ -268,7 +278,7 @@
                         ws.send("MsgImg:" + result)
                     }
                 })
-                $("#UserName").dblclick(function () {
+                $("#UserName").click(function () {
                     $("#UserName").removeAttr("readonly");
                     $("#EditName").removeAttr("style");
                 })
@@ -276,8 +286,8 @@
                     ws.send("EditName:" + $("#UserName").val());
                     $("#UserName").attr("readonly", "readonly");
                     $("#EditName").css("display", "none")
+                    console.log(123)
                 })
-
                 $('.Button3').qqFace({
                     id: 'facebox', //表情盒子的ID
                     assign: 'TextBox2', //给那个控件赋值

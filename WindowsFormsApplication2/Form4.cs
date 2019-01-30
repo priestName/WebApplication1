@@ -52,7 +52,7 @@ namespace WindowsFormsApplication2
             //安装勾子
             //KeyBordHook _keyboardHook = new KeyBordHook();
             //_keyboardHook.InstallHook(this.OnKeyPress);
-
+            FormBorderStyle = FormBorderStyle.FixedSingle;
             label1.Text = "时间：" + times.ToString();
             label5.Text = "当前数字：" + cishu.ToString();
             textBox1.Text = "1";
@@ -345,6 +345,11 @@ namespace WindowsFormsApplication2
             {
                 button1_Click(null, null);
             }
+        }
+
+        private void Form4_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            NewFrom();
         }
         //public void OnKeyPress(KeyBordHook.HookStruct hookStruct, out bool handle)
         //{

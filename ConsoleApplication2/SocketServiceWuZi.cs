@@ -15,92 +15,127 @@ namespace ConsoleApplication2
         public void Start()
         {
             List<string> SerName = new List<string> { };
-            int i = 0;
             FleckLog.Level = LogLevel.Debug;
-            //string users = ReadJson();
+            string users = ReadJson();
             var allSockets = new List<IWebSocketConnection>();
             var PkSockets = new List<IWebSocketConnection>();
 
-            var server = new WebSocketServer("ws://192.168.3.251:7788");//172.18.250.7  192.168.3.251
-
+            var server = new WebSocketServer("ws://172.18.250.7:7788");//172.18.250.7  192.168.3.251
             server.Start(socket =>
             {
                 socket.OnOpen = () =>
                 {
-                    i++;
-                    //var Name = SelName(socket.ConnectionInfo.ClientIpAddress);
-                    //Name = string.IsNullOrEmpty(Name) ? "User" + JObject.Parse(users).Count : Name;
-                    //var OldSocket = allSockets.Where(s => s.ConnectionInfo.ClientIpAddress == socket.ConnectionInfo.ClientIpAddress);
-                    //if (OldSocket.Count() > 0)
-                    //{
-                    //    OldSocket.First().Send("SysMsg:您已经在其他地方登录");
-                    //    OldSocket.First().Close();
-                    //    allSockets.Remove(OldSocket.First());
-                    //    SerName.Remove(Name);
-                    //}
-                    //else
-                    //{
-                    //    insertIpName(socket.ConnectionInfo.ClientIpAddress, Name);
-                    //}
-                    var Name = "User" + i;
-                    SerName.Add(Name);
-                    allSockets.Add(socket);
-                    i = allSockets.Count();
-                    InsertLogText("IP：" + socket.ConnectionInfo.ClientIpAddress + ":" + socket.ConnectionInfo.ClientPort + " 连接成功");
-                    Console.WriteLine(socket.ConnectionInfo.ClientPort + "连接成功  当前在线人数" + SerName.Count);
-                    socket.Send("username:" + SerName[i - 1]);
-                    socket.Send("serverlist:" + string.Join("|", SerName));
-                    allSockets.ToList().ForEach(s => s.Send("serverlist:" + string.Join("|", SerName)));
+                    try
+                    {
+                        var Name = SelName(socket.ConnectionInfo.ClientIpAddress);
+                        var OldSocketList = allSockets.Where(s => s.ConnectionInfo.ClientIpAddress == socket.ConnectionInfo.ClientIpAddress);
+                        if (!string.IsNullOrEmpty(Name))
+                        {
+                        if (OldSocketList.Count()>0)
+                            {
+                                var OldSocket = OldSocketList.First();
+                                OldSocket.Send("SysMsg:您已经在其他地方登录");
+                                SerName.Remove(Name);
+                                allSockets.Remove(OldSocket);
+                                OldSocket.Close();
+                            }
+                        }
+                        else
+                        {
+                            Name = string.IsNullOrEmpty(Name) ? "User" + JObject.Parse(users + "}").Count : Name;
+                            insertIpName(socket.ConnectionInfo.ClientIpAddress, Name);
+                        }
+                        SerName.Add(Name);
+                        allSockets.Add(socket);
+                        InsertLogText("IP：" + socket.ConnectionInfo.ClientIpAddress + ":" + socket.ConnectionInfo.ClientPort + " 连接成功");
+                        Console.WriteLine(socket.ConnectionInfo.ClientPort + "连接成功  当前在线人数" + allSockets.Count());
+                        socket.Send("username:" + SerName[allSockets.Count() - 1]);
+                        socket.Send("serverlist:" + string.Join("|", SerName));
+                        allSockets.ToList().ForEach(s => s.Send("serverlist:" + string.Join("|", SerName)));
+                    }
+                    catch (Exception e) {
+                        WriteJson(e.ToString(), "UserErro.txt");
+                    }
                 };
                 socket.OnClose = () =>
                 {
-                    Console.WriteLine("Close!");
-                    SerName.Remove(SerName[allSockets.IndexOf(socket)]);
-                    allSockets.Remove(socket);
-                    allSockets.ToList().ForEach(s => s.Send("serverlist:" + string.Join("|", SerName)));
+                    try
+                    {
+                        Console.WriteLine("Close!");
+                        if (allSockets.IndexOf(socket)!=-1)
+                        {
+                            SerName.Remove(SerName[allSockets.IndexOf(socket)]);
+                            allSockets.Remove(socket);
+                            allSockets.ToList().ForEach(s => s.Send("serverlist:" + string.Join("|", SerName)));
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        WriteJson(e.ToString(), "UserErro.txt");
+                    }
                 };
                 socket.OnMessage = message =>
                 {
-                    //Console.WriteLine(message);
-                    string MsgEcho = message.Substring(0, message.IndexOf(':'));
-                    string Messages = message.Substring(message.IndexOf(':') + 1);
-                    if (MsgEcho == "EditName")
+                    try
                     {
-                        InsertLogText(SerName[allSockets.IndexOf(socket)] + "==>>修改名字==>>" + Messages);
-                        SerName[allSockets.IndexOf(socket)] = Messages;
-                        allSockets.ToList().ForEach(s => s.Send("serverlist:" + string.Join("|", SerName)));
-                        EditName(socket.ConnectionInfo.ClientIpAddress, Messages);
-                    }
-                    else if(MsgEcho == "qizixy")
-                    {
-                        var socketGo = allSockets[Convert.ToInt32(MsgEcho)];
-                        socketGo.Send(message);
-                    }
-                    else if (MsgEcho == "UserGo")
-                    {
-                        var socketGo = allSockets[Convert.ToInt32(Messages)];
-                        PkSockets.Add(socket);
-                        PkSockets.Add(socketGo);
-                        socketGo.Send("UserGo:" + SerName[allSockets.IndexOf(socket)]);
-                        InsertLogText("["+SerName[allSockets.IndexOf(socket)] + "]==>>发起挑战到[" + SerName[Convert.ToInt32(Messages)]+"]");
-                    }
-                    else if (MsgEcho == "UserIsGo")
-                    {
-                        IWebSocketConnection socketGo;
-                        int UserPkindex = PkSockets.IndexOf(socket);
-                        if (UserPkindex != -1)
+                        //Console.WriteLine(message);
+                        string MsgEcho = message.Substring(0, message.IndexOf(':'));
+                        string Messages = message.Substring(message.IndexOf(':') + 1);
+                        if (MsgEcho == "EditName")
                         {
-                            if (UserPkindex % 2 == 0)
-                            {
-                                socketGo = PkSockets[UserPkindex + 1];
-                            }
-                            else
-                            {
-                                socketGo = PkSockets[UserPkindex - 1];
-                            }
-                            socketGo.Send("UserIsGo:" + SerName[allSockets.IndexOf(socket)]);
-                            InsertLogText("[" + SerName[allSockets.IndexOf(socket)] + "]接受[" + SerName[Convert.ToInt32(Messages)] + "]的挑战");
+                            InsertLogText(SerName[allSockets.IndexOf(socket)] + "==>>修改名字==>>" + Messages);
+                            SerName[allSockets.IndexOf(socket)] = Messages;
+                            allSockets.ToList().ForEach(s => s.Send("serverlist:" + string.Join("|", SerName)));
+                            EditName(socket.ConnectionInfo.ClientIpAddress, Messages);
                         }
+                        else if (MsgEcho == "qizixy")
+                        {
+                            IWebSocketConnection socketGo;
+                            int UserPkindex = PkSockets.IndexOf(socket);
+                            if (UserPkindex != -1)
+                            {
+                                if (UserPkindex % 2 == 0)
+                                {
+                                    socketGo = PkSockets[UserPkindex + 1];
+                                }
+                                else
+                                {
+                                    socketGo = PkSockets[UserPkindex - 1];
+                                }
+                                socketGo.Send(message);
+                                InsertLogText("[" + SerName[allSockets.IndexOf(socket)] + "]VS[" + SerName[allSockets.IndexOf(socket)] + "]：[" + SerName[allSockets.IndexOf(socket)] + "]" + Messages);
+                            }
+                        }
+                        else if (MsgEcho == "UserGo")
+                        {
+                            var socketGo = allSockets[Convert.ToInt32(Messages)];
+                            PkSockets.Add(socket);
+                            PkSockets.Add(socketGo);
+                            socketGo.Send("UserGo:" + SerName[allSockets.IndexOf(socket)]);
+                            InsertLogText("[" + SerName[allSockets.IndexOf(socket)] + "]==>>发起挑战到[" + SerName[Convert.ToInt32(Messages)] + "]");
+                        }
+                        else if (MsgEcho == "UserIsGo")
+                        {
+                            IWebSocketConnection socketGo;
+                            int UserPkindex = PkSockets.IndexOf(socket);
+                            if (UserPkindex != -1)
+                            {
+                                if (UserPkindex % 2 == 0)
+                                {
+                                    socketGo = PkSockets[UserPkindex + 1];
+                                }
+                                else
+                                {
+                                    socketGo = PkSockets[UserPkindex - 1];
+                                }
+                                socketGo.Send("UserIsGo:" + SerName[allSockets.IndexOf(socket)]);
+                                InsertLogText("[" + SerName[allSockets.IndexOf(socket)] + "]接受[" + SerName[allSockets.IndexOf(socket)] + "]的挑战");
+                            }
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        WriteJson(e.ToString(), "UserErro.txt");
                     }
                 };
             });

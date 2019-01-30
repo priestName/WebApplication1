@@ -20,7 +20,7 @@ namespace ConsoleApplication2
 
             var allSockets = new List<IWebSocketConnection>();
 
-            var server = new WebSocketServer("ws://192.168.3.251:7788");//172.18.250.7  192.168.3.251
+            var server = new WebSocketServer("ws://172.18.250.7:7788");//172.18.250.7  192.168.3.251
 
             server.Start(socket =>
             {
@@ -30,12 +30,13 @@ namespace ConsoleApplication2
                     var Name = SelName(socket.ConnectionInfo.ClientIpAddress);
                     Name = string.IsNullOrEmpty(Name) ? "User" + i : Name;
                     var OldSocket = allSockets.Where(s => s.ConnectionInfo.ClientIpAddress == socket.ConnectionInfo.ClientIpAddress);
-                    if (OldSocket.Count() > 0)
+                    if (!string.IsNullOrEmpty(Name))
                     {
-                        OldSocket.First().Send("SysMsg:您已经在其他地方登录");
-                        OldSocket.First().Close();
-                        allSockets.Remove(OldSocket.First());
-                        SerName.Remove(Name);
+                        if (OldSocket.Count()>0)
+                        {
+                            OldSocket.First().Send("SysMsg:您已经在其他地方登录");
+                            OldSocket.First().Close();
+                        }
                     }
                     else {
                         insertIpName(socket.ConnectionInfo.ClientIpAddress, Name);

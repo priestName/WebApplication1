@@ -30,7 +30,10 @@
 				strFace += '</tr></table></div>';
 			}
 			$(this).parent().append(strFace);
-			$('#'+id).show();
+			$('#' + id).show();
+			var fontSize1 = document.body.clientWidth
+			$("#facebox img").css("width", fontSize1 / 15 + "px");
+			$("#facebox img").css("width", fontSize1 / 15 + "px");
 			e.stopPropagation();
 		});
 		$(document).click(function(){
