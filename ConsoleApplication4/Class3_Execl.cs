@@ -24,8 +24,8 @@ namespace ConsoleApplication4
             //    Console.WriteLine(item["测试四"]);
             //}
 
-
         }
+        #region
         public DataTable duquToTable()
         {
             HSSFWorkbook wk = new HSSFWorkbook();
@@ -182,5 +182,6 @@ namespace ConsoleApplication4
             //ISheet sheet = wk.GetSheetAt(0);
             //string a = sheet.GetRow(1).GetCell(0).ToString();
         }
+        #endregion
     }
 }

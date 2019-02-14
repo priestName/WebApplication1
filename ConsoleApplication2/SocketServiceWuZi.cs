@@ -220,10 +220,11 @@ namespace ConsoleApplication2
         }
         public void WriteJson(string Text, string TextName)
         {
-            byte[] myByte = System.Text.Encoding.UTF8.GetBytes(Text + ",\r\n");
+            byte[] myByte = System.Text.Encoding.UTF8.GetBytes(Text + ",\r\n" + DateTime.Now);
             using (FileStream fsWrite = new FileStream(@"Log\" + TextName, FileMode.Create, FileAccess.Write))
             {
                 fsWrite.Write(myByte, 0, myByte.Length);
+
             };
         }
     }

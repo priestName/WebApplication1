@@ -1,0 +1,356 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+    <link href="style/jquery-ui.min.css" rel="stylesheet" />
+    <meta charset="utf-8" />
+
+</head>
+<body>
+    <form id="form1">
+        <div class="SysMsg">提示消息</div>
+        <div style="height:60px;line-height:60px;padding-left:40px;font-size:36px;margin-top:20px;">
+            <input type="text" id="UserName" readonly="readonly" placeholder="用户昵称" />
+            <select id="UserList">
+                <option value="-1">选择在线用户</option>
+            </select>
+            <input type="button" id="UserGo" value="发起对战" />
+            <label id="UserNum">0人在线</label>
+        </div>
+        <div class="left"><div class="left1"></div></div>
+        <div class="right"><div class="right1"></div></div>
+        <div class="fom">
+            <div class="boxpan"><div class="box"></div></div>
+        </div>
+        <div class="jieju"><div class="jju" id="jus"></div><input type="button" value="重新开始" id="Reset" /></div>
+        <div id="jinshou" class="jinshou"></div>
+        <div id="Msgs" style="display:none"></div>
+    </form>
+    <style>
+        body {
+            margin: 0px;
+            padding: 0px;
+            width: 100%;
+            height: 100%;
+        }
+
+        .fom {
+            width: 100%;
+            height: 100%;
+            margin: 0px auto;
+            margin-top: 50px;
+        }
+
+        .boxpan {
+            border: inset 5px #808080;
+            margin: 20px 45px;
+            position: relative;
+            background: url(Images/qipan.png)no-repeat;
+            background-size: 100%;
+        }
+
+        .box {
+            position: absolute;
+        }
+
+        .box div {
+            float: left;
+            border:1px solid #000;
+            box-sizing: border-box;
+            border-radius: 45px;
+        }
+
+        .left, .right {
+            width: 150px;
+            height: 30px;
+            margin: 0px auto;
+            margin-top: 100px;
+            border: inset #808080 2px;
+            position: relative;
+        }
+
+        .left {
+            float: left;
+            background-color: #fff;
+            margin-left: 25%;
+        }
+
+        .right {
+            background-color: #000;
+            margin-right: 25%;
+        }
+
+        .left1, .right1 {
+            width: 30px;
+            height: 30px;
+            position: absolute;
+            top: -50px;
+            left: 0px;
+            border: solid 1px #000;
+            border-radius: 45px;
+            margin-left: 40%;
+        }
+
+        .left1 {
+            background-color: #fff;
+            display: none;
+        }
+
+        .right1 {
+            background-color: #000;
+        }
+
+        .jieju {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            z-index: 9999;
+            top: 0px;
+            left: 0px;
+            background-color: rgba(0, 0, 0, 0.1);
+            text-align: center;
+            display: none;
+        }
+
+        .jinshou {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            z-index: 9999;
+            top: 0px;
+            left: 0px;
+            background-color: rgba(0, 0, 0, 0);
+            text-align: center;
+            display: none;
+        }
+
+        .jju {
+            font-size: 100px;
+            padding-top: 70%;
+            font-family: "华文行楷";
+        }
+
+        .jjus {
+            font-size: 24px;
+            padding-top: 40%;
+            font-family: "微软雅黑";
+        }
+
+        #UserName {
+            border: none;
+            margin-left: 10px;
+            width: 250px;
+            font-size: 36px;
+        }
+
+        .SysMsg {
+            padding: 2px 10px;
+            width: 100%;
+            font-size: 36px;
+            text-align: center;
+            position: absolute;
+            z-index: 999;
+            margin-top: -67px;
+            background-color: #ffffffc4;
+        }
+
+        #UserGo {
+            font-size: 36px;
+        }
+
+        #UserList {
+            font-size: 36px;
+            width: 250px;
+        }
+
+            #UserList option {
+                font-size: 36px;
+            }
+    </style>
+    <script src="scripts/jquery-3.3.1.min.js"></script>
+    <script src="scripts/jquery.js"></script>
+    <script src="scripts/jquery-ui.min.js"></script>
+    <script type="text/javascript">
+        $(".boxpan").height($(".boxpan").width())
+        $(".box").height($(".boxpan").width() / 14 + $(".boxpan").width())
+        $(".box").width($(".boxpan").width() / 14 + $(".boxpan").width())
+        $(".box").css("left", ($(".boxpan").width() / 28) * -1)
+        $(".box").css("top", ($(".boxpan").width() / 28) * -1)
+        var abc = new Array("a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z");
+        var gg = 15;
+        var wh = $(".box").width() / gg;
+        var qzsz = wh / 2 + 5;
+        var qzclo = "000";
+        var x, y;
+        var QzArray = new Array();
+        var VsUserGo = "";
+        var myqz = "";
+        $(function () {
+            buju();
+            function xq() {
+                $(".dv").bind("click", function(e) {
+                    var positionX = e.pageX - $(this).offset().left;
+                    var positionY = e.pageY - $(this).offset().top;
+                    if (positionX > wh / 2) {
+                        if (positionY > wh / 2) {
+                            x = ($(this).offset().left + wh);
+                            y = $(this).offset().top + wh;
+                        } else {
+                            x = $(this).offset().left + wh;
+                            y = $(this).offset().top;
+                        }
+                    }
+                    else {
+                        if (positionY > wh / 2) {
+                            x = $(this).offset().left;
+                            y = $(this).offset().top + wh;
+                        } else {
+                            x = $(this).offset().left;
+                            y = $(this).offset().top;
+                        }
+                    }
+                    x -= (qzsz / 2) + $(".box").offset().left + 5;
+                    y -= (qzsz / 2) + $(".box").offset().top + 5;
+                    ws.send("qizixy:" + x + ";" + y);
+                    xqb(x, y);
+
+                });
+            }
+
+            $(".dv").click(function () {
+                if ($(this).attr("qz") != 1)
+                {
+                    $(this).css("background-color", "#" + qzclo)
+                    $(this).attr("qz", "1");
+                    //$(this).css("pointer-events", "none")
+                    $(".dv[qz!=1][qz!=0]").css("pointer-events", "none");
+                    jiance(this.id);
+                    $(".right1").css("display", "none");
+                    $(".left1").css("display", "block");
+                }
+            })
+
+            function jiance(name) {
+                var xs = Number(name.substring(1));
+                var ys = name.substring(1, 0);
+                var qh = qs = qsx = qh2 = qs2 = qsx2 = qxx = qxx2 = 0;
+                for (var i = 1; i < 5; i++) {
+                    qh += qh != i - 1 ? 0 : $("#" + ys + (xs + i)).attr("qz") == "1" ? 1 : 0;
+                    qh2 += qh2 != i - 1 ? 0 : $("#" + ys + (xs - i)).attr("qz") == "1" ? 1 : 0;
+                    qs += qs != i - 1 ? 0 : $("#" + abc[abc.indexOf(ys) + i] + xs).attr("qz") == "1" ? 1 : 0;
+                    qs2 += qs2 != i - 1 ? 0 : $("#" + abc[abc.indexOf(ys) - i] + xs).attr("qz") == "1" ? 1 : 0;
+                    qxx += qxx != i - 1 ? 0 : $("#" + abc[abc.indexOf(ys) + i] + (xs + i)).attr("qz") == "1" ? 1 : 0;
+                    qxx2 += qxx2 != i - 1 ? 0 : $("#" + abc[abc.indexOf(ys) + i] + (xs - i)).attr("qz") == "1" ? 1 : 0;
+                    qsx += qsx != i - 1 ? 0 : $("#" + abc[abc.indexOf(ys) - i] + (xs + i)).attr("qz") == "1" ? 1 : 0;
+                    qsx2 += qsx2 != i - 1 ? 0 : $("#" + abc[abc.indexOf(ys) - i] + (xs - i)).attr("qz") == "1" ? 1 : 0;
+                }
+                if ((qh + qh2) == 4 || (qs + qs2) == 4 || (qsx + qsx2) == 4 || (qxx + qxx2) == 4) {
+                    console.log("胜");
+                }
+            }
+
+            function xqb(x, y) {
+                var is_not1 = $.inArray(qzclo + "|" + x + "|" + y, QzArray);
+                var is_not2 = $.inArray(qzclo + "|" + x + "|" + y, QzArray);
+                if (is_not1 == -1 && is_not2 == -1) {
+                    if (QzArray.length % 2 == 0) {
+                        qzclo = "000";
+                        QzArray[QzArray.length] = qzclo + "|" + x + "|" + y;
+                        setTimeout(function () {
+                            $(".right1").css("display", "none");
+                            $(".left1").css("display", "block");
+                        }, 100);
+                    } else {
+                        qzclo = "fff";
+                        QzArray[QzArray.length] = qzclo + "|" + x + "|" + y;
+                        setTimeout(function () {
+                            $(".left1").css("display", "none");
+                            $(".right1").css("display", "block");
+                        }, 100);
+                    }
+                    var qz = "<div class='qz' style='left:" + x + "px;top:" + y + "px;background-color:#" + qzclo + ";width:" + qzsz + "px;height:" + qzsz + "px;'></div>";
+                    //$(".box").append(qz);
+                    $(".qz").css("pointer-events", "none");
+                    var h1, h2, s1, s2, zx1, zx2, yx1, yx2;
+                    h1 = h2 = s1 = s2 = zx1 = zx2 = yx1 = yx2 = 0;
+                    for (var s = 0; s < 4; s++) {
+                        h1 += h1 != s ? 0 : ($.inArray(qzclo + "|" + (x + parseInt(wh * (s + 1))) + "|" + y, QzArray) == -1 ? 0 : 1); //横排右
+                        h2 += h2 != s ? 0 : ($.inArray(qzclo + "|" + (x - parseInt(wh * (s + 1))) + "|" + y, QzArray) == -1 ? 0 : 1); //横排左
+                        s1 += s1 != s ? 0 : ($.inArray(qzclo + "|" + x + "|" + (y + parseInt(wh * (s + 1))), QzArray) == -1 ? 0 : 1); //竖排下
+                        s2 += s2 != s ? 0 : ($.inArray(qzclo + "|" + x + "|" + (y - parseInt(wh * (s + 1))), QzArray) == -1 ? 0 : 1); //竖排上
+                        zx1 += zx1 != s ? 0 : ($.inArray(qzclo + "|" + (x + parseInt(wh * (s + 1))) + "|" + (y + parseInt(wh * (s + 1))), QzArray) == -1 ? 0 : 1); //左斜下
+                        zx2 += zx2 != s ? 0 : ($.inArray(qzclo + "|" + (x - parseInt(wh * (s + 1))) + "|" + (y - parseInt(wh * (s + 1))), QzArray) == -1 ? 0 : 1); //左斜上
+                        yx1 += yx1 != s ? 0 : ($.inArray(qzclo + "|" + (x - parseInt(wh * (s + 1))) + "|" + (y + parseInt(wh * (s + 1))), QzArray) == -1 ? 0 : 1); //右斜下
+                        yx2 += yx2 != s ? 0 : ($.inArray(qzclo + "|" + (x + parseInt(wh * (s + 1))) + "|" + (y - parseInt(wh * (s + 1))), QzArray) == -1 ? 0 : 1); //右斜上
+                    }
+                    if (h1 + h2 >= 4 || s1 + s2 >= 4 || zx1 + zx2 >= 4 || yx1 + yx2 >= 4) {
+                        if (QzArray.length % 2 == 0) {
+                            setTimeout(function () {
+                                $(".jieju").show();
+                                $(".jus").html("白子胜");
+                                $(".jus").animate({ paddingTop: "25%" }, 500);
+                            }, 100);
+                            $("div").unbind();
+                        } else {
+                            setTimeout(function () {
+                                $(".jieju").show();
+                                $(".jus").html("黑子胜");
+                                $(".jus").animate({ paddingTop: "25%" }, 500);
+                            }, 100);
+                            $("div").unbind();
+                        }
+                        $("#jus").removeClass('jjus');
+                        $("#jus").addClass('jju');
+                    }
+                }
+                if (qzclo != myqz) {
+                    $("#jinshou").hide();
+                } else {
+                    $("#jinshou").show();
+                }
+            }
+
+            $("#UserGo").click(function () {
+                if ($("#UserName").val()!="")
+                {
+                    ws.send("UserGo:" + $("#UserList").val());
+                    VsUserGo = $.trim($("#UserList").text());
+                    $(".jieju").html("<div class='jjus'>等待对方接受...</div>");
+                    $(".jieju").show();
+                    myqz = "000";
+                }
+            });
+
+            $("#ok").click(function() {
+                buju();
+            });
+            $("#Reset").click(function() {
+                buju();
+                $(".jieju").hide();
+                $("div").bind();
+            });
+
+            function buju() {
+                x = 0, y = 0;
+                QzArray = new Array();
+                VsUserGo = "";
+                var htm = "";
+                //if ($("#sizes").val() !== "") {
+                //    gg = $("#sizes").val();
+                //    wh = $(".box").width() / gg;
+                //    qzsz = wh / 2 + 5;
+                //}
+                htm = "";
+                for (var i = 0; i < gg; i++) {
+                    for (var r = 0; r < gg; r++) {
+                        htm += "<div class='dv' id='" + abc[i] + r + "' style='width:" + wh + "px;height:" + wh + "px'></div>";
+                    }
+                }
+                $(".box").html(htm);
+            }
+        });
+
+    </script>
+</body>
+</html>

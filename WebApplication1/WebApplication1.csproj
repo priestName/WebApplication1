@@ -207,6 +207,8 @@
     <Content Include="Global.asax" />
     <Content Include="HtmlJqueryUi.html" />
     <Content Include="HtmlWuzi.html" />
+    <Content Include="HtmlWuziM.html" />
+    <Content Include="Images\qipan.JPG" />
     <Content Include="style\images\ui-icons_444444_256x240.png" />
     <Content Include="style\images\ui-icons_555555_256x240.png" />
     <Content Include="style\images\ui-icons_777620_256x240.png" />
@@ -217,6 +219,7 @@
     <Content Include="ApplicationInsights.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="wuziqi.html" />
     <None Include="scripts\jquery-1.6.4-vsdoc.js" />
     <Content Include="scripts\jquery-1.6.4.js" />
     <Content Include="scripts\jquery-1.6.4.min.js" />
@@ -424,9 +427,7 @@
       <DependentUpon>WebForm9.aspx</DependentUpon>
     </Compile>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Images\" />
-  </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
