@@ -1,0 +1,38 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title></title>
+	<meta charset="utf-8" />
+</head>
+<body>
+    <div>
+        <div class="fud" style="position:absolute;top:50px;left:50px;z-index:12"><input type="button"/><div class="fubt">123</div></div>
+        <div class="fud" style="position:absolute;top:150px;left:50px;">123</div>
+    </div>
+    <style>
+        .fud {
+            width:200px;
+            height:100px;
+            background-color:#ff6a00;
+            border:1px solid #000000;
+            z-index:10;
+        }
+        input[type=button] {
+            width:50px;
+            height:30px;
+            position:relative;
+        }
+        .fubt {
+            width:50px;
+            height:150px;
+            background-color:#808080;
+            border:1px solid #000000;
+            position:relative;
+            z-index:1000;
+            left:10px;
+            top:10px;
+        }
+    </style>
+</body>
+</html>

@@ -206,6 +206,7 @@
     <Content Include="FleckHrml.html" />
     <Content Include="Global.asax" />
     <Content Include="HtmlJqueryUi.html" />
+    <Content Include="HtmlPage1.html" />
     <Content Include="HtmlWuzi.html" />
     <Content Include="HtmlWuziM.html" />
     <Content Include="Images\qipan.JPG" />
@@ -219,6 +220,7 @@
     <Content Include="ApplicationInsights.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="WebForm22.aspx" />
     <Content Include="wuziqi.html" />
     <None Include="scripts\jquery-1.6.4-vsdoc.js" />
     <Content Include="scripts\jquery-1.6.4.js" />
@@ -376,6 +378,13 @@
     </Compile>
     <Compile Include="WebForm21.aspx.designer.cs">
       <DependentUpon>WebForm21.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="WebForm22.aspx.cs">
+      <DependentUpon>WebForm22.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WebForm22.aspx.designer.cs">
+      <DependentUpon>WebForm22.aspx</DependentUpon>
     </Compile>
     <Compile Include="WebForm3.aspx.cs">
       <DependentUpon>WebForm3.aspx</DependentUpon>

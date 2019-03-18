@@ -83,10 +83,10 @@ namespace ConsoleApplication2
                         string Messages = message.Substring(message.IndexOf(':') + 1);
                         if (MsgEcho == "EditName")
                         {
+                            EditName(socket.ConnectionInfo.ClientIpAddress, Messages);
                             InsertLogText(SerName[allSockets.IndexOf(socket)] + "==>>修改名字==>>" + Messages);
                             SerName[allSockets.IndexOf(socket)] = Messages;
                             allSockets.ToList().ForEach(s => s.Send("serverlist:" + string.Join("|", SerName)));
-                            EditName(socket.ConnectionInfo.ClientIpAddress, Messages);
                         }
                         else if (MsgEcho == "qizixy")
                         {
@@ -142,7 +142,7 @@ namespace ConsoleApplication2
         }
         public void InsertLogText(string msg)
         {
-            byte[] myByte = System.Text.Encoding.UTF8.GetBytes(msg + "\r\n");
+            byte[] myByte = System.Text.Encoding.UTF8.GetBytes("（DT:" + DateTime.Now.ToString("yyyy/MM/dd-HH:mm:ss")+"）"+msg+ "\r\n");
             string TextName = DateTime.Now.Date.ToString("yyyy_MM_dd") + "_log.txt";
             Directory.CreateDirectory(@"Log\");
             using (FileStream fsWrite = new FileStream(@"Log\" + TextName, FileMode.Append))
@@ -193,9 +193,10 @@ namespace ConsoleApplication2
                 if (item.Value["ip"].ToString() == Ip)
                 {
                     item.Value["name"] = Name;
+                    break;
                 }
             }
-            WriteJson(job.ToString().Substring(0, job.ToString().Length - 1), "User_Ip_Name.txt");
+            WriteJson(job.ToString().Substring(0, job.ToString().Length - 1)+",", "User_Ip_Name.txt");
         }
         public string ReadJson()
         {
@@ -220,7 +221,12 @@ namespace ConsoleApplication2
         }
         public void WriteJson(string Text, string TextName)
         {
-            byte[] myByte = System.Text.Encoding.UTF8.GetBytes(Text + ",\r\n" + DateTime.Now);
+            
+            if (TextName != "User_Ip_Name.txt")
+            {
+                Text += ",\r\n" + DateTime.Now;
+            }
+            byte[] myByte = System.Text.Encoding.UTF8.GetBytes(Text);
             using (FileStream fsWrite = new FileStream(@"Log\" + TextName, FileMode.Create, FileAccess.Write))
             {
                 fsWrite.Write(myByte, 0, myByte.Length);
