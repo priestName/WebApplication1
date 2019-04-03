@@ -67,6 +67,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Class7_CMD.cs" />
     <Compile Include="Class_baiduAI.cs" />
     <Compile Include="Class1_sql.cs" />
     <Compile Include="Class_Socket.cs" />

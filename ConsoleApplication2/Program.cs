@@ -20,11 +20,11 @@ namespace ConsoleApplication2
             //TCP_Server c1 = new TCP_Server();
             //c1.Main();
 
-            //SocketService socket = new SocketService();
-            //socket.Start();
-
-            SocketServiceWuZi socket = new SocketServiceWuZi();
+            SocketService socket = new SocketService();
             socket.Start();
+
+            //SocketServiceWuZi socket = new SocketServiceWuZi();
+            //socket.Start();
 
             Console.ReadLine();
         }

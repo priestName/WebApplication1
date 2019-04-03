@@ -172,7 +172,7 @@
                 $("html").css("height", fontSize2);
                 
                 // 打开一个 web socket
-                var ws = new WebSocket("ws://47.106.232.163:7788");//47.106.232.163   192.168.3.251
+                var ws = new WebSocket("ws://192.168.3.251:7788");//47.106.232.163   192.168.3.251
                 ws.onopen = function()//连接成功时触发
                 {
                     $("#TextBox1").html($("#TextBox1").html() + "<div class='SysSuccess'>连接成功</div>");

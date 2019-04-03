@@ -20,7 +20,7 @@ namespace ConsoleApplication2
 
             var allSockets = new List<IWebSocketConnection>();
 
-            var server = new WebSocketServer("ws://172.18.250.7:7788");//172.18.250.7  192.168.3.251
+            var server = new WebSocketServer("ws://192.168.3.251:7788");//172.18.250.7  192.168.3.251
 
             server.Start(socket =>
             {
@@ -36,6 +36,12 @@ namespace ConsoleApplication2
                         {
                             OldSocket.First().Send("SysMsg:您已经在其他地方登录");
                             OldSocket.First().Close();
+                            if (allSockets.IndexOf(OldSocket.First()) != -1)
+                                Console.WriteLine("Close!");
+                            if (allSockets.IndexOf(OldSocket.First()) != -1)
+                                SerName.Remove(SerName[allSockets.IndexOf(OldSocket.First())]);
+                            if (allSockets.IndexOf(OldSocket.First()) != -1)
+                                allSockets.Remove(OldSocket.First());
                         }
                     }
                     else {
@@ -77,10 +83,14 @@ namespace ConsoleApplication2
                 };
                 socket.OnClose = () =>
                 {
-                    Console.WriteLine("Close!");
-                    SerName.Remove(SerName[allSockets.IndexOf(socket)]);
-                    allSockets.Remove(socket);
-                    allSockets.ToList().ForEach(s => s.Send("serverlist:" + string.Join("|", SerName)));
+                    if (allSockets.IndexOf(socket) != -1)
+                        Console.WriteLine("Close!");
+                    if (allSockets.IndexOf(socket) != -1)
+                        SerName.Remove(SerName[allSockets.IndexOf(socket)]);
+                    if (allSockets.IndexOf(socket) != -1)
+                        allSockets.Remove(socket);
+                    if (allSockets.IndexOf(socket) != -1)
+                        allSockets.ToList().ForEach(s => s.Send("serverlist:" + string.Join("|", SerName)));
                 };
                 socket.OnMessage = message =>
                 {
