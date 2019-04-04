@@ -78,8 +78,10 @@
     <Compile Include="Class5_ASCII.cs" />
     <Compile Include="Class6_技能对话.cs" />
     <Compile Include="Class_Text.cs" />
+    <Compile Include="Class_路径.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="System\Windows\Forms.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

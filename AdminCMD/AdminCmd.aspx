@@ -33,10 +33,13 @@
 <body onload="TextFocus()">
     <form id="form1" runat="server">
     <div>
+        <asp:Button ID="Button2" runat="server" Text="Button" UseSubmitBehavior="False" OnClick="Button2_Click"/>
+        <asp:TextBox ID="FileName" runat="server"></asp:TextBox>
+        <asp:TextBox ID="Arguments" runat="server"></asp:TextBox>
         <div>
             <div id="textarea1" runat="server">
                 Microsoft Windows [版本 6.3.9600]<br />
-                (c) 2018 Microsoft Corporation。保留所有权利。<br />
+                (c) 2013 Microsoft Corporation。保留所有权利。<br />
             </div>
             <asp:TextBox ID="TextBox1" runat="server" onkeydown="keyDown"></asp:TextBox><br />
         </div>

