@@ -10,7 +10,7 @@ namespace ConsoleApplication4
     {
         static void Main(string[] args)
         {
-            Class_路径 classs = new Class_路径();
+            Class8_MAC classs = new Class8_MAC();
             classs.saa();
             Console.ReadLine();
         }

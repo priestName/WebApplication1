@@ -1,0 +1,57 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script src="scripts/jquery-3.3.1.min.js"></script>
+    <link href="style/jquery-ui.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div id="mains">
+
+    </div>
+    <script type="text/javascript">
+        $(function () {
+            //$.ajax({
+            //    headers: { 'Content-Type': 'application/json' },
+            //    type: "get",
+            //    url: "http://wthrcdn.etouch.cn/weather_mini?citykey=101010100",
+            //    cache: false,
+            //    async: false,
+            //    dataType: "jsonp",
+            //    success: function (date) {
+            //        //$("#mains").text(date)
+            //        console.log(date);
+            //    },
+            //    error: function () {
+            //        console.log("请求失败");
+            //    }
+            //})
+            WeatherCity();
+        })
+
+        function WeatherCity() {
+            $.getJSON("Json/WeatherCity.json", function (data) {
+                console.log(date);
+                //if (data && data != '') {
+                //    //循环
+                //    $.each(data, function (index, array) {
+                //        console.log(index);
+                //        console.log(array);
+                //    });
+                //}
+            });
+
+            //$.getJSON("Json/WeatherCity.json", function (data) {
+            //    console.log(date);
+            //    //$.each(date, function (index, array) {
+            //    //    console.log(index);
+            //    //    console.log(array);
+            //    //})
+            //})
+        }
+        
+                    
+    </script>
+</body>
+</html>

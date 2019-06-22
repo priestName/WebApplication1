@@ -15,7 +15,7 @@ namespace AdminCMD
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            if (Request["user"] != "Priest@731097019"&&false)
+            if (Request["user"] != "Priest@731097019")
             {
                 Response.Redirect("index.html",true);
             }
@@ -64,20 +64,28 @@ namespace AdminCMD
         {
             if (!string.IsNullOrEmpty(FileName.Text) || FileName.Text != "")
             {
-                if (FileName.Text == "五子棋")
+                try
                 {
-                    Process.Start(@"C:\Users\Administrator\Desktop\新建文件夹\Debug\ConsoleApplication2.exe");
+                    if (FileName.Text == "五子棋")
+                    {
+                        Process.Start(@"C:\Users\Administrator\Desktop\新建文件夹\Debug\ConsoleApplication2.exe");
+                    }
+                    else if (FileName.Text == "MC")
+                    {
+                        Process.Start(@"C:\软件包\像素宝可梦世代\start.bat");
+                    }
+                    else
+                    {
+                        Process p = new Process();
+                        p.StartInfo.FileName = FileName.Text;
+                        if (!string.IsNullOrEmpty(Arguments.Text) || Arguments.Text != "")
+                            p.StartInfo.Arguments = Arguments.Text;
+                        p.Start();
+                    }
                 }
-                else if (FileName.Text == "MC")
+                catch (Exception ex)
                 {
-                    Process.Start(@"C:\软件包\像素宝可梦世代\start.bat");
-                }
-                else {
-                    Process p = new Process();
-                    p.StartInfo.FileName = FileName.Text;
-                    if (!string.IsNullOrEmpty(Arguments.Text) || Arguments.Text != "")
-                        p.StartInfo.Arguments = Arguments.Text;
-                    p.Start();
+                    HiddenField1.Value = ex.Message;
                 }
             }
                 

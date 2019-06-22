@@ -44,6 +44,7 @@
             <asp:TextBox ID="TextBox1" runat="server" onkeydown="keyDown"></asp:TextBox><br />
         </div>
         <asp:Button ID="Button1" runat="server" Text="Button" OnClick="Button1_Click"/>
+        <asp:HiddenField ID="HiddenField1" runat="server" Value=""/>
     </div>
     </form>
 <script type="text/javascript">
