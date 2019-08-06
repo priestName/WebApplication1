@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="TestHttpPost.aspx.cs" Inherits="TestPayhfPost.TestHttpPost" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="index.aspx.cs" Inherits="TestPayhfPost.TestHttpPost" %>
 
 <!DOCTYPE html>
 

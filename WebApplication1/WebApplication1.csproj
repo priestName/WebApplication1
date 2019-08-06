@@ -133,6 +133,7 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Drawing.html" />
     <Content Include="face\1.gif" />
     <Content Include="face\10.gif" />
     <Content Include="face\11.gif" />
@@ -218,6 +219,7 @@
     <Content Include="HtmlWuziM.html" />
     <Content Include="Images\qipan.png" />
     <Content Include="scripts\qrcode.min.js" />
+    <Content Include="scripts\WeatherCity.js" />
     <Content Include="style\images\ui-icons_444444_256x240.png" />
     <Content Include="style\images\ui-icons_555555_256x240.png" />
     <Content Include="style\images\ui-icons_777620_256x240.png" />

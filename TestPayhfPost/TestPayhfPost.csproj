@@ -47,6 +47,9 @@
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.12.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="Pay">
+      <HintPath>E:\SVN\Tools\Pay\Pay\bin\Pay.dll</HintPath>
+    </Reference>
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -71,21 +74,39 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Global.asax" />
-    <Content Include="TestHttpPost.aspx" />
+    <Content Include="index.aspx" />
+    <Content Include="index2.aspx" />
+    <Content Include="TestPostNotify.aspx" />
     <Content Include="TestWthrcdn.aspx" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TestHttpPost.aspx.cs">
-      <DependentUpon>TestHttpPost.aspx</DependentUpon>
+    <Compile Include="index2.aspx.cs">
+      <DependentUpon>index2.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="TestHttpPost.aspx.designer.cs">
-      <DependentUpon>TestHttpPost.aspx</DependentUpon>
+    <Compile Include="index2.aspx.designer.cs">
+      <DependentUpon>index2.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="index.aspx.cs">
+      <DependentUpon>index.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="index.aspx.designer.cs">
+      <DependentUpon>index.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="TestPostNotify.aspx.cs">
+      <DependentUpon>TestPostNotify.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="TestPostNotify.aspx.designer.cs">
+      <DependentUpon>TestPostNotify.aspx</DependentUpon>
     </Compile>
     <Compile Include="TestWthrcdn.aspx.cs">
       <DependentUpon>TestWthrcdn.aspx</DependentUpon>

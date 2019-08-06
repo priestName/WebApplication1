@@ -6,13 +6,12 @@ using System.Threading.Tasks;
 
 namespace ConsoleApplication4
 {
-    class Program
+    class Class_Weather
     {
-        static void Main(string[] args)
+        public void saa()
         {
-            MD5For classs = new MD5For();
-            classs.saa();
-            Console.ReadLine();
+
+
         }
     }
 }

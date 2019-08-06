@@ -20,13 +20,14 @@ namespace TestPayhfPost
             {
                 try
                 {
-                    //接收并读取POST过来的XML文件流
-                    StreamReader reader = new StreamReader(Request.InputStream);
+                    //接收并读取POST过来的文件流
+                    StreamReader reader = new StreamReader(Request.InputStream,Encoding.UTF8);
                     xmlData = reader.ReadToEnd();
-                    Dictionary<string, string> DataStr = TestPost(xmlData);
                     reader.Close();
                     if (!string.IsNullOrEmpty(xmlData))
                     {
+                        insertIpName(Directory.GetParent(Server.MapPath("~/")).FullName + @"\OldLog\", JsonConvert.SerializeObject(xmlData, Formatting.None));
+                        Dictionary<string, string> DataStr = TestPost(xmlData);
                         insertIpName(Directory.GetParent(Server.MapPath("~/")).FullName + @"\Log\", JsonConvert.SerializeObject(DataStr, Formatting.None));
                         Response.Write("RECV_ORD_ID_{" + DataStr["ordId"].ToString() + "}");
                         Response.End();
@@ -51,10 +52,9 @@ namespace TestPayhfPost
                         int fsLen = (int)fsRead.Length;
                         byte[] heByte = new byte[fsLen];
                         int r = fsRead.Read(heByte, 0, heByte.Length);
-                        myStr = System.Text.Encoding.UTF8.GetString(heByte);
-                        Log.InnerHtml += "<a>TextName："+ item.Name+ "</a><p>" + myStr + "</p><br/>";
+                        myStr = Encoding.UTF8.GetString(heByte);
+                        Log.InnerHtml += "<a>TextName：" + item.Name + "</a><p>" + myStr + "</p><br/>";
                     }
-
                 }
             }
         }
@@ -69,10 +69,7 @@ namespace TestPayhfPost
             Dictionary<string, string> UrlPostList = new Dictionary<string, string>();
             foreach (var item in UrlPost)
             {
-                if (item.IndexOf('%') != -1)
-                    UrlPostList.Add(item.Substring(0, item.IndexOf('=')), HttpUtility.UrlDecode(item.Substring(item.IndexOf('=') + 1), Encoding.UTF8));
-                else
-                    UrlPostList.Add(item.Substring(0, item.IndexOf('=')), item.Substring(item.IndexOf('=') + 1));
+                UrlPostList.Add(item.Substring(0, item.IndexOf('=')), item.Substring(item.IndexOf('=') + 1));
             }
             return UrlPostList;
         }
