@@ -19,12 +19,23 @@ namespace ConsoleApplication2
 
             //TCP_Server c1 = new TCP_Server();
             //c1.Main();
+            Console.WriteLine("1：聊天，2：五子棋");
+            switch (Console.ReadLine())
+            {
+                case "1":
+                    SocketService socket = new SocketService();
+                    socket.Start();
+                    break;
+                case "2":
+                    SocketServiceWuZi socketWuZi = new SocketServiceWuZi();
+                    socketWuZi.Start();
+                    break;
+                default:
+                    break;
+            }
+            
 
-            SocketService socket = new SocketService();
-            socket.Start();
-
-            //SocketServiceWuZi socket = new SocketServiceWuZi();
-            //socket.Start();
+            
 
             Console.ReadLine();
         }

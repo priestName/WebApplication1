@@ -172,7 +172,7 @@
                 $("html").css("height", fontSize2);
                 
                 // 打开一个 web socket
-                var ws = new WebSocket("ws://192.168.3.251:7788");//47.106.232.163   192.168.3.251
+                var ws = new WebSocket("ws://192.168.3.10:7788");//47.106.232.163   192.168.3.10
                 ws.onopen = function()//连接成功时触发
                 {
                     $("#TextBox1").html($("#TextBox1").html() + "<div class='SysSuccess'>连接成功</div>");
@@ -241,9 +241,10 @@
 
                 $("#Button1").click(function () {
                     var msg = $("#TextBox2").html();
-                    if (msg.substring(msg.length - 15) == "<div><br></div>")
-                    {
-                        msg=msg.substring(0, msg.length - 15)
+                    msg = msg.replace(/<div><br><\/div>/g, "")
+                    if (msg.length == 0) {
+                        $("#TextBox2").html("")
+                        return;
                     }
                     if ($("#UserList").val() == -1) {
                         var Htmls = "<div><span class='MsgGo'>" + msg + "</span></div>";

@@ -42,7 +42,7 @@ namespace ConsoleApplication2
                         }
                         else
                         {
-                            Name = string.IsNullOrEmpty(Name) ? "User" + JObject.Parse(users + "}").Count : Name;
+                            Name = "User" + JObject.Parse(users + "}").Count;
                             insertIpName(socket.ConnectionInfo.ClientIpAddress, Name);
                         }
                         SerName.Add(Name);

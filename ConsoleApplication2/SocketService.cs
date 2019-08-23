@@ -20,7 +20,7 @@ namespace ConsoleApplication2
 
             var allSockets = new List<IWebSocketConnection>();
 
-            var server = new WebSocketServer("ws://192.168.3.251:7788");//172.18.250.7  192.168.3.251
+            var server = new WebSocketServer("ws://192.168.3.10:7788");//172.18.250.7  192.168.3.10
 
             server.Start(socket =>
             {
@@ -28,7 +28,6 @@ namespace ConsoleApplication2
                 {
                     i++;
                     var Name = SelName(socket.ConnectionInfo.ClientIpAddress);
-                    Name = string.IsNullOrEmpty(Name) ? "User" + i : Name;
                     var OldSocket = allSockets.Where(s => s.ConnectionInfo.ClientIpAddress == socket.ConnectionInfo.ClientIpAddress);
                     if (!string.IsNullOrEmpty(Name))
                     {
@@ -45,6 +44,7 @@ namespace ConsoleApplication2
                         }
                     }
                     else {
+                        Name = "User" + i;
                         insertIpName(socket.ConnectionInfo.ClientIpAddress, Name);
                     }
                     SerName.Add(Name);
