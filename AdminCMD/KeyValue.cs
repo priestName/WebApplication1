@@ -13,6 +13,7 @@ namespace AdminCMD
         }
 
         public virtual DbSet<Md5Test> Md5Test { get; set; }
+        public virtual DbSet<Md5TestUser> Md5TestUser { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

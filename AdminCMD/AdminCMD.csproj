@@ -133,6 +133,7 @@
     <Compile Include="AdminCmd.aspx.designer.cs">
       <DependentUpon>AdminCmd.aspx</DependentUpon>
     </Compile>
+    <Compile Include="DbContextFactory.cs" />
     <Compile Include="GetMd5Text.aspx.cs">
       <DependentUpon>GetMd5Text.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -142,6 +143,7 @@
     </Compile>
     <Compile Include="KeyValue.cs" />
     <Compile Include="Md5Test.cs" />
+    <Compile Include="Md5TestUser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <PropertyGroup>

@@ -1,4 +1,4 @@
-namespace AdminCMD
+﻿namespace Md5TestFor
 {
     using System;
     using System.Collections.Generic;
@@ -6,7 +6,7 @@ namespace AdminCMD
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
 
-    public partial class Md5Test
+    public partial class Md5TestUser
     {
         public int Id { get; set; }
 

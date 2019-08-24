@@ -35,8 +35,9 @@ namespace Md5TestFor
                 "0","1","2","3","4","5","6","7","8","9"
             };
 
-            Double MaxNumber = 0, MinNumber = 0;
+            double MaxNumber = 0, MinNumber = 0;
             string NumberStr = string.Empty;
+            int[] Text;
             if (!string.IsNullOrEmpty(stretext))
             {
                 foreach (var item in stretext)
@@ -44,6 +45,8 @@ namespace Md5TestFor
                     int t = Array.IndexOf(zimu, item.ToString());
                     NumberStr += t > 0 ? t.ToString() + "," : "0,";
                 }
+                Text = Array.ConvertAll(NumberStr.Trim(',').Split(','), int.Parse);
+                Text[5] += 1;
             }
             else
             {
@@ -51,8 +54,8 @@ namespace Md5TestFor
                 {
                     NumberStr += "0,";
                 }
+                Text = Array.ConvertAll(NumberStr.Trim(',').Split(','), int.Parse);
             }
-            int[] Text = Array.ConvertAll(NumberStr.Trim(',').Split(','), int.Parse);
             for (int i = Text.Last(); i <= zimu.Length; i++)
             {
             jinzh:
@@ -80,11 +83,11 @@ namespace Md5TestFor
                 {
                     MinText += zimu[Convert.ToInt32(item)];
                 }
-
-                string IsMinText = MD5(MinText);
-                KeyValue KeyValueContext = new KeyValue();
-                KeyValueContext.Md5Test.Add(new Md5Test() { Key = MinText, Value = IsMinText });
-                KeyValueContext.SaveChanges();
+                Console.WriteLine(MinText);
+                //string IsMinText = MD5(MinText);
+                //KeyValue KeyValueContext = new KeyValue();
+                //KeyValueContext.Md5Test.Add(new Md5Test() { Key = MinText, Value = IsMinText });
+                //KeyValueContext.SaveChanges();
 
                 if (i == MaxNumber - 1)
                 {
