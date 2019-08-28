@@ -13,8 +13,6 @@ namespace Md5TestFor
     {
         public void Md5For()
         {
-            
-            
             string Key = Console.ReadLine();
             string Value = MD5(Key);
 

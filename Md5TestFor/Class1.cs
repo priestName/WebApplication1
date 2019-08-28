@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using System.Security.Cryptography;
+using System.Data.Entity;
 
 namespace Md5TestFor
 {
@@ -35,7 +36,6 @@ namespace Md5TestFor
                 "0","1","2","3","4","5","6","7","8","9"
             };
 
-            double MaxNumber = 0, MinNumber = 0;
             string NumberStr = string.Empty;
             int[] Text;
             if (!string.IsNullOrEmpty(stretext))
@@ -66,10 +66,6 @@ namespace Md5TestFor
                     i = 0;
                     Text[Text62] = 0;
                     Text[Text62 - 1] += +1;
-                    if (Text62 == Text.Length - 2)
-                    {
-                        Console.WriteLine(string.Join(",", Text));
-                    }
                     goto jinzh;
                 }
                 if (Text62 == 0)
@@ -83,17 +79,9 @@ namespace Md5TestFor
                 {
                     MinText += zimu[Convert.ToInt32(item)];
                 }
+                addMd5(MinText, MD5(MinText));
                 Console.WriteLine(MinText);
-                //string IsMinText = MD5(MinText);
-                //KeyValue KeyValueContext = new KeyValue();
-                //KeyValueContext.Md5Test.Add(new Md5Test() { Key = MinText, Value = IsMinText });
-                //KeyValueContext.SaveChanges();
-
-                if (i == MaxNumber - 1)
-                {
-                    Console.WriteLine(MinNumber);
-                    Console.WriteLine("结束");
-                }
+                
             }
         }
         string MD5(string input)
@@ -111,16 +99,13 @@ namespace Md5TestFor
 
             return sBuilder.ToString();
         }
-        
-        void insertText(string text, string name)
+
+        void addMd5(string Key, string Value)
         {
-            byte[] myByte = System.Text.Encoding.UTF8.GetBytes(text + ",");
-            Directory.CreateDirectory(@"C:\\MD5_Text\");
-            using (FileStream fsWrite = new FileStream(@"C:\\MD5_Text\" + name, FileMode.Append))
-            {
-                fsWrite.Position = fsWrite.Length;
-                fsWrite.Write(myByte, 0, myByte.Length);
-            };
+            KeyValue KeyValueContext = new KeyValue();
+            KeyValueContext.Md5Test.Add(new Md5Test() { Key = Key, Value = Value });
+            KeyValueContext.SaveChanges();
+            
         }
     }
 }
