@@ -12,7 +12,7 @@ namespace Md5TestFor
     {
         static void Main(string[] args)
         {
-            Class3 class1 = new Class3();
+            Class1 class1 = new Class1();
             class1.Md5For();
 
 

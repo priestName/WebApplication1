@@ -110,6 +110,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SocketService.cs" />
+    <Compile Include="SocketService2.cs" />
     <Compile Include="SocketServiceWuZi.cs" />
     <Compile Include="TCP_Server.cs" />
   </ItemGroup>

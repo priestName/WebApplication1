@@ -17,10 +17,7 @@ namespace Md5TestFor
             Console.Clear();
             Console.Write("位数:");
             string num = Console.ReadLine();
-            if (string.IsNullOrEmpty(num))
-            {
-                goto gonum;
-            }
+            if (string.IsNullOrEmpty(num)) goto gonum;
             Console.Write("起始项(可空):");
             string text = Console.ReadLine().ToString();
             quzimu(Convert.ToInt32(num), text);

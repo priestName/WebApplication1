@@ -10,7 +10,7 @@ using Newtonsoft.Json.Linq;
 
 namespace ConsoleApplication2
 {
-    class SocketService
+    class SocketService2
     {
         public void Start()
         {
@@ -31,7 +31,7 @@ namespace ConsoleApplication2
                     var OldSocket = allSockets.Where(s => s.ConnectionInfo.ClientIpAddress == socket.ConnectionInfo.ClientIpAddress);
                     if (!string.IsNullOrEmpty(Name))
                     {
-                        if (OldSocket.Count()>0)
+                        if (OldSocket.Count() > 0)
                         {
                             OldSocket.First().Send("SysMsg:您已经在其他地方登录");
                             OldSocket.First().Close();
@@ -43,7 +43,8 @@ namespace ConsoleApplication2
                                 allSockets.Remove(OldSocket.First());
                         }
                     }
-                    else {
+                    else
+                    {
                         Name = "User" + i;
                         insertIpName(socket.ConnectionInfo.ClientIpAddress, Name);
                     }
@@ -76,9 +77,9 @@ namespace ConsoleApplication2
                     //allSockets.Add(socket);
                     #endregion
                     InsertLogText("IP：" + socket.ConnectionInfo.ClientIpAddress + ":" + socket.ConnectionInfo.ClientPort + " 连接成功");
-                    Console.WriteLine(socket.ConnectionInfo.ClientPort+ "连接成功  当前在线人数"+ SerName.Count);
-                    socket.Send("username:" + SerName[i-1]);
-                    socket.Send("serverlist:"+ string.Join("|", SerName));
+                    Console.WriteLine(socket.ConnectionInfo.ClientPort + "连接成功  当前在线人数" + SerName.Count);
+                    socket.Send("username:" + SerName[i - 1]);
+                    socket.Send("serverlist:" + string.Join("|", SerName));
                     allSockets.ToList().ForEach(s => s.Send("serverlist:" + string.Join("|", SerName)));
                 };
                 socket.OnClose = () =>
@@ -100,7 +101,7 @@ namespace ConsoleApplication2
                 {
                     //Console.WriteLine(message);
                     string MsgEcho = message.Substring(0, message.IndexOf(':'));
-                    string Messages = message.Substring(message.IndexOf(':')+1);
+                    string Messages = message.Substring(message.IndexOf(':') + 1);
                     if (MsgEcho == "Msg")
                     {
                         foreach (var item in allSockets.ToList())
@@ -112,7 +113,8 @@ namespace ConsoleApplication2
                         }
                         InsertLogText(SerName[allSockets.IndexOf(socket)] + "==>>发送消息==>>" + Messages);
                     }
-                    else if (MsgEcho == "MsgImg") {
+                    else if (MsgEcho == "MsgImg")
+                    {
                         foreach (var item in allSockets.ToList())
                         {
                             if (item != socket)
@@ -140,7 +142,7 @@ namespace ConsoleApplication2
         }
         public void InsertLogText(string msg)
         {
-            byte[] myByte = System.Text.Encoding.UTF8.GetBytes(msg+ "\r\n");
+            byte[] myByte = System.Text.Encoding.UTF8.GetBytes(msg + "\r\n");
             string TextName = DateTime.Now.Date.ToString("yyyy_MM_dd") + "_log.txt";
             Directory.CreateDirectory(@"Log\");
             using (FileStream fsWrite = new FileStream(@"Log\" + TextName, FileMode.Append))
@@ -148,7 +150,7 @@ namespace ConsoleApplication2
                 fsWrite.Write(myByte, 0, myByte.Length);
             };
         }
-        public void insertIpName(string Ip,string name)
+        public void insertIpName(string Ip, string name)
         {
             Ip = name + ":{ip:'" + Ip + "',name:'" + name + "'},";
             byte[] myByte = System.Text.Encoding.UTF8.GetBytes("\r\n" + Ip);
@@ -166,7 +168,7 @@ namespace ConsoleApplication2
         {
             string myStr = ReadJson();
             myStr = myStr.Replace("\r\n", "");
-            if (myStr!="{")
+            if (myStr != "{")
             {
                 myStr = myStr.Substring(0, myStr.Length - 1) + "}";
                 JObject job = JObject.Parse(myStr);
@@ -190,7 +192,7 @@ namespace ConsoleApplication2
             {
                 if (item.Value["ip"].ToString() == Ip)
                 {
-                    item.Value["name"]= Name;
+                    item.Value["name"] = Name;
                 }
             }
             WriteJson(job.ToString().Substring(0, job.ToString().Length - 1), "User_Ip_Name.txt");
@@ -216,7 +218,7 @@ namespace ConsoleApplication2
             }
             return myStr;
         }
-        public void WriteJson(string Text,string TextName)
+        public void WriteJson(string Text, string TextName)
         {
             byte[] myByte = System.Text.Encoding.UTF8.GetBytes(Text + ",\r\n");
             using (FileStream fsWrite = new FileStream(@"Log\" + TextName, FileMode.Create, FileAccess.Write))
