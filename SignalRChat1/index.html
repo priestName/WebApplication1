@@ -3,52 +3,187 @@
 <head>
     <title>SignalR Simple Chat</title>
     <style type="text/css">
-        .container {
-            background-color: #99CCFF;
-            border: thick solid #808080;
-            padding: 20px;
-            margin: 20px;
+        * {
+            margin: 0;
+            padding: 0;
+            font-family: 'Microsoft YaHei'
+        }
+
+        html {
+            overflow: hidden;
+            width: 100%;
+            height: 100%;
+        }
+
+        body, form {
+            overflow: hidden;
+            width: 100%;
+            height: 100%;
+        }
+
+        #ShowMessage {
+            overflow: auto;
+            height: 80%;
+            width: 100%;
+            resize: none;
+            border: solid 1px #808080
+        }
+
+        #message {
+            height: 100%;
+            width: 100%;
+            resize: none;
+            overflow: auto;
+            display: block;
+        }
+
+        .TextSp {
+            height: 14%;
+            width: 80%;
+            float: left;
+        }
+
+        #ShowMessage div {
+            width: 100%;
+            text-align: right;
+        }
+
+        #sendmessage {
+            width: 100%;
+            height: 100%;
+        }
+
+        .Btn1Sp {
+            width: 10%;
+            height: 14%;
+            float: left;
+            vertical-align: top;
+        }
+
+        .ButSp {
+            width: 10%;
+            height: 14%;
+            vertical-align: top;
+            float: left;
+        }
+
+        #Button2 {
+            width: 100%;
+            height: 50%;
+        }
+
+        #Button3 {
+            width: 100%;
+            height: 50%;
+        }
+
+        .MsgGo {
+            background-color: darkturquoise;
+            line-height: 24px;
+            text-align: right;
+            margin: 1px 0px;
+            display: inline-block;
+        }
+
+        .SiMsg {
+            background-color: #00ffff;
+        }
+
+        .SysSuccess {
+            background-color: green;
+            text-align: center !important;
+        }
+
+        .SysFailure {
+            background-color: red;
+            text-align: center !important;
+        }
+
+        .SysWarning {
+            background-color: yellow;
+            text-align: center !important;
+        }
+
+        input::-webkit-input-placeholder {
+            color: #000;
+            font-size: 16px;
+        }
+
+        #UserName {
+            border: none;
+            margin-left: 10px;
+            width: 110px;
+            font-size: 16px;
+        }
+
+        .MsgImg {
+            width: 150px;
+            height: 150px;
+            vertical-align: text-top;
+        }
+
+        .qqFace {
+            position: absolute;
+            display: none;
+            z-index: 1000;
+            right: 10%;
+            bottom: 14%;
+            width: 80%;
+            background-color: #ffffff;
+            height: 77px;
+            overflow: auto;
+            border: 1px solid #d4d4d4;
+            border-radius: 5px;
+            padding: 8px;
+            box-shadow: 0px 0px 15px #a8a8a8;
+        }
+
+            .qqFace tr td {
+                float: left;
+            }
+
+                .qqFace tr td:hover {
+                    background-color: #d4d4d4;
+                    box-sizing: border-box;
+                }
+
+            .qqFace::-webkit-scrollbar {
+                display: none;
+            }
+
+        #EditName {
+            font-size: 16px;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <input type="text" id="message" />
-        <input type="button" id="sendmessage" value="Send" />
-        <input type="hidden" id="displayname" />
-        <ul id="discussion"></ul>
+    <div style="height:35px;line-height:35px">
+        <input type="text" id="UserName" readonly="readonly" placeholder="用户昵称" /><input type="button" value="确认" style="display:none" id="EditName" />
+        <select id="UserList">
+            <option value="-1">在线用户</option>
+        </select>
+        <label id="UserNum">0人在线</label>
     </div>
+    <div style="width:100%;height:100%;">
+        <div id="ShowMessage">
+        </div>
+        <hr />
+        <span class="ButSp">
+            <input id="Button3" class="Button3" type="button" value="表情" />
+            <input id="Button2" type="button" value="图片" /><br />
+        </span>
+        <span class="TextSp"><span contenteditable="true" id="message"></span></span>
+        <span class="Btn1Sp"><input id="sendmessage" type="button" value="发送" /></span>
+        <input type="file" id="FileImg" accept="image/*" style="display:none" />
+    </div>
+
     <script src="Scripts/jquery-3.3.1.min.js"></script>
     <script src="Scripts/jquery.signalR-2.2.2.min.js"></script>
     <!--引用自动生成的SignalR集线器脚本 -->
     <script src="signalr/hubs"></script>
+    <script src="Scripts/signalRChat.js"></script>
     <script type="text/javascript">
-        $(function () {
-            // 声明一个代理以引用集线器
-            var chat = $.connection.chatHub;
-            // 创建集线器可以调用以广播消息的函数
-            chat.client.broadcastMessage = function (name, message) {
-                // HTML编码显示名称和消息
-                var encodedName = $('<div />').text(name).html();
-                var encodedMsg = $('<div />').text(message).html();
-                // 将消息添加到页面
-                $('#discussion').append('<li><strong>' + encodedName
-                    + '</strong>:&nbsp;&nbsp;' + encodedMsg + '</li>');
-            };
-            // 获取用户名并将其存储为消息的前缀
-            $('#displayname').val(prompt('Enter your name:', ''));
-            // 将初始焦点设置为消息输入框
-            $('#message').focus();
-            // 启动连接
-            $.connection.hub.start().done(function () {
-                $('#sendmessage').click(function () {
-                    // 调用集线器上的send方法
-                    chat.server.send($('#displayname').val(), $('#message').val());
-                    // 清除文本框并重置下一个注释的焦点
-                    $('#message').val('').focus();
-                });
-            });
-        });
+
     </script>
 </body>
 </html>
