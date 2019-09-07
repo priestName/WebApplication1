@@ -27,6 +27,12 @@ namespace AdminCMD
                 ValueText.Value = md5.Value;
             }
             else {
+                Md5TestUser Usermd5 = SetUserMd5(Value);
+                if (Usermd5 != null)
+                {
+                    KeyText.Value = Usermd5.Key;
+                    ValueText.Value = Usermd5.Value;
+                }else
                 KeyText.Value = "暂未收录";
             }
             
@@ -56,10 +62,15 @@ namespace AdminCMD
             DbSet<Md5Test> _Md5dbSet = _dbContext.Set<Md5Test>();
             return _Md5dbSet.Count(m => m.Value == Value) >0;
         }
-        Md5Test SetMd5(string Key)
+        Md5Test SetMd5(string Value)
         {
             DbSet<Md5Test> _Md5dbSet = _dbContext.Set<Md5Test>();
-            return _Md5dbSet.FirstOrDefault(m => m.Key == Key);
+            return _Md5dbSet.FirstOrDefault(m => m.Value == Value);
+        }
+        Md5TestUser SetUserMd5(string Value)
+        {
+            DbSet<Md5TestUser> _Md5UserdbSet = _dbContext.Set<Md5TestUser>();
+            return _Md5UserdbSet.FirstOrDefault(m => m.Value == Value);
         }
         bool addMd5User(string Key,string Value)
         {
