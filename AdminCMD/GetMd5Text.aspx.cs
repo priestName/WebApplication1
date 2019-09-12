@@ -20,14 +20,14 @@ namespace AdminCMD
         protected void Button2_Click(object sender, EventArgs e)
         {
             string Value = ValueText.Value;
-            Md5Test md5 = SetMd5(Value);
+            Md5Test md5 = SetMd5(string.Empty, Value);
             if (md5!=null)
             {
                 KeyText.Value = md5.Key;
                 ValueText.Value = md5.Value;
             }
             else {
-                Md5TestUser Usermd5 = SetUserMd5(Value);
+                Md5TestUser Usermd5 = SetUserMd5(string.Empty, Value);
                 if (Usermd5 != null)
                 {
                     KeyText.Value = Usermd5.Key;
@@ -43,7 +43,7 @@ namespace AdminCMD
             string Key = KeyText.Value;
             string Value = ValueText.Value;
 
-            if (!SetMd5Count(Key))
+            if (!SetMd5Count(Key,string.Empty) && !SetUserMd5Count(Key, string.Empty))
             {
                 try
                 {
@@ -57,20 +57,25 @@ namespace AdminCMD
         }
         }
 
-        bool SetMd5Count(string Value)
+        bool SetMd5Count(string Key, string Value)
         {
             DbSet<Md5Test> _Md5dbSet = _dbContext.Set<Md5Test>();
-            return _Md5dbSet.Count(m => m.Value == Value) >0;
+            return _Md5dbSet.Count(m => (string.IsNullOrEmpty(Key) || m.Key == Key) && (string.IsNullOrEmpty(Value) || m.Value == Value)) >0;
         }
-        Md5Test SetMd5(string Value)
+        bool SetUserMd5Count(string Key, string Value)
+        {
+            DbSet<Md5TestUser> _Md5dbSet = _dbContext.Set<Md5TestUser>();
+            return _Md5dbSet.Count(m => (string.IsNullOrEmpty(Key) || m.Key == Key) && (string.IsNullOrEmpty(Value) || m.Value == Value)) > 0;
+        }
+        Md5Test SetMd5(string Key, string Value)
         {
             DbSet<Md5Test> _Md5dbSet = _dbContext.Set<Md5Test>();
-            return _Md5dbSet.FirstOrDefault(m => m.Value == Value);
+            return _Md5dbSet.FirstOrDefault(m => (string.IsNullOrEmpty(Key) || m.Key == Key) && (string.IsNullOrEmpty(Value) || m.Value == Value));
         }
-        Md5TestUser SetUserMd5(string Value)
+        Md5TestUser SetUserMd5(string Key, string Value)
         {
             DbSet<Md5TestUser> _Md5UserdbSet = _dbContext.Set<Md5TestUser>();
-            return _Md5UserdbSet.FirstOrDefault(m => m.Value == Value);
+            return _Md5UserdbSet.FirstOrDefault(m => (string.IsNullOrEmpty(Key) || m.Key == Key) && (string.IsNullOrEmpty(Value) || m.Value == Value));
         }
         bool addMd5User(string Key,string Value)
         {
@@ -94,7 +99,7 @@ namespace AdminCMD
         {
             MD5 md5Hasher = System.Security.Cryptography.MD5.Create();
 
-            byte[] data = md5Hasher.ComputeHash(Encoding.Default.GetBytes(input));
+            byte[] data = md5Hasher.ComputeHash(Encoding.UTF8.GetBytes(input));
 
             StringBuilder sBuilder = new StringBuilder();
 

@@ -217,7 +217,9 @@
     <Content Include="HtmlPage2.html" />
     <Content Include="HtmlWuzi.html" />
     <Content Include="HtmlWuziM.html" />
+    <Content Include="IfromTest.html" />
     <Content Include="Images\qipan.png" />
+    <Content Include="scripts\FileSaver.js" />
     <Content Include="scripts\qrcode.min.js" />
     <Content Include="scripts\WeatherCity.js" />
     <Content Include="style\images\ui-icons_444444_256x240.png" />
@@ -232,12 +234,15 @@
     </Content>
     <Content Include="TestHrefId.html" />
     <Content Include="TestHttpPost.aspx" />
+    <Content Include="TestIfrom.html" />
     <Content Include="TestPayhf.aspx" />
     <Content Include="TestQRCode.html" />
+    <Content Include="TestText.html" />
     <Content Include="TestWthrcdn.html" />
     <Content Include="WebForm22.aspx" />
     <Content Include="wuziqi.html" />
     <Content Include="Json\WeatherCity.json" />
+    <Content Include="Json\Md5Test.json" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="scripts\jquery-1.6.4-vsdoc.js" />
     <Content Include="scripts\jquery-1.6.4.js" />

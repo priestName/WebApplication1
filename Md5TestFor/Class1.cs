@@ -18,14 +18,16 @@ namespace Md5TestFor
             Console.Write("位数:");
             string num = Console.ReadLine();
             if (string.IsNullOrEmpty(num)) goto gonum;
+            Console.Write("分段执行(可空):");
+            string text1 = Console.ReadLine();
             Console.Write("起始项(可空):");
             string text = Console.ReadLine().ToString();
-            quzimu(Convert.ToInt32(num), text);
+            quzimu(Convert.ToInt32(num), text1, text);
 
             Console.ReadLine();
         }
 
-        void quzimu(int num, string stretext)
+        void quzimu(int num, string text1, string text2)
         {
             string[] zimu = {
                 "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z",
@@ -35,40 +37,38 @@ namespace Md5TestFor
 
             string NumberStr = string.Empty;
             int[] Text;
-            if (!string.IsNullOrEmpty(stretext))
+            string str = text1 + text2;
+            for (int i = 0; i < num; i++)
             {
-                foreach (var item in stretext)
-                {
-                    int t = Array.IndexOf(zimu, item.ToString());
-                    NumberStr += t > 0 ? t.ToString() + "," : "0,";
-                }
-                Text = Array.ConvertAll(NumberStr.Trim(',').Split(','), int.Parse);
-                Text[5] += 1;
+                var a = str.Length > i ? str[i].ToString() : "A";
+                int t = Array.IndexOf(zimu, a);
+                NumberStr += t > 0 ? t.ToString() + "," : "0,";
             }
-            else
+            Text = Array.ConvertAll(NumberStr.Trim(',').Split(','), int.Parse);
+            if (!string.IsNullOrEmpty(text2))
             {
-                for (int j = 0; j < num; j++)
-                {
-                    NumberStr += "0,";
-                }
-                Text = Array.ConvertAll(NumberStr.Trim(',').Split(','), int.Parse);
+                Text[num-1] += 1;
             }
             for (int i = Text.Last(); i <= zimu.Length; i++)
             {
             jinzh:
                 Text[Text.Length - 1] = i;
                 int Text62 = Array.IndexOf(Text, 62);
+                if (Text62 == text1.Length)
+                {
+                    Console.WriteLine("结束");
+                    return;
+                }
+                if (Text62 == num - 2)
+                {
+                    Console.WriteLine(string.Join(",",Text));
+                }
                 if (Text62 > 0)
                 {
                     i = 0;
                     Text[Text62] = 0;
                     Text[Text62 - 1] += +1;
                     goto jinzh;
-                }
-                if (Text62 == 0)
-                {
-                    Console.WriteLine("结束");
-                    return;
                 }
 
                 string MinText = string.Empty;
@@ -77,7 +77,7 @@ namespace Md5TestFor
                     MinText += zimu[Convert.ToInt32(item)];
                 }
                 addMd5(MinText, MD5(MinText));
-                Console.WriteLine(MinText);
+                //Console.WriteLine(MinText);
                 
             }
         }
@@ -85,7 +85,7 @@ namespace Md5TestFor
         {
             MD5 md5Hasher = System.Security.Cryptography.MD5.Create();
 
-            byte[] data = md5Hasher.ComputeHash(Encoding.Default.GetBytes(input));
+            byte[] data = md5Hasher.ComputeHash(Encoding.UTF8.GetBytes(input));
 
             StringBuilder sBuilder = new StringBuilder();
 

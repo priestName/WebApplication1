@@ -12,9 +12,24 @@ namespace Md5TestFor
     {
         static void Main(string[] args)
         {
-            Class1 class1 = new Class1();
-            class1.Md5For();
+            Console.Write("方式(1.枚举，2.循环)：");
+            int a = Convert.ToInt32(Console.ReadLine());
+            switch (a)
+            {
+                case 1:
+                    Class1 class1 = new Class1();
+                    class1.Md5For();
+                    break;
+                case 2:
+                    Class2 class2 = new Class2();
+                    class2.Md5For();
+                    break;
+                default:
+                    break;
+            }
+            
 
+            
 
 
             //var ctx1 = new KeyValue();
