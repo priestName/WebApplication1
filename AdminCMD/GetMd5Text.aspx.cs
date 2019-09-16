@@ -6,7 +6,7 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace AdminCMD
+namespace SignalRChat1
 {
     public partial class GetMd5Text : System.Web.UI.Page
     {

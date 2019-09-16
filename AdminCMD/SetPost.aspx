@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="SetPost.aspx.cs" Inherits="AdminCMD.SetPost" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="SetPost.aspx.cs" Inherits="SignalRChat1.SetPost" %>
 
 <!DOCTYPE html>
 

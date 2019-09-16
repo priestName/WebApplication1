@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace AdminCMD
+namespace SignalRChat1
 {
 
 

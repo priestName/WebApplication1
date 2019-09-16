@@ -1,24 +1,50 @@
-﻿// 声明一个代理以引用集线器
+﻿
+if (cookie("UserName").length > 0) {
+    $('#UserName').val(cookie("UserName"))
+} else {
+    location.href="Login.html"
+}
+// 声明一个代理以引用集线器
 var chat = $.connection.chatHub;
-// 创建集线器可以调用以广播消息的函数
+// 创建接收消息的方法
 chat.client.broadcastMessage = function (name, message) {
-    // HTML编码显示名称和消息
-    var encodedName = $('<div />').text(name).html();
-    var encodedMsg = $('<div />').text(message).html();
-    // 将消息添加到页面
-    $('#discussion').append('<li><strong>' + encodedName
-        + '</strong>:&nbsp;&nbsp;' + encodedMsg + '</li>');
+    var Htmls = "<div><span class='Msg'>" + name + "：" + message + "</span></div>";
+    $("#ShowMessage").append(Htmls)
 };
-// 获取用户名并将其存储为消息的前缀
-$('#displayname').val(prompt('Enter your name:', ''));
-// 将初始焦点设置为消息输入框
-$('#message').focus();
+//创建接收所有在线用户的方法
+chat.client.getUsers = function (data) {
+    if (data) {
+        var json = $.parseJSON(data);
+        console.info(json);
+        $("#UserList").html("<option value='-1'>在线用户</option>");
+        $("#UserNum").html(json.length + "人在线");
+        for (var i = 0; i < json.length; i++) {
+            if (json[i].Name == $('#UserName').val()) {
+                break;
+            }
+            $("#UserList").append("<option value='" + json[i].ConnectionID + "'>" + json[i].Name + "</option>");
+        }
+    }
+}
 // 启动连接
 $.connection.hub.start().done(function () {
-    $('#sendmessage').click(function () {
-        // 调用集线器上的send方法
-        chat.server.send($('#displayname').val(), $('#message').val());
-        // 清除文本框并重置下一个注释的焦点
-        $('#message').val('').focus();
-    });
+    chat.server.getName($('#UserName').val());
 });
+
+$('#sendmessage').click(function () {
+    // 调用集线器上的send方法
+    var msg = $("#message").html().replace(/<div><br><\/div>/g, "")
+    chat.server.send($('#UserName').val(), msg);
+    $("#message").html("")
+});
+
+
+
+function cookie(name) {
+    var arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
+    if (arr = document.cookie.match(reg))
+        return arr[2];
+    else
+        return "";
+
+}

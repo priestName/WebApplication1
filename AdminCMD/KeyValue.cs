@@ -1,4 +1,4 @@
-namespace AdminCMD
+namespace SignalRChat1
 {
     using System;
     using System.Data.Entity;

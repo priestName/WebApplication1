@@ -2,13 +2,16 @@
 <html>
 <head>
     <title>SignalR Simple Chat</title>
+    <link href="Style/jquery-ui.min.css" rel="stylesheet" />
     <style type="text/css">
         * {
             margin: 0;
             padding: 0;
             font-family: 'Microsoft YaHei'
         }
-
+        .hide{
+            display:none
+        }
         html {
             overflow: hidden;
             width: 100%;
@@ -176,14 +179,10 @@
         <span class="Btn1Sp"><input id="sendmessage" type="button" value="发送" /></span>
         <input type="file" id="FileImg" accept="image/*" style="display:none" />
     </div>
-
     <script src="Scripts/jquery-3.3.1.min.js"></script>
     <script src="Scripts/jquery.signalR-2.2.2.min.js"></script>
-    <!--引用自动生成的SignalR集线器脚本 -->
+    <script src="Scripts/jquery-ui.min.js"></script>
     <script src="signalr/hubs"></script>
     <script src="Scripts/signalRChat.js"></script>
-    <script type="text/javascript">
-
-    </script>
 </body>
 </html>

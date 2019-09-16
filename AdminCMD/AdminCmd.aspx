@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="AdminCmd.aspx.cs" Inherits="AdminCMD.index" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="AdminCmd.aspx.cs" Inherits="SignalRChat1.index" %>
 
 <!DOCTYPE html>
 

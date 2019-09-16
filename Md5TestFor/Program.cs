@@ -5,6 +5,7 @@ using System.IO;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using System.Threading;
 
 namespace Md5TestFor
 {
@@ -18,10 +19,12 @@ namespace Md5TestFor
             {
                 case 1:
                     Class1 class1 = new Class1();
+                    Thread thread1 = new Thread(new ThreadStart(class1.Md5For));
                     class1.Md5For();
                     break;
                 case 2:
                     Class2 class2 = new Class2();
+                    Thread thread2 = new Thread(new ThreadStart(class2.Md5For));
                     class2.Md5For();
                     break;
                 default:

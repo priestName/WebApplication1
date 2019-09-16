@@ -9,7 +9,7 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
-namespace AdminCMD
+namespace SignalRChat1
 {
     public partial class index : System.Web.UI.Page
     {

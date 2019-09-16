@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="GetMd5Text.aspx.cs" Inherits="AdminCMD.GetMd5Text" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="GetMd5Text.aspx.cs" Inherits="SignalRChat1.GetMd5Text" %>
 
 <!DOCTYPE html>
 

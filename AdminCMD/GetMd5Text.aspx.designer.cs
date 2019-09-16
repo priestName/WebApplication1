@@ -7,7 +7,7 @@
 // </自动生成>
 //------------------------------------------------------------------------------
 
-namespace AdminCMD {
+namespace SignalRChat1 {
     
     
     public partial class GetMd5Text {
