@@ -26,7 +26,6 @@ namespace Md5TestFor
             string text = Console.ReadLine().ToString();
             string IsText = Quzimu(Convert.ToInt32(num), text1, text);
             Console.WriteLine(IsText); goto gonum2;
-            //Console.ReadLine();
         }
 
         string Quzimu(int num, string text1, string text2)

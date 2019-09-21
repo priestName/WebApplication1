@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
@@ -13,24 +14,61 @@ namespace SignalRChat1
     {
         UserDLL UserDLL = new UserDLL();
         public static List<User> users = new List<User>();
-        public void Send(string name, string message)
+        public void Send(string name, string message,string GoUserId)
         {
             //调用BroadcastMessage方法来更新客户端
-            Clients.All.broadcastMessage(name, message);
+            if(string.IsNullOrEmpty(GoUserId))
+                Clients.All.broadcastMessage(name, message,0);
+            else
+                Clients.Client(GoUserId).broadcastMessage(name, message,1);
         }
-        public void GetName(string name)
+        public void GetName()
         {
-            //查询用户  
-            var user = users.SingleOrDefault(u => u.ConnectionID == Context.ConnectionId);
-            if (user != null)
+            int id = Convert.ToInt32(Context.RequestCookies["UserId"].Value);
+            //查询用户
+            SockedUser sockedUser = UserDLL.SetUser(u => u.ID == id);
+            if (sockedUser != null)
             {
-                user.Name = name;
-                SockedUser sockedUser = UserDLL.SetUser(string.Empty, user.Name);
+                var user = users.SingleOrDefault(u => u.Name == sockedUser.Name);
+                users.SingleOrDefault(u => u.ConnectionID == Context.ConnectionId).Name = sockedUser.Name;
+                if (user != null)
+                {
+                    Clients.Client(user.ConnectionID).closesignalr(true);
+                    //Clients.Client(user.ConnectionID)
+
+                    //Clients.Client
+                }
                 sockedUser.ClientId = Context.ConnectionId;
+                UserDLL.UpdateUser(sockedUser);
+                
+                Clients.Client(Context.ConnectionId).showId(sockedUser.Name);
+            }
+            GetUsers();
+        }
+        //获取所有用户在线列表  
+        private void GetUsers()
+        {
+            var list = users.Where(u=>!string.IsNullOrEmpty(u.Name) && u.ConnectionID!=Context.ConnectionId)
+                            .Select(s => new { s.Name, s.ConnectionID }).ToList();
+            string jsonList = JsonConvert.SerializeObject(list);
+            Clients.All.getUsers(jsonList);
+        }
+        public void EditName(string name)
+        {
+            users.SingleOrDefault(u => u.ConnectionID == Context.ConnectionId).Name = name;
+            SockedUser sockedUser = UserDLL.SetUser(u => u.ClientId == Context.ConnectionId);
+            if (sockedUser != null)
+            {
+                sockedUser.Name = name;
                 UserDLL.UpdateUser(sockedUser);
             }
             GetUsers();
         }
+        public void CloseSignalr(bool stopCalled)
+        {
+            OnDisconnected(stopCalled);
+        }
+
         #region 重写连接事件
         public override Task OnConnected()
         {
@@ -56,15 +94,13 @@ namespace SignalRChat1
             GetUsers();//获取所有用户的列表  
             return base.OnDisconnected(stopCalled);
         }
-        #endregion
-        //获取所有用户在线列表  
-        private void GetUsers()
+        public override Task OnReconnected()
         {
-            var list = users.Select(s => new { s.Name, s.ConnectionID }).ToList();
-            string jsonList = JsonConvert.SerializeObject(list);
-            Clients.All.getUsers(jsonList);
+            string id = Context.ConnectionId;
+            
+            return base.OnReconnected();
         }
-
+        #endregion
     }
     public class User
     {

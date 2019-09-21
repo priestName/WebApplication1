@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Migrations;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Web;
 
 namespace SignalRChat1
@@ -34,6 +35,11 @@ namespace SignalRChat1
         {
             DbSet<SockedUser> _SockedUser = _dbContext.Set<SockedUser>();
             return _SockedUser.FirstOrDefault(s => (string.IsNullOrEmpty(Password) || s.Password == Password) && (string.IsNullOrEmpty(Name) || s.Name == Name));
+        }
+        public SockedUser SetUser(Expression<Func<SockedUser, bool>> whereLamebda)
+        {
+            DbSet<SockedUser> _SockedUser = _dbContext.Set<SockedUser>();
+            return _SockedUser.FirstOrDefault(whereLamebda);
         }
     }
 }

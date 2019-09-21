@@ -1,23 +1,27 @@
-﻿
-if (cookie("UserName").length > 0) {
-    $('#UserName').val(cookie("UserName"))
-} else {
+﻿if (cookie("UserId") <= 0 || cookie("UserId").length<=0) {
     location.href="Login.html"
 }
 // 声明一个代理以引用集线器
 var chat = $.connection.chatHub;
 // 创建接收消息的方法
-chat.client.broadcastMessage = function (name, message) {
-    var Htmls = "<div><span class='Msg'>" + name + "：" + message + "</span></div>";
-    $("#ShowMessage").append(Htmls)
+chat.client.broadcastMessage = function (name, message,isgo) {
+    var Htmls = "";
+    if (isgo == 0) {
+        if (name = $('#UserName').val())
+            Htmls = "<li><span class='MsgGo'>" + name + "：" + message + "</span></li>";
+        else
+            Htmls = "<li><span class='Msg'>" + name + "：" + message + "</span></li>";
+    } else {
+        Htmls = "<li  class='SiMsg'><span class='Msg'>" + name + "==>" + message + "</span></li>";
+    }
+    $("#ShowMessage ul").append(Htmls)
 };
 //创建接收所有在线用户的方法
 chat.client.getUsers = function (data) {
     if (data) {
         var json = $.parseJSON(data);
-        console.info(json);
         $("#UserList").html("<option value='-1'>在线用户</option>");
-        $("#UserNum").html(json.length + "人在线");
+        $("#UserNum").html(json.length+1 + "人在线");
         for (var i = 0; i < json.length; i++) {
             if (json[i].Name == $('#UserName').val()) {
                 break;
@@ -26,18 +30,42 @@ chat.client.getUsers = function (data) {
         }
     }
 }
+chat.client.showId = function (name) {
+    $('#UserName').val(name)
+}
+chat.client.closeSignalr = function (stopCalled) {
+    chat.server.closeSignalr(stopCalled);
+
+}
 // 启动连接
 $.connection.hub.start().done(function () {
-    chat.server.getName($('#UserName').val());
+    chat.server.getName();
 });
 
 $('#sendmessage').click(function () {
     // 调用集线器上的send方法
     var msg = $("#message").html().replace(/<div><br><\/div>/g, "")
-    chat.server.send($('#UserName').val(), msg);
+    if (msg.length == 0) {
+        $("#TextBox2").html("")
+        return;
+    }
+    if ($("#UserList").val() == -1) {
+        chat.server.send($('#UserName').val(), msg,"");
+    }
+    else {
+        var Htmls = "<li class='MsgGo'><span class='MsgGo'>" + "==>>" + $("#UserList").text().replace(/^\s+|\s+$/g, "") + "：" + msg + "</span></li>";
+        $("#ShowMessage ul").append(Htmls)
+        chat.server.send($('#UserName').val(), msg, $("#UserList").val())
+    }
+    $("#ShowMessage").scrollTop($("#ShowMessage")[0].scrollHeight);
+    
     $("#message").html("")
 });
-
+$("#EditName").click(function () {
+    chat.server.editName($('#UserName').val());
+    $("#UserName").attr("readonly", "readonly");
+    $("#EditName").css("display", "none")
+})
 
 
 function cookie(name) {
@@ -46,5 +74,4 @@ function cookie(name) {
         return arr[2];
     else
         return "";
-
 }

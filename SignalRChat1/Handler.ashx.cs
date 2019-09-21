@@ -19,16 +19,24 @@ namespace SignalRChat1
             string type = context.Request.Form["type"].ToLower();
             string name = context.Request.Form["name"].ToLower();
             string pwd = context.Request.Form["password"].ToLower();
-            string text = "true";
+            string text = "false";
             switch (type)
             {
                 case "login":
-                    text = (userDLL.SetUser(MD5(pwd), name) != null).ToString();
+                    var user = userDLL.SetUser(MD5(pwd), name);
+                    if (user != null)
+                    {
+                        text = "true";
+                        SetCookie("UserId", user.ID.ToString());
+                    }
                     break;
                 case "loginto":
                     if (userDLL.SetUser(string.Empty, name) == null)
                     {
-                        text = userDLL.AddUser(new Models.SockedUser { Name = name, Password = MD5(pwd) }).ToString();
+                        if (userDLL.AddUser(new Models.SockedUser { Name = name, Password = MD5(pwd) }))
+                        {
+                            text = "true";
+                        }
                     }
                     else {
                         text = "昵称已存在";
@@ -37,7 +45,6 @@ namespace SignalRChat1
                 default:
                     break;
             }
-            SetCookie("UserName",name);
             context.Response.Write(text.ToLower());
         }
         public static void SetCookie(string key, string value)
