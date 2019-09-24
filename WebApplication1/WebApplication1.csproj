@@ -215,6 +215,7 @@
     <Content Include="HtmlJqueryUi.html" />
     <Content Include="HtmlPage1.html" />
     <Content Include="HtmlPage2.html" />
+    <Content Include="HtmlPage3.html" />
     <Content Include="HtmlWuzi.html" />
     <Content Include="HtmlWuziM.html" />
     <Content Include="IfromTest.html" />

@@ -14,7 +14,7 @@ namespace ConsoleApplication4
         private static int count = 0;
         public void saa()
         {
-            WriteLine("server:ready", ConsoleColor.Green); //绿色
+            WriteLine("server:ready", ConsoleColor.Green);
 
             #region 启动程序
             var socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);

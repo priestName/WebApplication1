@@ -1,6 +1,10 @@
-﻿if (cookie("UserId") <= 0 || cookie("UserId").length<=0) {
-    location.href="Login.html"
+﻿var UserName = Cookies.get("UserName");
+while (UserName == null || UserName == "" || UserName == false) {
+    UserName = prompt('输入你的昵称:', '');
 }
+$('#UserName').val(UserName);
+Cookies.set("UserName", UserName)
+
 // 声明一个代理以引用集线器
 var chat = $.connection.chatHub;
 // 创建接收消息的方法
@@ -21,7 +25,7 @@ chat.client.getUsers = function (data) {
     if (data) {
         var json = $.parseJSON(data);
         $("#UserList").html("<option value='-1'>在线用户</option>");
-        $("#UserNum").html(json.length+1 + "人在线");
+        $("#UserNum").html(json.length + 1 + "人在线");
         for (var i = 0; i < json.length; i++) {
             if (json[i].Name == $('#UserName').val()) {
                 break;
@@ -30,16 +34,16 @@ chat.client.getUsers = function (data) {
         }
     }
 }
-chat.client.showId = function (name) {
-    $('#UserName').val(name)
+chat.client.getName = function (name) {
+    UserName = name;
+    $('#UserName').val(name);
 }
 chat.client.closeSignalr = function (stopCalled) {
     chat.server.closeSignalr(stopCalled);
-
 }
 // 启动连接
 $.connection.hub.start().done(function () {
-    chat.server.getName();
+    
 });
 
 $('#sendmessage').click(function () {
@@ -68,10 +72,10 @@ $("#EditName").click(function () {
 })
 
 
-function cookie(name) {
-    var arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
-    if (arr = document.cookie.match(reg))
-        return arr[2];
-    else
-        return "";
-}
+//function cookie(name) {
+//    var arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
+//    if (arr = document.cookie.match(reg))
+//        return arr[2];
+//    else
+//        return "";
+//}

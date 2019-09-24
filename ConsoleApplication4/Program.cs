@@ -10,7 +10,7 @@ namespace ConsoleApplication4
     {
         static void Main(string[] args)
         {
-            MD5For classs = new MD5For();
+            Class_路径 classs = new Class_路径();
             classs.saa();
             Console.ReadLine();
         }

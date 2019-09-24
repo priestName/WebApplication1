@@ -38,7 +38,7 @@ namespace WindowsFormsApplication1
                 //①创建一个Socket
                 socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
                 //②连接到指定服务器的指定端口
-                socket.Connect("47.106.232.163", 7788); //localhost代表本机    47.106.232.163   192.168.3.251
+                socket.Connect("127.0.0.1", 7788); //localhost代表本机    47.106.232.163   192.168.3.251
                 WriteLine("client:connect to server success!");
                 //③实现异步接受消息的方法 客户端不断监听消息
                 socket.BeginReceive(buffer, 0, buffer.Length, SocketFlags.None, new AsyncCallback(ReceiveMessage), socket);
