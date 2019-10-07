@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AdminCMD.Model;
+using System;
 using System.Data.Entity;
 using System.Data.Entity.Migrations;
 using System.IO;
@@ -10,7 +11,7 @@ namespace SignalRChat1
 {
     public partial class GetMd5Text : System.Web.UI.Page
     {
-        private KeyValue _dbContext = DbContextFactory.GetIntance();
+        private MD5KeyValue _dbContext = DbContextFactory.GetIntance();
         
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -20,7 +21,7 @@ namespace SignalRChat1
         protected void Button2_Click(object sender, EventArgs e)
         {
             string Value = ValueText.Value;
-            Md5Test md5 = SetMd5(string.Empty, Value);
+            V_MD5Test md5 = SetMd5(string.Empty, Value);
             if (md5!=null)
             {
                 KeyText.Value = md5.Key;
@@ -59,7 +60,7 @@ namespace SignalRChat1
 
         bool SetMd5Count(string Key, string Value)
         {
-            DbSet<Md5Test> _Md5dbSet = _dbContext.Set<Md5Test>();
+            DbSet<V_MD5Test> _Md5dbSet = _dbContext.Set<V_MD5Test>();
             return _Md5dbSet.Count(m => (string.IsNullOrEmpty(Key) || m.Key == Key) && (string.IsNullOrEmpty(Value) || m.Value == Value)) >0;
         }
         bool SetUserMd5Count(string Key, string Value)
@@ -67,10 +68,10 @@ namespace SignalRChat1
             DbSet<Md5TestUser> _Md5dbSet = _dbContext.Set<Md5TestUser>();
             return _Md5dbSet.Count(m => (string.IsNullOrEmpty(Key) || m.Key == Key) && (string.IsNullOrEmpty(Value) || m.Value == Value)) > 0;
         }
-        Md5Test SetMd5(string Key, string Value)
+        V_MD5Test SetMd5(string Key, string Value)
         {
-            DbSet<Md5Test> _Md5dbSet = _dbContext.Set<Md5Test>();
-            return _Md5dbSet.FirstOrDefault(m => (string.IsNullOrEmpty(Key) || m.Key == Key) && (string.IsNullOrEmpty(Value) || m.Value == Value));
+            DbSet<V_MD5Test> _V_MD5dbSet = _dbContext.Set<V_MD5Test>();
+            return _V_MD5dbSet.FirstOrDefault(m => (string.IsNullOrEmpty(Key) || m.Key == Key) && (string.IsNullOrEmpty(Value) || m.Value == Value));
         }
         Md5TestUser SetUserMd5(string Key, string Value)
         {

@@ -50,9 +50,9 @@ namespace Md5TestFor
             decimal EndText = strTo10(EndStr);
             
             
-            chonglai:
             for (decimal i = StartText; i < EndText; i++)
             {
+            chonglai:
                 try
                 {
                     string str = strTo64(num, i);

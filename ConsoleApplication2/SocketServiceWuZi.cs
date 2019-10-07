@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Threading;
 using Fleck;
 using System.IO;
 using Newtonsoft.Json.Linq;
+using System.Timers;
 
 namespace ConsoleApplication2
 {
@@ -20,7 +20,7 @@ namespace ConsoleApplication2
             var allSockets = new List<IWebSocketConnection>();
             var PkSockets = new List<IWebSocketConnection>();
 
-            var server = new WebSocketServer("ws://172.18.250.7:7788");//172.18.250.7  192.168.3.251
+            var server = new WebSocketServer("ws://192.168.3.10.7:7788");//172.18.250.7  192.168.3.10
             server.Start(socket =>
             {
                 socket.OnOpen = () =>
@@ -31,7 +31,7 @@ namespace ConsoleApplication2
                         var OldSocketList = allSockets.Where(s => s.ConnectionInfo.ClientIpAddress == socket.ConnectionInfo.ClientIpAddress);
                         if (!string.IsNullOrEmpty(Name))
                         {
-                        if (OldSocketList.Count()>0)
+                            if (OldSocketList.Count() > 0)
                             {
                                 var OldSocket = OldSocketList.First();
                                 OldSocket.Send("SysMsg:您已经在其他地方登录");
@@ -53,7 +53,8 @@ namespace ConsoleApplication2
                         socket.Send("serverlist:" + string.Join("|", SerName));
                         allSockets.ToList().ForEach(s => s.Send("serverlist:" + string.Join("|", SerName)));
                     }
-                    catch (Exception e) {
+                    catch (Exception e)
+                    {
                         WriteJson(e.ToString(), "UserErro.txt");
                     }
                 };
@@ -62,7 +63,7 @@ namespace ConsoleApplication2
                     try
                     {
                         Console.WriteLine("Close!");
-                        if (allSockets.IndexOf(socket)!=-1)
+                        if (allSockets.IndexOf(socket) != -1)
                         {
                             SerName.Remove(SerName[allSockets.IndexOf(socket)]);
                             allSockets.Remove(socket);

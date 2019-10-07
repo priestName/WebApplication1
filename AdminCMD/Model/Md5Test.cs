@@ -1,4 +1,4 @@
-namespace SignalRChat1
+namespace AdminCMD.Model
 {
     using System;
     using System.Collections.Generic;
@@ -9,9 +9,9 @@ namespace SignalRChat1
     public partial class Md5Test
     {
         public int Id { get; set; }
-
+        
         public string Key { get; set; }
-
+        
         public string Value { get; set; }
     }
 }

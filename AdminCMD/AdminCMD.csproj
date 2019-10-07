@@ -147,9 +147,10 @@
     <Compile Include="GetMd5Text.aspx.designer.cs">
       <DependentUpon>GetMd5Text.aspx</DependentUpon>
     </Compile>
-    <Compile Include="KeyValue.cs" />
-    <Compile Include="Md5Test.cs" />
-    <Compile Include="Md5TestUser.cs" />
+    <Compile Include="Model\MD5KeyValue.cs" />
+    <Compile Include="Model\Md5Test.cs" />
+    <Compile Include="Model\Md5TestUser.cs" />
+    <Compile Include="Model\V_MD5Test.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SetPost.aspx.cs">
       <DependentUpon>SetPost.aspx</DependentUpon>

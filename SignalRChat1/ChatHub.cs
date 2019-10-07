@@ -14,18 +14,23 @@ namespace SignalRChat1
     {
         public static List<User> users = new List<User>();
         public static List<List<User>> UsersList = new List<List<User>>();
-        public void Send(string name, string message,string GoUserId)
+        public void Send(string message)
         {
-            //调用BroadcastMessage方法来更新客户端
-            if(string.IsNullOrEmpty(GoUserId))
-                Clients.All.broadcastMessage(name, message,0);
-            else
-                Clients.Client(GoUserId).broadcastMessage(name, message,1);
+            Clients.All.broadcastMessage(GetUser(string.Empty).Name, message);
+        }
+        public void SendGo(string message, string GoUserName)
+        {
+            Clients.Client(GetUser(GoUserName).ConnectionID).broadcastMessageGo(GetUser(string.Empty).Name, message);
+        }
+        public void EditName(string UserName)
+        {
+            users.Where(w => w.ConnectionID == Context.ConnectionId).SingleOrDefault().Name = UserName;
+            GetUsers();
         }
         //获取所有用户在线列表  
         private void GetUsers()
         {
-            var list = users.Where(u=>!string.IsNullOrEmpty(u.Name) && u.ConnectionID!=Context.ConnectionId)
+            var list = users.Where(u => !string.IsNullOrEmpty(u.Name) && u.ConnectionID != Context.ConnectionId)
                             .Select(s => new { s.Name, s.ConnectionID }).ToList();
             string jsonList = JsonConvert.SerializeObject(list);
             Clients.All.getUsers(jsonList);
@@ -35,7 +40,7 @@ namespace SignalRChat1
             var user = users.Where(w => w.ConnectionID == Context.ConnectionId).SingleOrDefault();
             if (user == null)
             {
-                user = new User(name, Context.ConnectionId);
+                user = new User(name, Context.ConnectionId,1);
                 users.Add(user);
             }
 
@@ -72,8 +77,15 @@ namespace SignalRChat1
         public override Task OnReconnected()
         {
             string id = Context.ConnectionId;
-            
+
             return base.OnReconnected();
+        }
+        #endregion
+
+        #region
+        public User GetUser(string name)
+        {
+            return users.Where(u => (string.IsNullOrEmpty(name) && u.ConnectionID == Context.ConnectionId) || (!string.IsNullOrEmpty(name) && u.Name == name)).SingleOrDefault();
         }
         #endregion
     }
@@ -81,10 +93,12 @@ namespace SignalRChat1
     {
         public string ConnectionID { get; set; }
         public string Name { get; set; }
-        public User(string name, string connectionId)
+        public int Status { get; set; }
+        public User(string name, string connectionId,int Status)
         {
             this.Name = name;
             this.ConnectionID = connectionId;
+            this.Status = Status;
         }
     }
 }

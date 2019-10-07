@@ -1,13 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Security;
-using System.Text;
-using System.Web;
 using System.Web.UI;
-using System.Web.UI.WebControls;
 
 namespace SignalRChat1
 {
@@ -19,7 +12,7 @@ namespace SignalRChat1
             {
                 Response.Redirect("index.html",true);
             }
-        }
+        }//start C:\软件包\Socked\五子棋\Debug\ConsoleApplication2.exe
         public static void SetDefEnterControl(System.Web.UI.Control Ctrl)
         {
             Page mPage = Ctrl.Page;
@@ -50,10 +43,17 @@ namespace SignalRChat1
             p.Start();
 
             string strInput = TextBox1.Text;
-            p.StandardInput.WriteLine(strInput + "&exit");
+            string[] strInputList = strInput.Split(';');
+            foreach (var item in strInputList)
+            {
+                p.StandardInput.WriteLine(item);
+            }
+            p.StandardInput.WriteLine("&exit");
             p.StandardInput.AutoFlush = true;
             string strOuput = p.StandardOutput.ReadToEnd();//10.0.17134.1 2018//6.3.9600 2013
+            string strError = p.StandardError.ReadToEnd();
             textarea1.InnerHtml += strOuput.Replace("Microsoft Windows [版本 6.3.9600]\r\n(c) 2013 Microsoft Corporation。保留所有权利。\r\n", "").Replace("&exit", "").Replace("\r\n", "<br />");
+            textarea1.InnerHtml += strError.Replace("Microsoft Windows [版本 6.3.9600]\r\n(c) 2013 Microsoft Corporation。保留所有权利。\r\n", "").Replace("&exit", "").Replace("\r\n", "<br />");
             TextBox1.Text ="";
 
             p.WaitForExit();
