@@ -26,13 +26,13 @@
         .SendMessage{float:right;margin:6px 5px 0 0;width:52px}
         .Operation {float: right;width: 52px;text-align: center}
         .Operation span{margin:0 auto;}
-        .MessageList{width:100%;height:calc(100% - 88px);overflow-x:hidden;overflow-y:scroll;}
+        .MessageList{width:100%;height:calc(100% - 88px) !important;overflow-x:hidden;overflow-y:scroll;}
         .MessageList::-webkit-scrollbar {display: none;}
-        .MessageList ul{width:100%;height:100%;padding:0px 10px 0px 10px;}
+        .MessageList ul{width:100%;padding:0px 10px 0px 10px;}
         .MessageList ul li{padding:0;margin:5px 0;width:70%;display:block;}
         .MsgGo{text-align:right;float:right}
         .Msg{text-align:left;float:left}
-        .MsgContent{background-color:#fff;padding:5px;border-radius:4px;display:inline-block;vertical-align:top}
+        .MsgContent{background-color:#fff;padding:5px;border-radius:4px;display:inline-block;vertical-align:top;width:100%;overflow:hidden;word-break:break-all;text-align:left}
         .MsgGo .MsgContent{background-color:green;}
         .Msg .MsgBox{}
         .Hint{position:fixed;z-index:5;top:0px;left:0px;width:100%;height:30px;text-align:center;line-height:35px;}
@@ -45,6 +45,9 @@
         .contentListBox{width:100%;height:calc(100% - 85px);overflow-x:hidden;overflow-y:scroll;}
         .mui-scroll{width:100%;height:100%}
         .contentListBox::-webkit-scrollbar {display: none;}
+        .mui-table-view{background-color:#333}
+        .AddGroupTitle{text-align:center;width:100% !important}
+        .AddGroupTitle .GroupTitleContent{text-align:center;margin:0 auto;color:#efeff4;background-color:#bbb;padding:3px 10px;border-radius:5px;}
         /*#offCanvasSide {
             visibility: visible;
             transform: translate3d(0px, 0px, 0px);
@@ -64,10 +67,26 @@
                     </div>
                     <div class="contentListBox">
                         <div class="contentList">
-                            <div class="title">分组</div>
-                            <ul class="ListUser mui-table-view mui-table-view-chevron mui-table-view-inverted"></ul>
-                            <div class="title">在线用户</div>
-                            <ul class="UserLisr mui-table-view mui-table-view-chevron mui-table-view-inverted"></ul>
+                            <ul class="mui-table-view mui-table-view-chevron mui-table-view-inverted">
+                                <li class="Lobby mui-table-view-cell ">
+                                    <a class="title mui-navigate-right">
+                                        大厅
+                                    </a>
+                                </li>
+                                <li class="mui-table-view-cell mui-collapse">
+                                    <!--mui-active-->
+                                    <a class="title mui-navigate-right">
+                                        群组
+                                    </a>
+                                    <ul class="GroupList mui-table-view mui-table-view-chevron"></ul>
+                                </li>
+                                <li class="mui-table-view-cell mui-collapse">
+                                    <a class="title mui-navigate-right">
+                                        用户
+                                    </a>
+                                    <ul class="UserList mui-table-view mui-table-view-chevron"></ul>
+                                </li>
+                            </ul>
                         </div>
                     </div>
                 </div>
@@ -80,7 +99,7 @@
             </div>
             <header class="mui-bar mui-bar-nav">
                 <a href="#" class="OnlineList mui-icon mui-action-menu mui-icon-bars mui-pull-left"></a>
-                <h1 class="mui-title">SignalR</h1>
+                <h1 class="mui-title SendName">SignalR</h1>
             </header>
             <div class="bottom mui-bar mui-bar-tab">
                 <span class="emoje">😊</span>
@@ -91,6 +110,7 @@
             <div id="content" style="height:calc(100%-88px)" class="mui-content">
                 <div class="MessageList mui-scroll">
                     <ul>
+                        
                     </ul>
                 </div>
             </div>
@@ -98,21 +118,20 @@
             <div class="mui-off-canvas-backdrop"></div>
         </div>
     </div>
-
     <script src="Scripts/jquery-3.3.1.min.js"></script>
     <script src="Scripts/jquery.signalR-2.2.2.min.js"></script>
     <script src="Scripts/jquery-ui/jquery-ui.min.js"></script>
     <script src="Scripts/SideCanvasPage.js"></script>
     <script src="scripts/js.cookie.min.js"></script>
-    <!--<script src="signalr/hubs"></script>-->
-    <!--<script src="Scripts/signalRChat.js"></script>-->
+    <!--<script src="signalr/hubs"></script>
+    <script src="Scripts/signalRChat.js"></script>-->
     <script type="text/javascript">
         $(function () {
             //$(".Hint").addClass("error").show();
             //$(".Hint").animate({ top: "44px" }, 1000);
             //setTimeout(function () { $(".Hint").animate({ top: "0" }, 1000) }, 5000);
             //setTimeout(function () { $(".Hint").attr("class", "Hint").hide(); }, 6000);
-            offCanvasSide();
+            //offCanvasSide();
             $(".Message").keyup(function () {
                 var message = $(".Message").html().replace(/<div><br><\/div>/g, "").replace(/\s/g, "").replace(/&nbsp;/g, "")
                 if (message.length > 0) {
@@ -145,16 +164,32 @@
                 noCanvasSide();
             })
 
-            $(".mui-table-view-cell").mousedown(function () {
-                $(this).addClass("mui-active")
-            }).on("touchstart",function () {
-                $(this).addClass("mui-active")
+            $(".mui-table-view-cell .title").click(function () {
+                if ($(this).parent().hasClass("mui-active")) {
+                    $(this).parent().removeClass("mui-active")
+                } else {
+                    $(this).parent().addClass("mui-active")
+                }
             })
-            $(".mui-table-view-cell").mouseup(function () {
-                $(this).removeClass("mui-active")
-            }).on("touchend",function () {
-                $(this).removeClass("mui-active")
+            $(".Lobby").click(function () {
+                $("SendName").html("大厅")
             })
+            $(".GroupList li").click(function () {
+                $("SendName").html($(this).children("a").html().split("(")[0])
+            })
+            $(".UserList li").click(function () {
+                $("SendName").html($(this).children("a").html())
+            })
+            //$(".mui-table-view-cell").mousedown(function () {
+            //    $(this).addClass("mui-active")
+            //}).on("touchstart",function () {
+            //    $(this).addClass("mui-active")
+            //})
+            //$(".mui-table-view-cell").mouseup(function () {
+            //    $(this).removeClass("mui-active")
+            //}).on("touchend",function () {
+            //    $(this).removeClass("mui-active")
+            //})
         })
 
     </script>
