@@ -24,7 +24,7 @@ namespace SignalRChat1
         }
         public void SendGroup(string message, string GroupName)
         {
-            Clients.Group(GroupName, new string[0]).broadcastMessageGo(GetUser(string.Empty).Name, message);
+            Clients.Group(GroupName, new string[0]).groupMessageGo(GetUser(string.Empty).Name, GroupName, message);
         }
         public void EditName(string UserName)
         {

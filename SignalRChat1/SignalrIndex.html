@@ -48,11 +48,15 @@
         .mui-table-view{background-color:#333}
         .AddGroupTitle{text-align:center;width:100% !important}
         .AddGroupTitle .GroupTitleContent{text-align:center;margin:0 auto;color:#efeff4;background-color:#bbb;padding:3px 10px;border-radius:5px;}
+        .titleNum{ border-radius: 45px; background-color: red; color: #fff; float: right;width:21px;text-align:center;}
+        .OnlineList{position:relative}
+        .HeaderTitleNum{position:absolute;top:0px;right:0px;border-radius: 45px; background-color: red; color: #fff;font-size:15px;line-height:18px;display:block;width:18px;text-align:center}
         /*#offCanvasSide {
             visibility: visible;
             transform: translate3d(0px, 0px, 0px);
             transform: translateX(0px);
         }*/
+        
     </style>
 
 </head>
@@ -73,18 +77,22 @@
                                         大厅
                                     </a>
                                 </li>
-                                <li class="mui-table-view-cell mui-collapse">
+                                <li class="Group mui-table-view-cell mui-collapse">
                                     <!--mui-active-->
                                     <a class="title mui-navigate-right">
                                         群组
                                     </a>
-                                    <ul class="GroupList mui-table-view mui-table-view-chevron"></ul>
+                                    <ul class="GroupList mui-table-view mui-table-view-chevron">
+                                        <li class="mui-table-view-cell" name="haha"><a class="mui-navigate-right">haha(10)</a></li>
+                                    </ul>
                                 </li>
-                                <li class="mui-table-view-cell mui-collapse">
+                                <li class="User mui-table-view-cell mui-collapse">
                                     <a class="title mui-navigate-right">
                                         用户
                                     </a>
-                                    <ul class="UserList mui-table-view mui-table-view-chevron"></ul>
+                                    <ul class="UserList mui-table-view mui-table-view-chevron">
+                                        <li class="mui-table-view-cell" name="haha"><a class="mui-navigate-right">haha</a></li>
+                                    </ul>
                                 </li>
                             </ul>
                         </div>
@@ -99,7 +107,7 @@
             </div>
             <header class="mui-bar mui-bar-nav">
                 <a href="#" class="OnlineList mui-icon mui-action-menu mui-icon-bars mui-pull-left"></a>
-                <h1 class="mui-title SendName">SignalR</h1>
+                <h1 class="mui-title SendName">大厅</h1>
             </header>
             <div class="bottom mui-bar mui-bar-tab">
                 <span class="emoje">😊</span>
@@ -109,12 +117,11 @@
             </div>
             <div id="content" style="height:calc(100%-88px)" class="mui-content">
                 <div class="MessageList mui-scroll">
-                    <ul>
-                        
-                    </ul>
+                    <ul></ul>
                 </div>
             </div>
             <!-- off-canvas backdrop -->
+            <input type="hidden" class="SendType" value="" />
             <div class="mui-off-canvas-backdrop"></div>
         </div>
     </div>
@@ -123,15 +130,10 @@
     <script src="Scripts/jquery-ui/jquery-ui.min.js"></script>
     <script src="Scripts/SideCanvasPage.js"></script>
     <script src="scripts/js.cookie.min.js"></script>
-    <!--<script src="signalr/hubs"></script>
-    <script src="Scripts/signalRChat.js"></script>-->
+    <script src="signalr/hubs"></script>
+    <script src="Scripts/signalRChat.js"></script>
     <script type="text/javascript">
         $(function () {
-            //$(".Hint").addClass("error").show();
-            //$(".Hint").animate({ top: "44px" }, 1000);
-            //setTimeout(function () { $(".Hint").animate({ top: "0" }, 1000) }, 5000);
-            //setTimeout(function () { $(".Hint").attr("class", "Hint").hide(); }, 6000);
-            //offCanvasSide();
             $(".Message").keyup(function () {
                 var message = $(".Message").html().replace(/<div><br><\/div>/g, "").replace(/\s/g, "").replace(/&nbsp;/g, "")
                 if (message.length > 0) {
@@ -145,6 +147,7 @@
             $(".SendMessage").click(function () {
                 var msg = $(".Message").html().replace(/<div>/g, "<br>").replace(/<\/div>/g, "");
                 if (msg.replace(/<br>/g, "").length > 0) {
+                    SendMessage($(".SendType").val(), msg, $(".SendName").text())
                     $(".MessageList ul").append("<li class=\"MsgGo\"><span class=\"MsgContent\">" + msg + "</span></li>")
                     $(".Message").html("")
                 }
@@ -154,12 +157,15 @@
                 $(".content .UserName").removeClass("sname").removeAttr("readonly");
             })
             $(".content .UserName").blur(function () {
-                $(".content .UserName").addClass("sname").attr("readonly","readonly");
+                EditName($(".content .UserName").val())
+                $(".content .UserName").addClass("sname").attr("readonly", "readonly");
             })
-
+            //打开菜单
             $(".OnlineList").click(function () {
+                $(".OnlineList .HeaderTitleNum").remove();
                 offCanvasSide();
             })
+            //点击空白区域关闭菜单
             $(".mui-inner-wrap .mui-off-canvas-backdrop").click(function () {
                 noCanvasSide();
             })
@@ -171,26 +177,57 @@
                     $(this).parent().addClass("mui-active")
                 }
             })
+
+            $(".Lobby,.Group,.User").click(function () {
+                $(".Lobby,.Group,.User").removeClass("mui-active")
+                $(this).addClass("mui-active")
+                $(this).children("a").children(".titleNum").remove();
+            })
             $(".Lobby").click(function () {
-                $("SendName").html("大厅")
+                setMsg("msgText","")
+                $(".SendName").html("大厅")
+                $(".SendType").val("Lobby");
             })
             $(".GroupList li").click(function () {
-                $("SendName").html($(this).children("a").html().split("(")[0])
+                setMsg("msgGroupText", $(this).children("a").html().split("(")[0])
+                $(".SendName").html($(this).children("a").html().split("(")[0])
+                $(".SendType").val("Group");
+                $(this).children("a").children(".titleNum").remove();
             })
             $(".UserList li").click(function () {
-                $("SendName").html($(this).children("a").html())
+                setMsg("msgGoText", $(this).children("a").html())
+                $(".SendName").html($(this).children("a").html())
+                $(".SendType").val("User");
+                $(this).children("a").children(".titleNum").remove();
             })
-            //$(".mui-table-view-cell").mousedown(function () {
-            //    $(this).addClass("mui-active")
-            //}).on("touchstart",function () {
-            //    $(this).addClass("mui-active")
-            //})
-            //$(".mui-table-view-cell").mouseup(function () {
-            //    $(this).removeClass("mui-active")
-            //}).on("touchend",function () {
-            //    $(this).removeClass("mui-active")
-            //})
         })
+        //function titlespan(item,name) {
+        //    if ($(item).hasClass("mui-active")) {
+        //        return
+        //    }
+        //    if ($(item).children("a").children(".titleNum").length == 0) {
+        //        $(item).children("a").append("<span class=\"titleNum\">1</span>");
+        //    } else {
+        //        var i = parseInt($(item).children("a").children(".titleNum").text())
+        //        var num1 = i >= 99 ? "99+" : i + 1;
+        //        $(item).children("a").children(".titleNum").text(num1);
+        //    }
+        //    if ($(".OnlineList .HeaderTitleNum").length == 0) {
+        //        $(".OnlineList").append("<span class=\"HeaderTitleNum\">1</span>");
+        //    } else {
+        //        var j = parseInt($(".OnlineList .HeaderTitleNum").text())
+        //        var num2 = j >= 99 ? "99+" : j + 1;
+        //        $(".OnlineList .HeaderTitleNum").text(num2);
+        //    }
+        //    var li_item = $(item).find("ul li[name=haha]");
+        //    if ($(li_item).children("a").children(".titleNum").length == 0) {
+        //        $(li_item).children("a").append("<span class=\"titleNum\">1</span>");
+        //    } else {
+        //        var i = parseInt($(li_item).children("a").children(".titleNum").text())
+        //        var num1 = i >= 99 ? "99+" : i + 1;
+        //        $(li_item).children("a").children(".titleNum").text(num1);
+        //    }
+        //}
 
     </script>
 
