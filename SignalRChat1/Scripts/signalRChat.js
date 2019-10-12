@@ -1,9 +1,4 @@
 ﻿var UserName = Cookies.get("UserName");
-while (UserName == null || UserName == "" || UserName == false) {
-    UserName = prompt('输入你的昵称:', '');
-}
-$('.UserName').val(UserName);
-Cookies.set("UserName", UserName)
 //大厅消息，私聊消息，群组消息
 var msgText = new Array(), msgGoText = new Array(), msgGroupText = new Array();
 // 声明一个代理以引用集线器
@@ -49,7 +44,8 @@ chat.client.getUsers = function (data) {
 //重连时接收昵称
 chat.client.getName = function (name) {
     UserName = name;
-    $('#UserName').val(name);
+    $('.UserName').val(UserName);
+    Cookies.set("UserName", UserName)
 }
 //接收所有分组
 chat.client.getGroups = function (data) {
@@ -76,7 +72,9 @@ chat.client.groupSystem = function (text) {
 }
 // 启动连接
 $.connection.hub.start().done(function () {
-    
+    while (UserName == null || UserName == "" || UserName == false) {
+        //chat.server.loging(prompt('输入你的昵称:', ''));
+    }
 });
 //发送消息
 function SendMessage(type, msg, name) {

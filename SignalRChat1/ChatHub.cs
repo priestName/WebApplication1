@@ -12,25 +12,47 @@ namespace SignalRChat1
 {
     public class ChatHub : Hub
     {
-        public static List<UserList> users = new List<UserList>();
-        public static List<GroupList> groups = new List<GroupList>();
+        public static List<UserList> users = new List<UserList>();//用户
+        public static List<GroupList> groups = new List<GroupList>();//组
+        /// <summary>
+        /// 大厅消息
+        /// </summary>
+        /// <param name="message"></param>
         public void Send(string message)
         {
             Clients.All.broadcastMessage(GetUser(string.Empty).Name, message);
         }
+        /// <summary>
+        /// 私聊消息
+        /// </summary>
+        /// <param name="message"></param>
+        /// <param name="GoUserName"></param>
         public void SendGo(string message, string GoUserName)
         {
             Clients.Client(GetUser(GoUserName).ConnectionID).broadcastMessageGo(GetUser(string.Empty).Name, message);
         }
+        /// <summary>
+        /// 组消息
+        /// </summary>
+        /// <param name="message"></param>
+        /// <param name="GroupName"></param>
         public void SendGroup(string message, string GroupName)
         {
             Clients.Group(GroupName, new string[0]).groupMessageGo(GetUser(string.Empty).Name, GroupName, message);
         }
+        /// <summary>
+        /// 改名
+        /// </summary>
+        /// <param name="UserName"></param>
         public void EditName(string UserName)
         {
             users.Where(w => w.ConnectionID == Context.ConnectionId).SingleOrDefault().Name = UserName;
             GetUsers();
         }
+        /// <summary>
+        /// 创建组
+        /// </summary>
+        /// <param name="GroupName"></param>
         public void CreatGroup(string GroupName)
         {
             var group = groups.Where(g => g.GroupName == GroupName).SingleOrDefault();
@@ -45,6 +67,10 @@ namespace SignalRChat1
                 Clients.All.SystemNotification("分组名称已存在");
             }
         }
+        /// <summary>
+        /// 加入组
+        /// </summary>
+        /// <param name="GroupName"></param>
         public void AddGroup(string GroupName)
         {
             var group = groups.Where(g => g.GroupName == GroupName).SingleOrDefault();
@@ -61,6 +87,10 @@ namespace SignalRChat1
                 Clients.All.SystemNotification("分组不存在");
             }
         }
+        /// <summary>
+        /// 退出组(组人数为0时删除组)
+        /// </summary>
+        /// <param name="GroupName"></param>
         public void DelGroup(string GroupName)
         {
             var group = groups.Where(g => g.GroupName == GroupName).SingleOrDefault();
@@ -82,7 +112,9 @@ namespace SignalRChat1
                 Clients.All.SystemNotification("分组不存在");
             }
         }
-        //获取所有用户在线列表  
+        /// <summary>
+        /// 获取所有用户在线列表
+        /// </summary>
         private void GetUsers()
         {
             var list = users.Where(u => !string.IsNullOrEmpty(u.Name) && u.Status == 1)
@@ -90,23 +122,32 @@ namespace SignalRChat1
             string jsonList = JsonConvert.SerializeObject(list);
             Clients.All.getUsers(jsonList);
         }
+        /// <summary>
+        /// 获取所有组
+        /// </summary>
         private void GetGroups()
         {
             var list = groups.Where(g =>g.Status == 1).Select(s => new { s.GroupName, s.user.Count }).ToList();
             string jsonList = JsonConvert.SerializeObject(list);
             Clients.All.getGroups(jsonList);
         }
-
-        public void Loging(string name)
+        /// <summary>
+        /// 登录
+        /// </summary>
+        /// <param name="name"></param>
+        private void Loging(string name)
         {
-            var user = users.Where(w => w.ConnectionID == Context.ConnectionId).SingleOrDefault();
-            if (user == null)
+            if (users.Where(w => w.Name == name).Count() == 0)
             {
-                user = new UserList(name, Context.ConnectionId,1);
-                users.Add(user);
+                Clients.Client(Context.ConnectionId).getName(name);
+                var user = users.Where(w => w.ConnectionID == Context.ConnectionId).SingleOrDefault();
+                if (user == null)
+                {
+                    user = new UserList(name, Context.ConnectionId, 1);
+                    users.Add(user);
+                }
+                GetUsers();
             }
-
-            GetUsers();
         }
         public void CloseSignalr(bool stopCalled)
         {
