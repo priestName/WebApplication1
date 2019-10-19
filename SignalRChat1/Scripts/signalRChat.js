@@ -55,7 +55,8 @@ chat.client.getGroups = function (data) {
         //$("#UserNum").html(json.length + 1 + "人在线");
         for (var i = 0; i < json.length; i++) {
             html += "<li class=\"mui-table-view-cell\" name=\"" + json[i].Name + "\"><a class=\"mui-navigate-right\">";
-            html += json[i].Name + "("+json[i][1]+")";
+            html += json[i].Name + "(" + json[i][1] + ")";
+            html += "<input data-naem=\"" + json[i].Name+"\" date-status=\"0\" type=\"button\" class=\"addgroup\" value=\"加入\"/>";
             html += "</a></li>";
         }
         $("#offCanvasSideScroll .contentList .UserLisr").html(html)
@@ -165,13 +166,13 @@ function titlespan(item, name) {
     }
     if (li_item == "")
         return;
-    var li_item = $(item).find("ul li[name=" + li_item+"]");
-    if ($(li_item).children("a").children(".titleNum").length == 0) {
-        $(li_item).children("a").append("<span class=\"titleNum\">1</span>");
+    var li_item = $(item).find("ul li input[date-name=" + li_item+"]");
+    if ($(li_item).nextAll(".titleNum").length == 0) {
+        $(li_item).prepend("<span class=\"titleNum\">1</span>");
     } else {
-        var i = parseInt($(li_item).children("a").children(".titleNum").text())
+        var i = parseInt($(li_item).nextAll(".titleNum").text())
         var num1 = i >= 99 ? "99+" : i + 1;
-        $(li_item).children("a").children(".titleNum").text(num1);
+        $(li_item).nextAll(".titleNum").text(num1);
     }
 }
 

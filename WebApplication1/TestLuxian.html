@@ -1,0 +1,73 @@
+﻿<!DOCTYPE html>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+    <link href="style/jquery-ui.min.css" rel="stylesheet" />
+    <style type="text/css">
+        *{padding:0;margin:0;}
+        html,body{padding:0;margin:0;height:100%;width:100%}
+        li {list-style-type:none;}
+        .box {padding: 0;margin: 0;border: 1px solid #000;background-repeat: no-repeat;background-position:top;background-size: contain;}
+        .box ul li{float:left;}
+        .hide{display:none !important}
+    </style>
+</head>
+<body>
+    <from class="from1">
+        <div>
+            <div class="topImg">
+                <input id="File1" type="file" />
+            </div>
+            <div class="box">
+                <ul></ul>
+            </div>
+            <div class="jieguo">
+                <span class="luxian"></span>
+                <span class="guaiwu"></span>
+            </div>
+        </div>
+    </from>
+    <script src="scripts/jquery-3.3.1.min.js"></script>
+    <script src="scripts/jquery-ui.min.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            var w = 0, h = 0;
+            w = $(window).width() - 2
+            $("#File1").change(function () {
+                var file = $("#File1").get(0).files[0];
+                var reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = function (e) {
+                    $(".box").css("background-image", "url(" + reader.result + ")")
+                    var image = new Image();
+                    image.src = e.target.result;
+                    image.onload = function () {
+                        var imgw = this.width;
+                        var imgh = this.height;
+                        console.log(imgw + ":" + imgh)
+                        console.log(w + ":" + imgh * (w / imgw))
+                        $(".box").css({ "width": w, "height": imgh*(w / imgw)  })
+                    }//462:388
+                }
+            })
+            console.log(w)
+            $(".box").css({ "width": w, "height": w })
+            //if ($(window).width() < 500) {
+            //    var w = $(window).width()
+            //    $(".box").css({ "width": w,"height":w})
+            //}
+            //462*388
+            //500*(388*(500/462))
+            for (var i = 0; i < 20; i++) {
+                for (var j = 0; j < 20; j++) {
+                    var html = "<li data-x=\"" + j + "\" data-y=\"" + i + "\"></li>"
+                    $(".box ul").append(html);
+                }
+            }
+            $(".box ul li").css({ "width": $(".box").width() / 20, "height": $(".box").height() / 20 });
+        })
+    </script>
+</body>
+</html>

@@ -236,6 +236,7 @@
     <Content Include="TestHrefId.html" />
     <Content Include="TestHttpPost.aspx" />
     <Content Include="TestIfrom.html" />
+    <Content Include="TestLuxian.html" />
     <Content Include="TestPayhf.aspx" />
     <Content Include="TestQRCode.html" />
     <Content Include="TestText.html" />

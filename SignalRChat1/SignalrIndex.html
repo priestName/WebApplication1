@@ -51,6 +51,8 @@
         .titleNum{ border-radius: 45px; background-color: red; color: #fff; float: right;width:21px;text-align:center;}
         .OnlineList{position:relative}
         .HeaderTitleNum{position:absolute;top:0px;right:0px;border-radius: 45px; background-color: red; color: #fff;font-size:15px;line-height:18px;display:block;width:18px;text-align:center}
+        .GroupList li a .addgroup{border:1px solid #bbb;padding:0 4px;margin:0;border-radius:5px;float:right;font-size:6px;background-color:#333;color:#fff}
+        
         /*#offCanvasSide {
             visibility: visible;
             transform: translate3d(0px, 0px, 0px);
@@ -83,7 +85,12 @@
                                         群组
                                     </a>
                                     <ul class="GroupList mui-table-view mui-table-view-chevron">
-                                        <li class="mui-table-view-cell" name="haha"><a class="mui-navigate-right">haha(10)</a></li>
+                                        <li class="mui-table-view-cell" name="haha">
+                                            <a class="mui-navigate-right">
+                                                haha(10)
+                                                <input data-naem="haha(10)" date-status="0" type="button" class="addgroup" value="加入"/>
+                                            </a>
+                                        </li>
                                     </ul>
                                 </li>
                                 <li class="User mui-table-view-cell mui-collapse">
@@ -196,11 +203,18 @@
                 $(".SendName").html("大厅")
                 $(".SendType").val("Lobby");
             })
-            $(".GroupList li").click(function () {
-                setMsg("msgGroupText", $(this).children("a").html().split("(")[0])
-                $(".SendName").html($(this).children("a").html().split("(")[0])
-                $(".SendType").val("Group");
-                $(this).children("a").children(".titleNum").remove();
+            titlespan($(".Group"), "haha")
+            $(".GroupList li .addgroup").click(function () {
+                var name = $(this).attr("data-naem");
+                var status = $(this).attr("date-status");
+                if (status == 0) {
+                    setMsg("msgGroupText", name)
+                    $(".SendName").html(name)
+                    $(".SendType").val("Group");
+                    $(this).parents("a").children(".titleNum").remove();
+                }
+                
+                
             })
             $(".UserList li").click(function () {
                 setMsg("msgGoText", $(this).children("a").html())
@@ -209,6 +223,8 @@
                 $(this).children("a").children(".titleNum").remove();
             })
         })
+
+
         //function titlespan(item,name) {
         //    if ($(item).hasClass("mui-active")) {
         //        return
