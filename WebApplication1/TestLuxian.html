@@ -19,6 +19,7 @@
         <div>
             <div class="topImg">
                 <input id="File1" type="file" />
+                <input type="button" class="guai" value="怪+1"/>
             </div>
             <div class="box">
                 <ul></ul>
@@ -32,8 +33,11 @@
     <script src="scripts/jquery-3.3.1.min.js"></script>
     <script src="scripts/jquery-ui.min.js"></script>
     <script type="text/javascript">
+        var luxian = "", guaiwu = "", fangxian = "";
+        var bushu = 0, xiaobushu = 0;
         $(function () {
             var w = 0, h = 0;
+            var x = 0, y = 0;
             w = $(window).width() - 2
             $("#File1").change(function () {
                 var file = $("#File1").get(0).files[0];
@@ -67,6 +71,44 @@
                 }
             }
             $(".box ul li").css({ "width": $(".box").width() / 20, "height": $(".box").height() / 20 });
+            
+            $(".box ul li").click(function () {
+                var i = parseInt($(this).attr("date-i")) + 1
+                $(this).css({ "background-color": "#ffd800", "opacity": 0.3 * i }).attr("date-i", i)
+                
+                if (parseInt($(this).attr("date-x"))==x) {
+                    if (fangxian == "x") {
+
+                    }
+                    xiaobushu += 1;
+                    fangxian = "x";
+                }
+                if (parseInt($(this).attr("date-y")) == y) {
+                    if (fangxian == "x") {
+
+                    }
+                    xiaobushu += 1;
+                    fangxian = "y";
+                }
+                bushu += 1;
+                var x = parseInt($(this).attr("date-x"))
+                var y = parseInt($(this).attr("date-y"))
+            })
+            $(".box ul li").
+            $(".box ul li").dblclick(function () {
+                var i = parseInt($(this).attr("date-i")) - 1
+                $(this).css({ "background-color": "#ffd800", "opacity": 0.3 * i }).attr("date-i", i)
+            })
+            $(document).mousedown(function (e) {
+                //e.which 1 = 鼠标左键 left; 2 = 鼠标中键; 3 = 鼠标右键
+                if (e.which == 3) {
+                    e.preventDefault() // 阻止默认行为
+                    guaiwu = guaiwu + "," + bushu;
+                }
+            })
+            $(".guai").click(function () {
+                guaiwu = guaiwu + "," + bushu;
+            })
         })
     </script>
 </body>
