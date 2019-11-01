@@ -12,13 +12,17 @@ namespace ConsoleApplication2
 
             //TCP_Server c1 = new TCP_Server();
             //c1.Main();
-            SocketServiceWuZi socketWuZi = new SocketServiceWuZi();
-            socketWuZi.Start();
+            //SocketServiceWuZi socketWuZi = new SocketServiceWuZi();
+            //socketWuZi.Start();
+            //SocketService socket = new SocketService();
+            //socket.Start();
+            Class3 socket = new Class3();
+            socket.Start();
 
-            Timer timer = new Timer(600000-30);
-            timer.AutoReset = true;
-            timer.Enabled = true;
-            timer.Elapsed += new System.Timers.ElapsedEventHandler(aaaa);
+            //Timer timer = new Timer(600000-30);
+            //timer.AutoReset = true;
+            //timer.Enabled = true;
+            //timer.Elapsed += new System.Timers.ElapsedEventHandler(aaaa);
             Console.ReadLine();
             //Console.WriteLine("1：聊天，2：五子棋");
             //switch (Console.ReadLine())

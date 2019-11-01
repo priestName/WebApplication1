@@ -85,10 +85,9 @@
                                         群组
                                     </a>
                                     <ul class="GroupList mui-table-view mui-table-view-chevron">
-                                        <li class="mui-table-view-cell" name="haha">
+                                        <li class="mui-table-view-cell" data-name="haha" date-status="1" date-num="10">
                                             <a class="mui-navigate-right">
                                                 haha(10)
-                                                <input data-naem="haha(10)" date-status="0" type="button" class="addgroup" value="加入"/>
                                             </a>
                                         </li>
                                     </ul>
@@ -98,7 +97,7 @@
                                         用户
                                     </a>
                                     <ul class="UserList mui-table-view mui-table-view-chevron">
-                                        <li class="mui-table-view-cell" name="haha"><a class="mui-navigate-right">haha</a></li>
+                                        <li class="mui-table-view-cell" data-name="haha"><a class="mui-navigate-right">haha</a></li>
                                     </ul>
                                 </li>
                             </ul>
@@ -114,7 +113,7 @@
             </div>
             <header class="mui-bar mui-bar-nav">
                 <a href="#" class="OnlineList mui-icon mui-action-menu mui-icon-bars mui-pull-left"></a>
-                <h1 class="mui-title SendName">大厅</h1>
+                <h1 class="mui-title SendTitle">大厅</h1>
             </header>
             <div class="bottom mui-bar mui-bar-tab">
                 <span class="emoje">😊</span>
@@ -128,7 +127,8 @@
                 </div>
             </div>
             <!-- off-canvas backdrop -->
-            <input type="hidden" class="SendType" value="" />
+            <input type="hidden" class="SendType" value="Lobby" />
+            <input type="hidden" class="SendName" value="" />
             <div class="mui-off-canvas-backdrop"></div>
         </div>
     </div>
@@ -146,7 +146,7 @@
     <script src="Scripts/SideCanvasPage.js"></script>
     <script src="scripts/js.cookie.min.js"></script>
     <script src="signalr/hubs"></script>
-    <script src="Scripts/signalRChat.js"></script>
+    <script src="Scripts/signalRChat.js?v=2012"></script>
     <script type="text/javascript">
         $(function () {
             $(".Message").keyup(function () {
@@ -162,6 +162,7 @@
             $(".SendMessage").click(function () {
                 var msg = $(".Message").html().replace(/<div>/g, "<br>").replace(/<\/div>/g, "");
                 if (msg.replace(/<br>/g, "").length > 0) {
+                    console.log($(".SendType").val() + "," + $(".SendName").text());
                     SendMessage($(".SendType").val(), msg, $(".SendName").text())
                     $(".MessageList ul").append("<li class=\"MsgGo\"><span class=\"MsgContent\">" + msg + "</span></li>")
                     $(".Message").html("")
@@ -194,33 +195,39 @@
             })
 
             $(".Lobby,.Group,.User").click(function () {
-                $(".Lobby,.Group,.User").removeClass("mui-active")
-                $(this).addClass("mui-active")
-                $(this).children("a").children(".titleNum").remove();
+                if ($(this).hasClass("mui-active")) {
+                    $(".Lobby,.Group,.User").removeClass("mui-active")
+                    $(this).addClass("mui-active")
+                    $(this).children("a").children(".titleNum").remove();
+                }
             })
             $(".Lobby").click(function () {
                 setMsg("msgText","")
                 $(".SendName").html("大厅")
                 $(".SendType").val("Lobby");
             })
-            titlespan($(".Group"), "haha")
-            $(".GroupList li .addgroup").click(function () {
-                var name = $(this).attr("data-naem");
+            $(".GroupList li").click(function () {
+                var name = $(this).attr("data-name");
                 var status = $(this).attr("date-status");
+                var num = $(this).attr("date-num");
                 if (status == 0) {
-                    setMsg("msgGroupText", name)
-                    $(".SendName").html(name)
-                    $(".SendType").val("Group");
-                    $(this).parents("a").children(".titleNum").remove();
+                    AddGroup(name);
                 }
-                
-                
+                setMsg("msgGroupText", name)
+                $(".SendTitle").html(name + "(" + num + ")")
+                $(".SendName").html(name)
+                $(".SendType").val("Group");
+                $(this).children("a").children(".titleNum").remove();
+                noCanvasSide();
             })
             $(".UserList li").click(function () {
-                setMsg("msgGoText", $(this).children("a").html())
-                $(".SendName").html($(this).children("a").html())
+                var name = $(this).attr("data-name")
+                setMsg("msgGoText", name)
+                $(".SendTitle").html(name)
+                $(".SendName").val(name)
                 $(".SendType").val("User");
                 $(this).children("a").children(".titleNum").remove();
+                noCanvasSide();
             })
         })
 

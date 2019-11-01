@@ -17,12 +17,16 @@ namespace ConsoleApplication4
     {
         public void saa()
         {
+            duqu();
+            //xiugai();
+            //cuangjian();
             //DataTable dt = duquToTable();
             //foreach (DataRow item in dt.Rows)
             //{
             //    var a = item["测试四"];
             //    Console.WriteLine(item["测试四"]);
             //}
+            Console.WriteLine("ok");
 
         }
         #region
@@ -59,20 +63,21 @@ namespace ConsoleApplication4
         public string[,] duqu()
         {
             HSSFWorkbook wk = new HSSFWorkbook();
-            using (FileStream fs = File.Open(@"C:\Users\admin\Desktop\News.xls", FileMode.Open, FileAccess.Read))
+            using (FileStream fs = File.Open(@"C:\Users\admin\Desktop\Test1.xls", FileMode.Open, FileAccess.Read))
             {
                 wk = new HSSFWorkbook(fs);
                 fs.Close();
             }
             ISheet sheet = wk.GetSheetAt(0);
-            string[,] aa = new string[sheet.LastRowNum, sheet.GetRow(0).LastCellNum];
-            for (int i = 0; i < sheet.LastRowNum; i++)
+            string[,] aa = new string[sheet.LastRowNum+1, sheet.GetRow(0).LastCellNum];
+            for (int i = 0; i <= sheet.LastRowNum; i++)
             {
                 for (var j = 0; j < sheet.GetRow(i).LastCellNum; j++)
                 {
                     aa[i, j] = sheet.GetRow(i).GetCell(j).ToString();
-                    Console.Write(aa[i, j]); //14.215.177.38
+                    Console.Write(aa[i, j]);
                 }
+                Console.WriteLine("");
             }
             return aa;
         }
@@ -86,31 +91,44 @@ namespace ConsoleApplication4
             }
             ISheet sheet = wk.GetSheetAt(0);
             string[,] aa = new string[sheet.LastRowNum, sheet.GetRow(0).LastCellNum];
-            sheet.GetRow(1).GetCell(0).SetCellValue("测试2");
+            sheet.GetRow(3).GetCell(4).SetCellValue("测试2");
             using (FileStream fls = File.Open(@"C:\Users\admin\Desktop\News.xls", FileMode.OpenOrCreate, FileAccess.ReadWrite))
             {
                 wk.Write(fls);
             }
-            for (int i = 0; i < sheet.LastRowNum; i++)
-            {
-                for (var j=0;j< sheet.GetRow(i).LastCellNum; j++)
-                {
-                    aa[i, j] = sheet.GetRow(i).GetCell(j).ToString();
-                    Console.Write(aa[i, j]);
-                }
-                Console.WriteLine();
-            }
-            foreach (var item in aa) { Console.Write(item); }
-           
+            //for (int i = 0; i < sheet.LastRowNum; i++)
+            //{
+            //    for (var j=0;j< sheet.GetRow(i).LastCellNum; j++)
+            //    {
+            //        aa[i, j] = sheet.GetRow(i).GetCell(j).ToString();
+            //        //Console.Write(aa[i, j]);
+            //    }
+            //    Console.WriteLine();
+            //}
+            //foreach (var item in aa) { Console.Write(item); }
+
         }
         public void cuangjian()
         {
             HSSFWorkbook wk = new HSSFWorkbook();
             ISheet sheet = wk.CreateSheet("例子");
-            IRow row = sheet.CreateRow(1);
             //在第一行的第一列创建单元格  
-            ICell cell = row.CreateCell(0);
+            IRow row = sheet.CreateRow(0);//第一行
+            ICell cell = row.CreateCell(0);//第一列
             cell.SetCellValue("测试1");
+            row.CreateCell(1).SetCellValue("测试2");
+            row.CreateCell(2).SetCellValue("测试3");
+
+            IRow row1 = sheet.CreateRow(1);
+            row1.CreateCell(0).SetCellValue("a1");
+            row1.CreateCell(1).SetCellValue("a2");
+            row1.CreateCell(2).SetCellValue("a3");
+            //只有最后一列生效
+            sheet.CreateRow(2).CreateCell(0).SetCellValue("b1");
+            sheet.CreateRow(2).CreateCell(1).SetCellValue("b2");
+            sheet.CreateRow(2).CreateCell(2).SetCellValue("b3");
+
+
             using (FileStream fs = File.OpenWrite(@"C:\Users\admin\Desktop\News.xls"))
             {
                 wk.Write(fs);//向打开的这个xls文件中写入并保存。  

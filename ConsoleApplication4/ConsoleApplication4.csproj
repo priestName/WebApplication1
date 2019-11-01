@@ -65,6 +65,10 @@
   <PropertyGroup>
     <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>
+    </ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="ICSharpCode.SharpZipLib, Version=0.86.0.518, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
       <HintPath>..\packages\SharpZipLib.0.86.0\lib\20\ICSharpCode.SharpZipLib.dll</HintPath>
@@ -123,6 +127,7 @@
     <Compile Include="Class_Weather.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="OneDrive.ico" />
     <None Include="App.config" />
     <Content Include="Json\WeatherCity.json" />
     <None Include="ConsoleApplication4_TemporaryKey.pfx" />

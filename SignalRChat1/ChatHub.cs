@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNet.SignalR;
 using Newtonsoft.Json;
-using SignalRChat1.Models;
 
 namespace SignalRChat1
 {
@@ -135,7 +133,7 @@ namespace SignalRChat1
         /// 登录
         /// </summary>
         /// <param name="name"></param>
-        private void Loging(string name)
+        public void Loging(string name)
         {
             if (users.Where(w => w.Name == name).Count() == 0)
             {
@@ -148,7 +146,7 @@ namespace SignalRChat1
                 }
                 GetUsers();
             }
-        }
+        }        
         public void CloseSignalr(bool stopCalled)
         {
             OnDisconnected(stopCalled);

@@ -1,0 +1,163 @@
+﻿<!DOCTYPE html>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+    <title></title>
+    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+    <script src="scripts/jquery.qqFace.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            font-family: 'Microsoft YaHei'
+        }
+
+        html {
+            overflow: hidden;
+            width: 100%;
+            height: 100%;
+        }
+
+        body, form {
+            overflow: hidden;
+            width: 100%;
+            height: 100%;
+        }
+
+        #TextBox1 {
+            overflow: auto;
+            height: 86%;
+            width: 100%;
+            resize: none;
+            border: solid 1px #808080
+        }
+
+        #TextBox2 {
+            height: 100%;
+            width: 100%;
+            resize: none;
+            overflow: auto;
+            display: block;
+        }
+
+        .TextSp {
+            height: 14%;
+            width: 90%;
+            float: left;
+        }
+
+        #TextBox1 div {
+            width: 100%;
+            text-align: left;
+        }
+
+        #Button1 {
+            width: 100%;
+            height: 100%;
+        }
+
+        .Btn1Sp {
+            width: 10%;
+            height: 14%;
+            float: left;
+            vertical-align: top;
+        }
+
+        .MsgGo {
+            background-color: darkturquoise;
+            line-height: 24px;
+            text-align: right;
+            margin: 1px 0px;
+            display: inline-block;
+        }
+
+        .SysSuccess {
+            background-color: green;
+            text-align: center !important;
+        }
+
+        .SysFailure {
+            background-color: red;
+            text-align: center !important;
+        }
+
+        .SysWarning {
+            background-color: yellow;
+            text-align: center !important;
+        }
+
+        input::-webkit-input-placeholder {
+            color: #000;
+            font-size: 16px;
+        }
+
+        #EditName {
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <form id="form1">
+        <div style="width:100%;height:100%;">
+            <div id="TextBox1">
+            </div>
+            <hr />
+            <span class="TextSp"><span contenteditable="true" id="TextBox2"></span></span>
+            <span class="Btn1Sp"><input id="Button1" type="button" value="发送" /></span>
+        </div>
+        <script>
+            $(function () {
+                var fontSize1 = document.body.clientWidth
+                var fontSize2 = document.body.clientHeight
+                $("html").css("width", fontSize1);
+                $("html").css("height", fontSize2);
+
+                // 打开一个 web socket
+                var ws = new WebSocket("ws://192.168.3.10:7788");//47.106.232.163   192.168.3.10
+                ws.onopen = function()//连接成功时触发
+                {
+                    $("#TextBox1").html($("#TextBox1").html() + "<div class='SysSuccess'>连接成功</div>");
+                    $("#TextBox1").scrollTop($("#TextBox1")[0].scrollHeight);
+                };
+
+                ws.onmessage = function (evt)//接收消息时触发
+                {
+                    var Htmls = "<div><span class='Msg'>" + evt.data + "</span></div>";
+                    $("#TextBox1").html($("#TextBox1").html() + Htmls);
+                    $("#TextBox1").scrollTop($("#TextBox1")[0].scrollHeight);
+                };
+
+                ws.onclose = function(evt)
+                {
+                    $("#TextBox1").html($("#TextBox1").html() + "<div class='SysFailure'>与服务器的连接已断开</div>");//关闭时触发
+                    $("#TextBox1").scrollTop($("#TextBox1")[0].scrollHeight);
+                };
+
+                ws.onerror = function(evt)
+                {
+                    $("#TextBox1").html($("#TextBox1").html() + "<div class='SysWarning'>服务器未开启</div>");//连接出错时触发
+                    $("#TextBox1").scrollTop($("#TextBox1")[0].scrollHeight);
+                    socketStatus = false;
+                    ws.send();
+                };
+                window.onbeforeunload = function () {
+                    ws.close();
+                }
+
+                $("#Button1").click(function () {
+                    var msg = $("#TextBox2").html();
+                    msg = msg.replace(/<div><br><\/div>/g, "")
+                    if (msg.length == 0) {
+                        $("#TextBox2").html("")
+                        return;
+                    }
+                    ws.send(msg);
+                    $("#TextBox2").html("");
+                })
+            })
+        </script>
+    </form>
+</body>
+</html>

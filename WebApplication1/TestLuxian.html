@@ -19,21 +19,21 @@
         <div>
             <div class="topImg">
                 <input id="File1" type="file" />
-                <input type="button" class="guai" value="怪+1"/>
+                <input type="button" class="guai" value="怪+1" />
+                <input type="button" class="houtui" value="后退" />
+                <input type="text" class="luxian" value="" />
+                <input type="text" class="guaiwu" value="" />
+                <input type="text" class="guaiwu" value="" />
             </div>
             <div class="box">
                 <ul></ul>
-            </div>
-            <div class="jieguo">
-                <span class="luxian"></span>
-                <span class="guaiwu"></span>
             </div>
         </div>
     </from>
     <script src="scripts/jquery-3.3.1.min.js"></script>
     <script src="scripts/jquery-ui.min.js"></script>
     <script type="text/javascript">
-        var luxian = "", guaiwu = "", fangxian = "";
+        var fangxian = "";
         var bushu = 0, xiaobushu = 0;
         $(function () {
             var w = 0, h = 0;
@@ -50,13 +50,13 @@
                     image.onload = function () {
                         var imgw = this.width;
                         var imgh = this.height;
-                        console.log(imgw + ":" + imgh)
-                        console.log(w + ":" + imgh * (w / imgw))
+                        //console.log(imgw + ":" + imgh)
+                        //console.log(w + ":" + imgh * (w / imgw))
                         $(".box").css({ "width": w, "height": imgh*(w / imgw)  })
                     }//462:388
                 }
             })
-            console.log(w)
+            //console.log(w)
             $(".box").css({ "width": w, "height": w })
             //if ($(window).width() < 500) {
             //    var w = $(window).width()
@@ -66,7 +66,7 @@
             //500*(388*(500/462))
             for (var i = 0; i < 20; i++) {
                 for (var j = 0; j < 20; j++) {
-                    var html = "<li data-x=\"" + j + "\" data-y=\"" + i + "\"></li>"
+                    var html = "<li data-x=\"" + j + "\" data-y=\"" + i + "\" date-i=\"0\"></li>"
                     $(".box ul").append(html);
                 }
             }
@@ -75,41 +75,91 @@
             $(".box ul li").click(function () {
                 var i = parseInt($(this).attr("date-i")) + 1
                 $(this).css({ "background-color": "#ffd800", "opacity": 0.3 * i }).attr("date-i", i)
+
+                if (parseInt($(this).attr("date-x")) > x) {
+                    if (fangxian != "x1") {
+                        luxian(fangxian, xiaobushu)
+                        xiaobushu = 0;
+                    }
+                    xiaobushu += 1;
+                    fangxian = "x1";
+                }
+                else if (parseInt($(this).attr("date-x")) < x) {
+                    if (fangxian != "x0") {
+                        luxian(fangxian, xiaobushu)
+                        xiaobushu = 0;
+                    }
+                    xiaobushu += 1;
+                    fangxian = "x0";
+                }
+
+                if (parseInt($(this).attr("date-y")) < y) {
+                    if (fangxian != "y1") {
+                        luxian(fangxian, xiaobushu)
+                        xiaobushu = 0;
+                    }
+                    xiaobushu += 1;
+                    fangxian = "y1";
+                }
+                else if (parseInt($(this).attr("date-y")) > y) {
+                    if (fangxian != "y0") {
+                        luxian(fangxian, xiaobushu)
+                        xiaobushu = 0;
+                    }
+                    xiaobushu += 1;
+                    fangxian = "y0";
+                }
                 
-                if (parseInt($(this).attr("date-x"))==x) {
-                    if (fangxian == "x") {
-
-                    }
-                    xiaobushu += 1;
-                    fangxian = "x";
-                }
-                if (parseInt($(this).attr("date-y")) == y) {
-                    if (fangxian == "x") {
-
-                    }
-                    xiaobushu += 1;
-                    fangxian = "y";
-                }
                 bushu += 1;
-                var x = parseInt($(this).attr("date-x"))
-                var y = parseInt($(this).attr("date-y"))
+                x = parseInt($(this).attr("date-x"))
+                y = parseInt($(this).attr("date-y"))
             })
-            $(".box ul li").
             $(".box ul li").dblclick(function () {
                 var i = parseInt($(this).attr("date-i")) - 1
                 $(this).css({ "background-color": "#ffd800", "opacity": 0.3 * i }).attr("date-i", i)
+                xiaobushu -= 1;
+                bushu -= 1;
+                x = parseInt($(this).attr("date-x"))
+                y = parseInt($(this).attr("date-y"))
+            })
+            $(".houtui").click(function () {
+                //var i = parseInt($(this).attr("date-i")) - 1
+                //$(this).css({ "background-color": "#ffd800", "opacity": 0.3 * i }).attr("date-i", i)
+                //xiaobushu -= 1;
+                //bushu -= 1;
+                //x = parseInt($(this).attr("date-x"))
+                //y = parseInt($(this).attr("date-y"))
             })
             $(document).mousedown(function (e) {
-                //e.which 1 = 鼠标左键 left; 2 = 鼠标中键; 3 = 鼠标右键
                 if (e.which == 3) {
                     e.preventDefault() // 阻止默认行为
-                    guaiwu = guaiwu + "," + bushu;
+                    $(".guaiwu").val($(".guaiwu").val() + bushu + ",")
                 }
             })
             $(".guai").click(function () {
-                guaiwu = guaiwu + "," + bushu;
+                $(".guaiwu").val($(".guaiwu").val() + bushu + ",")
             })
         })
+        function luxian(fx, bs) {
+            var lx = "";
+            switch (fx) {
+                case "x0":
+                    lx = "左" + bs;
+                    break;
+                case "x1":
+                    lx = "右" + bs;
+                    break;
+                case "y0":
+                    lx = "上" + bs;
+                    break;
+                case "y1":
+                    lx = "下" + bs;
+                    break;
+                default:
+                    break;
+            }
+            $(".luxian").val($(".luxian").val() + lx + ",")
+        }
     </script>
 </body>
 </html>

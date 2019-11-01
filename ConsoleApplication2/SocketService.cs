@@ -18,9 +18,9 @@ namespace ConsoleApplication2
             int i = 0;
             FleckLog.Level = LogLevel.Debug;
 
-            var allSockets = new List<IWebSocketConnection>();
+            List<IWebSocketConnection> allSockets = new List<IWebSocketConnection>();
 
-            var server = new WebSocketServer("ws://192.168.3.10:7788");//172.18.250.7  192.168.3.10
+            WebSocketServer server = new WebSocketServer("ws://192.168.3.10:7788");//172.18.250.7  192.168.3.10
 
             server.Start(socket =>
             {

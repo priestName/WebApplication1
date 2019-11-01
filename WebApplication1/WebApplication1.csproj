@@ -211,6 +211,7 @@
     <Content Include="face\9.gif" />
     <Content Include="ChatPage.html" />
     <Content Include="FleckHrml.html" />
+    <Content Include="FleckHrml1.html" />
     <Content Include="Global.asax" />
     <Content Include="HtmlJqueryUi.html" />
     <Content Include="HtmlPage1.html" />

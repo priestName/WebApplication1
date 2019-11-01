@@ -15,7 +15,7 @@ namespace ConsoleApplication4
         public void saa()
         {
             string myStr = string.Empty;
-            using (FileStream fsRead = new FileStream(@"Log\User_Ip_Name.txt", FileMode.Open))
+            using (FileStream fsRead = new FileStream(@"Log\User_Ip_Name.txt", FileMode.Truncate, FileAccess.ReadWrite))
             {
                 int fsLen = (int)fsRead.Length;
                 byte[] heByte = new byte[fsLen];
