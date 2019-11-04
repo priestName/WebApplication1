@@ -1,5 +1,5 @@
 ﻿var chat = $.connection.chatHub;
-chat.connection.url = "http://192.168.3.10:53499/signalr/hubs";
+chat.connection.url = "http://qy.priest.ink:8050/signalr/hubs";
 
 $.connection.hub.start().done(function () {
     chat.server.hello("hello");

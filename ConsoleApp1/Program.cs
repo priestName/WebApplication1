@@ -4,14 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ConsoleApplication4
+namespace ConsoleApp1
 {
     class Program
     {
         static void Main(string[] args)
         {
-            Class1 classs = new Class1();
-            classs.saa();
+            Class1 c1 = new Class1();
+            c1.main();
+
             Console.ReadLine();
         }
     }

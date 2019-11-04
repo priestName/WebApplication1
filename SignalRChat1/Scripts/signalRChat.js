@@ -1,4 +1,4 @@
-﻿Cookies.set("UserName", "Test")
+﻿//Cookies.set("UserName", "Test")
 var UserName = Cookies.get("UserName");
 
 //大厅消息，私聊消息，群组消息
@@ -9,24 +9,34 @@ var chat = $.connection.chatHub;
 chat.client.broadcastMessage = function (name, message) {
     if (name == UserName)
         return;
-    titlespan($(".Lobby"),"")
     msgText.push("{\"name\":\"" + name + "\",\"message\":\"" + message + "\",\"status\":\"1\"}");
-    var Htmls = "<li class=\"Msg\"><span>" + name + "：<span class=\"MsgContent\">" + message + "</span></span></li>";
-    $("#ShowMessage ul").append(Htmls)
+    if ($(".SendName").val() == "") {
+        var Htmls = "<li class=\"Msg\"><span>" + name + "：<span class=\"MsgContent\">" + message + "</span></span></li>";
+        $(".MessageList ul").append(Htmls)
+    } else {
+        titlespan($(".Lobby"), "")
+    }
 };
 //接收私聊消息
 chat.client.broadcastMessageGo = function (name, message) {
-    titlespan($(".User"), name)
     msgGoText.push("{\"Name\":\"" + name + "\",\"SendName\":\"" + UserName + "\",\"message\":\"" + message + "\",\"status\":\"1\"}");
-    var Htmls = "<li class=\"Msg\"><span>" + name + "：<span class=\"MsgContent\">" + message + "</span></span></li>";
-    $("#ShowMessage ul").append(Htmls)
+    if ($(".SendName").val() == name) {
+        var Htmls = "<li class=\"Msg\"><span>" + name + "：<span class=\"MsgContent\">" + message + "</span></span></li>";
+        $(".MessageList ul").append(Htmls)
+    } else {
+        titlespan($(".User"), name)
+    }
 };
 //接收群组消息
 chat.client.groupMessageGo = function (name, groupname, message) {
-    titlespan($(".Group"), name)
-    msgGroupText.push("{\"Name\":\"" + name + "\",\"GroupName\":\"" + UserName + "\",\"message\":\"" + message + "\",\"status\":\"1\"}");
-    var Htmls = "<li class=\"Msg\"><span>" + name + "：<span class=\"MsgContent\">" + message + "</span></span></li>";
-    $("#ShowMessage ul").append(Htmls)
+    msgGroupText.push("{\"Name\":\"" + name + "\",\"GroupName\":\"" + groupname + "\",\"message\":\"" + message + "\",\"status\":\"1\"}");
+    if ($(".SendName").val() == groupname) {
+        var Htmls = "<li class=\"Msg\"><span>" + name + "：<span class=\"MsgContent\">" + message + "</span></span></li>";
+        $(".MessageList ul").append(Htmls)
+    } else {
+        titlespan($(".Group"), name)
+    }
+    
 };
 //接收所有在线用户的方法
 chat.client.getUsers = function (data) {
@@ -40,28 +50,33 @@ chat.client.getUsers = function (data) {
             }
             html += "<li class=\"mui-table-view-cell\" name=\"" + json[i].Name + "\"><a class=\"mui-navigate-right\">" + json[i].Name + "</a></li>";
         }
-        $("#offCanvasSideScroll .contentList .UserLisr").html(html)
+        $("#offCanvasSideScroll .contentList .UserList").html(html)
     }
 }
-//重连时接收昵称
+//接收昵称
 chat.client.getName = function (name) {
-    UserName = name;
-    $('.UserName').val(UserName);
-    Cookies.set("UserName", UserName)
+    if (name == "false") {
+        alert("名称已被使用")
+    } else {
+        UserName = name;
+        $('.UserName').val(UserName);
+        Cookies.set("UserName", UserName)
+        $(".LoginPage").hide();
+    }
+    
 }
 //接收所有分组
 chat.client.getGroups = function (data) {
     if (data) {
         var json = $.parseJSON(data);
         var html = "";
-        //$("#UserNum").html(json.length + 1 + "人在线");
         for (var i = 0; i < json.length; i++) {
-            html += "<li class=\"mui-table-view-cell\" name=\"" + json[i].Name + "\"><a class=\"mui-navigate-right\">";
-            html += json[i].Name + "(" + json[i][1] + ")";
-            html += "<input data-naem=\"" + json[i].Name+"\" date-status=\"0\" type=\"button\" class=\"addgroup\" value=\"加入\"/>";
+            html += "<li class=\"mui-table-view-cell\" data-name=\"" + json[i].Name + "\" date-status=\"" + json[i].Status + "\" date-num=" + json[i].Count + ">"
+            html += "<a class=\"mui-navigate-right\">" + json[i].Name + "(" + json[i].Count + ")";
+            //html += "<input data-naem=\"" + json[i].Name+"\" date-status=\"0\" type=\"button\" class=\"addgroup\" value=\"加入\"/>";
             html += "</a></li>";
         }
-        $("#offCanvasSideScroll .contentList .UserLisr").html(html)
+        $("#offCanvasSideScroll .contentList .GroupList").html(html)
     }
 }
 //接收系统提示
@@ -71,14 +86,16 @@ chat.client.systemNotification = function (text) {
 //接收群组系统提示
 chat.client.groupSystem = function (text) {
     var html = "<li class=\"AddGroupTitle\"><span class=\"GroupTitleContent\">" + text + "</span></li>"
-    $("#ShowMessage ul").append(html)
+    $(".MessageList ul").append(html)
 }
 // 启动连接
 $.connection.hub.start().done(function () {
-    while (UserName == null || UserName == "" || UserName == false) {
-        //chat.server.loging(prompt('输入你的昵称:', ''));
-    }
+    console.log(UserName);
+    if (UserName != null && UserName != "" && UserName != false && UserName != undefined && UserName.length > 0) {
+        chat.server.loging(UserName);
+    } 
 });
+function GoName(name) { chat.server.loging(name); }
 //发送消息
 function SendMessage(type, msg, name) {
     switch (type) {
@@ -138,18 +155,20 @@ function setMsg(type,name) {
             }
         }
     }
+    $(".MessageList ul li").remove();
     for (var j = 0; j < msgJson.length; j++) {
-        if (msgJson[j].status == 1) {
-            $("#ShowMessage ul").append("<li class=\"Msg\"><span>" + msgJson[j].name + "：<span class=\"MsgContent\">" + msgJson[j].message + "</span></span></li>")
+        var JItem = JSON.parse(msgJson[j])
+        if (JItem.status == 1) {
+            $(".MessageList ul").append("<li class=\"Msg\"><span>" + JItem.name + "：<span class=\"MsgContent\">" + JItem.message + "</span></span></li>")
         } else {
-            $(".MessageList ul").append("<li class=\"MsgGo\"><span class=\"MsgContent\">" + msgJson[j].message + "</span></li>")
+            $(".MessageList ul").append("<li class=\"MsgGo\"><span class=\"MsgContent\">" + JItem.message + "</span></li>")
         }
     }
     $(".MessageList").scrollTop($(".MessageList")[0].scrollHeight);
 }
 
-function titlespan(item, name) {
-    if (!$(item).hasClass("mui-active")) {
+function titlespan(item, name) {//!$(item).hasClass("mui-active") 
+    if ($(".SendName").val() != name) {
         if ($(item).children("a").children(".titleNum").length == 0) {
             $(item).children("a").append("<span class=\"titleNum\">1</span>");
         } else {
@@ -157,24 +176,23 @@ function titlespan(item, name) {
             var num1 = i >= 99 ? "99+" : i + 1;
             $(item).children("a").children(".titleNum").text(num1);
         }
-    }
-    
-    if ($(".OnlineList .HeaderTitleNum").length == 0) {
-        $(".OnlineList").append("<span class=\"HeaderTitleNum\">1</span>");
-    } else {
-        var j = parseInt($(".OnlineList .HeaderTitleNum").text())
-        var num2 = j >= 99 ? "99+" : j + 1;
-        $(".OnlineList .HeaderTitleNum").text(num2);
-    }
-    if (name == "" || $(".SendName").val() == name)
-        return;
-    var li_item = $(item).find("ul li[data-name=" + name + "]").children("a");
-    if ($(li_item).children(".titleNum").length == 0) {
-        $(li_item).append("<span class=\"titleNum\">1</span>");
-    } else {
-        var i = parseInt($(li_item).children(".titleNum").text())
-        var num1 = i >= 99 ? "99+" : i + 1;
-        $(li_item).children(".titleNum").text(num1);
+        if ($(".OnlineList .HeaderTitleNum").length == 0) {
+            $(".OnlineList").append("<span class=\"HeaderTitleNum\">1</span>");
+        } else {
+            var j = parseInt($(".OnlineList .HeaderTitleNum").text())
+            var num2 = j >= 99 ? "99+" : j + 1;
+            $(".OnlineList .HeaderTitleNum").text(num2);
+        }
+        if (name == "" || $(".SendName").val() == name)
+            return;
+        var li_item = $(item).find("ul li[data-name=" + name + "]").children("a");
+        if ($(li_item).children(".titleNum").length == 0) {
+            $(li_item).append("<span class=\"titleNum\">1</span>");
+        } else {
+            var i = parseInt($(li_item).children(".titleNum").text())
+            var num1 = i >= 99 ? "99+" : i + 1;
+            $(li_item).children(".titleNum").text(num1);
+        }
     }
 }
 

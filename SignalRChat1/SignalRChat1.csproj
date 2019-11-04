@@ -32,6 +32,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <LangVersion>7.3</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -41,6 +42,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <LangVersion>7.3</LangVersion>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
@@ -108,7 +110,6 @@
     <Content Include="Handler.ashx" />
     <Content Include="fonts\mui-icons-extra.ttf" />
     <Content Include="fonts\mui.ttf" />
-    <Content Include="HtmlPage1.html" />
     <Content Include="Scripts\font-awesome\fonts\fontawesome-webfont.eot" />
     <Content Include="Scripts\font-awesome\fonts\fontawesome-webfont.ttf" />
     <Content Include="Scripts\font-awesome\fonts\fontawesome-webfont.woff" />
@@ -145,6 +146,7 @@
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile1.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile2.pubxml" />
+    <None Include="Properties\PublishProfiles\FolderProfile3.pubxml" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="images\ui-icons_444444_256x240.png" />
     <Content Include="images\ui-icons_555555_256x240.png" />
@@ -180,7 +182,6 @@
     <Content Include="Scripts\mui.js" />
     <Content Include="Scripts\SideCanvasPage.js" />
     <Content Include="Scripts\signalRChat.js" />
-    <Content Include="Scripts\signalRChat2.js" />
     <Content Include="SignalrIndex.html" />
     <Content Include="Style\mui.min.css" />
     <Content Include="Web.config" />

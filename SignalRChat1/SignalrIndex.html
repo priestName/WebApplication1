@@ -52,7 +52,11 @@
         .OnlineList{position:relative}
         .HeaderTitleNum{position:absolute;top:0px;right:0px;border-radius: 45px; background-color: red; color: #fff;font-size:15px;line-height:18px;display:block;width:18px;text-align:center}
         .GroupList li a .addgroup{border:1px solid #bbb;padding:0 4px;margin:0;border-radius:5px;float:right;font-size:6px;background-color:#333;color:#fff}
-        
+
+        .LoginPage{display:block;position:absolute;top:0;left:0;z-index:99;width:100%;height:100%;background-color:#bbb}
+        .LoginPage div{margin-top:40%;text-align:center}
+        .LoginPage div .LoginName{width:80%;}
+        .LoginPage div .Login{width:60%;}
         /*#offCanvasSide {
             visibility: visible;
             transform: translate3d(0px, 0px, 0px);
@@ -132,19 +136,17 @@
             <div class="mui-off-canvas-backdrop"></div>
         </div>
     </div>
-    <div class="hide">
-        <div class="LoginPage">
-            <div>
-                <input type="text" class="UserName" />
-                <input type="button" class="Login" />
-            </div>
+    <div class="hide LoginPage">
+        <div>
+            <input type="text" class="LoginName" />
+            <input type="button" class="Login" value="Login"/>
         </div>
     </div>
     <script src="Scripts/jquery-3.3.1.min.js"></script>
-    <script src="Scripts/jquery.signalR-2.2.2.min.js"></script>
     <script src="Scripts/jquery-ui/jquery-ui.min.js"></script>
     <script src="Scripts/SideCanvasPage.js"></script>
     <script src="scripts/js.cookie.min.js"></script>
+    <script src="Scripts/jquery.signalR-2.2.2.min.js"></script>
     <script src="signalr/hubs"></script>
     <script src="Scripts/signalRChat.js?v=2012"></script>
     <script type="text/javascript">
@@ -202,8 +204,8 @@
                 }
             })
             $(".Lobby").click(function () {
-                setMsg("msgText","")
-                $(".SendName").html("大厅")
+                setMsg("msgText", "")
+                $(".SendName").html("")
                 $(".SendType").val("Lobby");
             })
             $(".GroupList li").click(function () {
@@ -229,36 +231,41 @@
                 $(this).children("a").children(".titleNum").remove();
                 noCanvasSide();
             })
+
+            $(".LoginPage").show();
+            $(".Login").click(function () {
+                GoName($(".LoginName").val())
+            })
         })
 
 
-        //function titlespan(item,name) {
-        //    if ($(item).hasClass("mui-active")) {
-        //        return
-        //    }
-        //    if ($(item).children("a").children(".titleNum").length == 0) {
-        //        $(item).children("a").append("<span class=\"titleNum\">1</span>");
-        //    } else {
-        //        var i = parseInt($(item).children("a").children(".titleNum").text())
-        //        var num1 = i >= 99 ? "99+" : i + 1;
-        //        $(item).children("a").children(".titleNum").text(num1);
-        //    }
-        //    if ($(".OnlineList .HeaderTitleNum").length == 0) {
-        //        $(".OnlineList").append("<span class=\"HeaderTitleNum\">1</span>");
-        //    } else {
-        //        var j = parseInt($(".OnlineList .HeaderTitleNum").text())
-        //        var num2 = j >= 99 ? "99+" : j + 1;
-        //        $(".OnlineList .HeaderTitleNum").text(num2);
-        //    }
-        //    var li_item = $(item).find("ul li[name=haha]");
-        //    if ($(li_item).children("a").children(".titleNum").length == 0) {
-        //        $(li_item).children("a").append("<span class=\"titleNum\">1</span>");
-        //    } else {
-        //        var i = parseInt($(li_item).children("a").children(".titleNum").text())
-        //        var num1 = i >= 99 ? "99+" : i + 1;
-        //        $(li_item).children("a").children(".titleNum").text(num1);
-        //    }
-        //}
+            //function titlespan(item,name) {
+            //    if ($(item).hasClass("mui-active")) {
+            //        return
+            //    }
+            //    if ($(item).children("a").children(".titleNum").length == 0) {
+            //        $(item).children("a").append("<span class=\"titleNum\">1</span>");
+            //    } else {
+            //        var i = parseInt($(item).children("a").children(".titleNum").text())
+            //        var num1 = i >= 99 ? "99+" : i + 1;
+            //        $(item).children("a").children(".titleNum").text(num1);
+            //    }
+            //    if ($(".OnlineList .HeaderTitleNum").length == 0) {
+            //        $(".OnlineList").append("<span class=\"HeaderTitleNum\">1</span>");
+            //    } else {
+            //        var j = parseInt($(".OnlineList .HeaderTitleNum").text())
+            //        var num2 = j >= 99 ? "99+" : j + 1;
+            //        $(".OnlineList .HeaderTitleNum").text(num2);
+            //    }
+            //    var li_item = $(item).find("ul li[name=haha]");
+            //    if ($(li_item).children("a").children(".titleNum").length == 0) {
+            //        $(li_item).children("a").append("<span class=\"titleNum\">1</span>");
+            //    } else {
+            //        var i = parseInt($(li_item).children("a").children(".titleNum").text())
+            //        var num1 = i >= 99 ? "99+" : i + 1;
+            //        $(li_item).children("a").children(".titleNum").text(num1);
+            //    }
+            //}
 
     </script>
 

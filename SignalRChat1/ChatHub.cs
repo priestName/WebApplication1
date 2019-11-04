@@ -44,8 +44,16 @@ namespace SignalRChat1
         /// <param name="UserName"></param>
         public void EditName(string UserName)
         {
-            users.Where(w => w.ConnectionID == Context.ConnectionId).SingleOrDefault().Name = UserName;
-            GetUsers();
+            if (users.Where(w => w.ConnectionID != Context.ConnectionId && w.Name == UserName).Count() == 0)
+            {
+                users.Where(w => w.ConnectionID == Context.ConnectionId).SingleOrDefault().Name = UserName;
+                Clients.Client(Context.ConnectionId).getName(UserName);
+                GetUsers();
+            }
+            else
+            {
+                Clients.Client(Context.ConnectionId).getName("false");
+            }
         }
         /// <summary>
         /// 创建组
@@ -125,7 +133,7 @@ namespace SignalRChat1
         /// </summary>
         private void GetGroups()
         {
-            var list = groups.Where(g =>g.Status == 1).Select(s => new { s.GroupName, s.user.Count }).ToList();
+            var list = groups.Where(g =>g.Status == 1).Select(s => new { s.GroupName, s.user.Count, s.Status }).ToList();
             string jsonList = JsonConvert.SerializeObject(list);
             Clients.All.getGroups(jsonList);
         }
@@ -145,6 +153,9 @@ namespace SignalRChat1
                     users.Add(user);
                 }
                 GetUsers();
+            }
+            else {
+                Clients.Client(Context.ConnectionId).getName("false");
             }
         }        
         public void CloseSignalr(bool stopCalled)
