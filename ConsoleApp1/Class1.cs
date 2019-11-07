@@ -126,7 +126,7 @@ namespace ConsoleApp1
                         return ref matrix[i, j];
             throw new InvalidOperationException("Not found");
         }
-        public void aaa((string,int) unnamed, out int a) => a = unnamed.Item2;
+        public void aaa((string, int) unnamed, out int a) => a = unnamed.Item2;
         public class Point
         {
             public Point(double x, double y)
@@ -138,5 +138,6 @@ namespace ConsoleApp1
             public void Deconstruct(out double x, out double y) =>
                 (x, y) = (X, Y);
         }
+        
     }
 }
