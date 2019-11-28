@@ -26,22 +26,22 @@ namespace ConsoleApp1
         {
             MLContext mlContext = new MLContext();
 
-            // 1. Import or create training data
+            // 1. 导入或创建培训数据
             HouseData[] houseData = {
-               new HouseData() { Size = 1.1F, Price = 1.2F },
-               new HouseData() { Size = 1.9F, Price = 2.3F },
-               new HouseData() { Size = 2.8F, Price = 3.0F },
-               new HouseData() { Size = 3.4F, Price = 3.7F } };
+               new HouseData() { Size = 1F, Price = 5F },
+               new HouseData() { Size = 2F, Price = 4.7F },
+               new HouseData() { Size = 3F, Price = 4.2F },
+               new HouseData() { Size = 4F, Price = 3.4F } };
             IDataView trainingData = mlContext.Data.LoadFromEnumerable(houseData);
 
-            // 2. Specify data preparation and model training pipeline
+            // 2. 指定数据准备模型和培训对象
             var pipeline = mlContext.Transforms.Concatenate("Features", new[] { "Size" })
-                .Append(mlContext.Regression.Trainers.Sdca(labelColumnName: "Price", maximumNumberOfIterations: 100));
+                .Append(mlContext.Regression.Trainers.Sdca(labelColumnName: "Price", maximumNumberOfIterations: 1));
 
-            // 3. Train model
+            // 3. 陈列模型
             var model = pipeline.Fit(trainingData);
 
-            // 4. Make a prediction
+            // 4. 做出预测
             var size = new HouseData() { Size = 2.5F };
             var price = mlContext.Model.CreatePredictionEngine<HouseData, Prediction>(model).Predict(size);
 
