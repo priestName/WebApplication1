@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace ConsoleApp2
 {
@@ -8,30 +9,15 @@ namespace ConsoleApp2
     {
         public void Main()
         {
-            Console.Write("初始数：");
-            var NumList = Array.ConvertAll(Console.ReadLine().ToString().Replace("，",",").Split(','), int.Parse);
-            int Num2 = 0;
-            foreach (var Num in NumList)
-            {
-                Num2 = gys(Num2, Num);
-            }
-            Console.WriteLine(Num2);
-            Console.ReadLine();
+            GenerateSequence();
         }
-        public int gys(int Num1,int Num2)
+        public static async System.Collections.Generic.IAsyncEnumerable<int> GenerateSequence()
         {
-            int Rem;
-            if (Num1 == 0)
-                return Num2;
-
-            while (Num2 > 0)
+            for (int i = 0; i < 20; i++)
             {
-                Rem = Num1 % Num2;
-                Num1 = Num2;
-                Num2 = Rem;
+                await Task.Delay(100);
+                yield return i;
             }
-
-            return Num1;
         }
     }
 }
